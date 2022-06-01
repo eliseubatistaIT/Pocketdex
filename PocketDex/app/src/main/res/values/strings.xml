@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">PocketDex</string>
+
+    <string name="bar_item_locations">Locations</string>
+    <string name="bar_item_items">Items</string>
+    <string name="bar_item_pokedex">Pokédex</string>
+    <string name="bar_item_profile">Profile</string>
+    <string name="bar_item_settings">Settings</string>
+</resources>

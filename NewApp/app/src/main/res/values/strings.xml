@@ -1,9 +1,0 @@
-<resources>
-    <string name="app_name">PocketDex</string>
-
-    <string name="menu_title_locations">Locations</string>
-    <string name="menu_title_items">Items</string>
-    <string name="menu_title_pokedex">Pokédex</string>
-    <string name="menu_title_profile">Profile</string>
-    <string name="menu_title_settings">Settings</string>
-</resources>
