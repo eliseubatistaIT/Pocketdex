@@ -3,6 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Projects/Pocketdex-App/PocketDex/app/src/main/res/layout/activity_control.xml" value="0.2151268115942029" />
+        <entry key="..\:/Projects/Pocketdex-App/PocketDex/app/src/main/res/layout/fragment_pokedex.xml" value="0.2151268115942029" />
+        <entry key="..\:/Projects/Pocketdex-App/PocketDex/app/src/main/res/layout/fragment_pokedex_filter.xml" value="0.2115036231884058" />
+        <entry key="..\:/Projects/Pocketdex-App/PocketDex/app/src/main/res/layout/item_pokemon_list.xml" value="0.2" />
+        <entry key="..\:/Projects/Pocketdex-App/PocketDex/app/src/main/res/menu/bottom_nav_menu.xml" value="0.37864583333333335" />
+        <entry key="..\:/Projects/Pocketdex-App/PocketDex/app/src/main/res/menu/filter_menu.xml" value="0.26510416666666664" />
+        <entry key="..\:/Projects/Pocketdex-App/PocketDex/app/src/main/res/menu/pokedex_menu.xml" value="0.37864583333333335" />
+        <entry key="..\:/Projects/Pocketdex-App/PocketDex/app/src/main/res/menu/toolbar_menu.xml" value="0.26614583333333336" />
         <entry key="..\:/Projects/pocketdex-app/PocketDex/app/src/main/res/layout/activity_control.xml" value="0.25" />
         <entry key="..\:/Projects/pocketdex-app/PocketDex/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/Projects/pocketdex-app/PocketDex/app/src/main/res/layout/fragment_dashboard.xml" value="0.25" />

@@ -1,8 +1,10 @@
 package com.elideus.pocketdex.activities
 
 import android.os.Bundle
+import android.view.Menu
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -13,7 +15,7 @@ import com.elideus.pocketdex.databinding.ActivityControlBinding
 
 class ControlActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityControlBinding
+    private lateinit var toolbar: Toolbar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,6 +23,24 @@ class ControlActivity : AppCompatActivity() {
         val binding =
             DataBindingUtil.setContentView<ActivityControlBinding>(this, R.layout.activity_control)
 
+        setupActionBar(binding)
+
+        setupBottomNavBar(binding)
+    }
+
+//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+//        menuInflater.inflate(R.menu.pokedex_menu, menu)
+//        return super.onCreateOptionsMenu(menu)
+//    }
+
+    private fun setupActionBar(binding: ActivityControlBinding) {
+        toolbar = binding.toolbar
+        toolbar.title = "Pokédex"
+
+        setSupportActionBar(toolbar)
+    }
+
+    private fun setupBottomNavBar(binding: ActivityControlBinding) {
         val navView: BottomNavigationView = binding.navView
 
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
@@ -36,9 +56,19 @@ class ControlActivity : AppCompatActivity() {
             )
         )
 
-        if (actionBar != null) {
+        if (supportActionBar != null) {
             setupActionBarWithNavController(navController, appBarConfiguration)
         }
         navView.setupWithNavController(navController)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.pocketdex_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        val navController = findNavController(R.id.nav_host_fragment_activity_main)
+        return navController.navigateUp()
     }
 }

@@ -19,9 +19,13 @@
 
     <fragment
         android:id="@+id/navigation_pokedex"
-        android:name="com.elideus.pocketdex.fragments.PokedexFragment"
+        android:name="com.elideus.pocketdex.fragments.pokedex.PokedexFragment"
         android:label="Pokedex"
-        tools:layout="@layout/fragment_pokedex" />
+        tools:layout="@layout/fragment_pokedex" >
+        <action
+            android:id="@+id/action_navigation_pokedex_to_pokedexFilterFragment"
+            app:destination="@id/pokedexFilterFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_profile"
@@ -33,4 +37,13 @@
         android:name="com.elideus.pocketdex.fragments.SettingsFragment"
         android:label="Settings"
         tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/pokedexFilterFragment"
+        android:name="com.elideus.pocketdex.fragments.pokedex.PokedexFilterFragment"
+        android:label="Pokedex Filter"
+        tools:layout="@layout/fragment_pokedex_filter">
+        <action
+            android:id="@+id/action_pokedexFilterFragment_to_navigation_pokedex"
+            app:destination="@id/navigation_pokedex" />
+    </fragment>
 </navigation>
