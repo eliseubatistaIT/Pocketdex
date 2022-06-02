@@ -18,11 +18,17 @@ class PokedexViewModel : ViewModel() {
     val listOfPokemons: LiveData<List<PokemonDetailedData>>
         get() = _listOfPokemons
 
+    private var _isLoadingMorePokemons = MutableLiveData<Boolean>()
+    val isLoadingMorePokemons: LiveData<Boolean>
+        get() = _isLoadingMorePokemons
+
     private var coroutineJob = Job()
     private val coroutineScope = CoroutineScope(coroutineJob + Dispatchers.Main)
 
+    private var pokemonsLoaded = 0;
+
     init {
-        getPokemons()
+        getMorePokemons()
     }
 
     override fun onCleared() {
@@ -30,18 +36,34 @@ class PokedexViewModel : ViewModel() {
         coroutineJob.cancel()
     }
 
-    private fun getPokemons() {
+    fun getMorePokemons() {
+
+        //If we are already loading and waiting for more pokemons, do nothing
+        if (_isLoadingMorePokemons.value == true) {
+            return
+        }
+
+        Log.i("END", "FETCHING MORE POKEMONS")
+
+        _isLoadingMorePokemons.value = true
 
         coroutineScope.launch {
+            //Store how many pokemons we already loaded, to save some processing
+            val previousLoadedPokemons = pokemonsLoaded
+            //Also, we want to load ten more
+            pokemonsLoaded += 10
+
             try {
                 //Try to get all the pokemons in a specific range
-                val listOfPokemonsData = PokeApi.retrofitService.getPokemons(30, 0).results
+                val pokemonsData =
+                    PokeApi.retrofitService.getPokemons(pokemonsLoaded, previousLoadedPokemons)
 
-                //Create a list to store the pokemon data
-                val listOfPokemonsDetails = mutableListOf<PokemonDetailedData>()
+                //Copy the value of the listOfPokemons (if its null, create a new list)
+                val listOfPokemonsDetails =
+                    _listOfPokemons.value?.toMutableList() ?: mutableListOf<PokemonDetailedData>()
 
                 //For each pokemon retrieved, get its data
-                for (pokeData in listOfPokemonsData) {
+                for (pokeData in pokemonsData.results) {
                     getPokemonByName(pokeData.name)?.let {
                         listOfPokemonsDetails.add(it)
                     }
@@ -49,10 +71,15 @@ class PokedexViewModel : ViewModel() {
 
                 //Update the live data to refresh the observers
                 _listOfPokemons.value = listOfPokemonsDetails
+
+                _isLoadingMorePokemons.value = false
+
             } catch (e: Exception) {
                 //If we get an exception, create an empty list
                 Log.i("ERRO", e.toString())
                 _listOfPokemons.value = ArrayList()
+
+                _isLoadingMorePokemons.value = false
             }
         }
     }

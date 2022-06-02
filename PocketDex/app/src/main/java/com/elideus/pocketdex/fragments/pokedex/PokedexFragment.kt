@@ -51,6 +51,18 @@ class PokedexFragment : Fragment() {
                 pokemonListAdapter.submitList(it)
             }
         })
+
+        binding.pokemonsList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+
+                //If we reach the end of the list, we want to show more pokemons
+                if (recyclerView.canScrollVertically(1) == false) {
+                    viewModel.getMorePokemons()
+                }
+            }
+        })
     }
+
 
 }
