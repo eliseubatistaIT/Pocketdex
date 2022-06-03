@@ -25,7 +25,7 @@ class PokedexFragment : Fragment() {
         val binding: FragmentPokedexBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_pokedex, container, false)
 
-        (activity as AppCompatActivity).supportActionBar?.title = "ZAU"
+        (activity as AppCompatActivity).supportActionBar?.title = "Pokédex"
 
         viewModel = ViewModelProvider(this).get(PokedexViewModel::class.java)
 
@@ -57,7 +57,7 @@ class PokedexFragment : Fragment() {
                 super.onScrollStateChanged(recyclerView, newState)
 
                 //If we reach the end of the list, we want to show more pokemons
-                if (recyclerView.canScrollVertically(1) == false) {
+                if (recyclerView.canScrollVertically(3) == false) {
                     viewModel.getMorePokemons()
                 }
             }

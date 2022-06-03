@@ -1,11 +1,13 @@
 package com.elideus.pocketdex.network
 
+import com.elideus.pocketdex.network.data.ItemDetailedData
+import com.elideus.pocketdex.network.data.TypeDetailedData
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import retrofit2.Call
-import retrofit2.converter.scalars.ScalarsConverterFactory
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -17,10 +19,22 @@ private val moshi = Moshi.Builder()
     .build()
 
 
-private val retrofit = Retrofit.Builder()
-    .addConverterFactory(MoshiConverterFactory.create(moshi))
-    .baseUrl(BASE_URL)
-    .build()
+private fun retrofit(): Retrofit {
+
+    val okHttpClientBuilder = OkHttpClient.Builder()
+
+    okHttpClientBuilder.addInterceptor(
+        HttpLoggingInterceptor().setLevel(
+            HttpLoggingInterceptor.Level.BASIC
+        )
+    )
+
+    return Retrofit.Builder()
+        .addConverterFactory(MoshiConverterFactory.create(moshi))
+        .baseUrl(BASE_URL)
+        .client(okHttpClientBuilder.build())
+        .build()
+}
 
 
 interface PokeApiService {
@@ -28,12 +42,24 @@ interface PokeApiService {
     suspend fun getPokemons(
         @Query("limit") limit: Int,
         @Query("offset") offset: Int
-    ): PokemonsGlobalData
+    ): GlobalSearchData
 
     @GET("pokemon/{pokemonName}/")
     suspend fun getPokemonByName(@Path("pokemonName") name: String): PokemonDetailedData
+
+    @GET("item")
+    suspend fun getItems(
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int
+    ): GlobalSearchData
+
+    @GET("item/{itemName}/")
+    suspend fun getItemByName(@Path("itemName") name: String): ItemDetailedData
+
+    @GET("type/{typeName}/")
+    suspend fun getTypeByName(@Path("typeName") name: String): TypeDetailedData
 }
 
 object PokeApi {
-    val retrofitService: PokeApiService by lazy { retrofit.create(PokeApiService::class.java) }
+    val retrofitService: PokeApiService by lazy { retrofit().create(PokeApiService::class.java) }
 }

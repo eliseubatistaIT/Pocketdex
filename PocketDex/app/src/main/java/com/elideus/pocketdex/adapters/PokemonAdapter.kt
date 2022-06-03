@@ -1,5 +1,6 @@
 package com.elideus.pocketdex.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,12 +10,17 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.elideus.pocketdex.R
+import com.elideus.pocketdex.models.PokemonModel
 import com.elideus.pocketdex.network.BaseNameAndUrl
 import com.elideus.pocketdex.network.PokemonDetailedData
+import com.elideus.pocketdex.utils.getPokemonBackgroundColor
+import com.elideus.pocketdex.utils.getPokemonTextColor
+import com.elideus.pocketdex.utils.loadImageWithGlide
+import com.elideus.pocketdex.utils.manipulateColor
 
 
 class PokemonListAdapter :
-    ListAdapter<PokemonDetailedData, PokemonListAdapter.ViewHolder>(PokemonDiffCallback()) {
+    ListAdapter<PokemonModel, PokemonListAdapter.ViewHolder>(PokemonDiffCallback()) {
 
     //Creates the view holder
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -50,30 +56,41 @@ class PokemonListAdapter :
         }
 
         //This is used to bind the data to the view holder
-        fun bind(item: PokemonDetailedData) {
-            val res = itemView.context.resources
+        fun bind(item: PokemonModel) {
+
+            var type = "unknown"
+
+            if (item.types.isNotEmpty()) {
+                type = item.types[0].name
+            }
+
+            val pokemonColor = getPokemonBackgroundColor(itemView.context, type)
+            val pokemonDarkerColor = manipulateColor(pokemonColor, 0.75f)
 
             pokemonName.text = item.name
+            pokemonName.setTextColor(getPokemonTextColor(itemView.context, type))
             pokemonId.text = "#${item.id}"
-            pokemonTypeText.text = item.types[0].type.name
-
+            pokemonTypeText.text = type
+            pokemonTypeImage.setColorFilter(pokemonDarkerColor)
+            pokemonBackground.setColorFilter(pokemonColor)
+            loadImageWithGlide(item.maleSprite, pokemonImage)
         }
     }
 
     //This util is used to avoid redrawing an item that was not changed
-    class PokemonDiffCallback : DiffUtil.ItemCallback<PokemonDetailedData>() {
+    class PokemonDiffCallback : DiffUtil.ItemCallback<PokemonModel>() {
         override fun areItemsTheSame(
-            oldItem: PokemonDetailedData,
-            newItem: PokemonDetailedData
+            oldItem: PokemonModel,
+            newItem: PokemonModel
         ): Boolean {
             return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(
-            oldItem: PokemonDetailedData,
-            newItem: PokemonDetailedData
+            oldItem: PokemonModel,
+            newItem: PokemonModel
         ): Boolean {
-            return oldItem == newItem
+            return oldItem.id == newItem.id
         }
 
     }

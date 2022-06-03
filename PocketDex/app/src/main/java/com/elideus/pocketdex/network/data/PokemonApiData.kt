@@ -2,17 +2,6 @@ package com.elideus.pocketdex.network
 
 import com.squareup.moshi.Json
 
-
-/*
-This is the global pokemon data
- */
-data class PokemonsGlobalData(
-    @Json(name = "count") val numberOfPokemons: Int,
-    @Json(name = "next") val next: String?,
-    @Json(name = "previous") val previous: String?,
-    @Json(name = "results") val results: List<BaseNameAndUrl>
-)
-
 /*
 This is the detailed data of each pokemon
  */
@@ -30,7 +19,7 @@ data class PokemonDetailedData(
     @Json(name = "moves") val moves: List<PokemonMovesData>,
     @Json(name = "name") val name: String,
     @Json(name = "order") val order: Int,
-    //@Json(name="past_types") val pastTypes: List<PokemonPastTypeData>,
+    @Json(name = "past_types") val pastTypes: List<PokemonPastTypeData>,
     @Json(name = "species") val species: BaseNameAndUrl,
     @Json(name = "sprites") val sprites: PokemonSpritesData,
     @Json(name = "stats") val stats: List<PokemonStatData>,
@@ -86,6 +75,14 @@ data class PokemonMoveVersionGroup(
     @Json(name = "level_learned_at") val levelLearnedAt: Int,
     @Json(name = "move_learn_method") val moveLearnMethod: BaseNameAndUrl,
     @Json(name = "version_group") val versionGroup: BaseNameAndUrl,
+)
+
+/*
+This is the pokemon past type data retrieved from the pokemon detailed data
+ */
+data class PokemonPastTypeData(
+    @Json(name = "generation") val generation: BaseNameAndUrl,
+    @Json(name = "types") val types: List<PokemonTypeData>,
 )
 
 /*
