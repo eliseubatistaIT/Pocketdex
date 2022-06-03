@@ -1,18 +1,19 @@
 package com.elideus.pocketdex.fragments.pokedex
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.elideus.pocketdex.R
-import com.elideus.pocketdex.adapters.PokemonListAdapter
+import com.elideus.pocketdex.views.PokemonAdapter
 import com.elideus.pocketdex.databinding.FragmentPokedexBinding
+import com.elideus.pocketdex.views.OnPokemonClickedListener
 
 class PokedexFragment : Fragment() {
 
@@ -42,8 +43,22 @@ class PokedexFragment : Fragment() {
         binding.pokemonsList.layoutManager = linearLayoutManager
 
         //Create and bind the list adapter
-        val pokemonListAdapter = PokemonListAdapter()
+        val pokemonListAdapter = PokemonAdapter()
         binding.pokemonsList.adapter = pokemonListAdapter
+
+        //Click listener
+        pokemonListAdapter.onPokemonClickedListener =
+            object : OnPokemonClickedListener {
+                override fun onPokemonClicked(pokemonName: String) {
+                    view?.findNavController()
+                        ?.navigate(
+                            PokedexFragmentDirections.actionNavigationPokedexToPokemonDetailsFragment(
+                                pokemonName
+                            )
+                        )
+                }
+
+            }
 
         //Create and observer to refresh the list automatically
         viewModel.listOfPokemons.observe(viewLifecycleOwner, Observer {
@@ -52,6 +67,7 @@ class PokedexFragment : Fragment() {
             }
         })
 
+        //Scroll listenner
         binding.pokemonsList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)

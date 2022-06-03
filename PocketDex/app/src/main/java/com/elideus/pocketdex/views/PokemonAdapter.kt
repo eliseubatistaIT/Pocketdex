@@ -1,6 +1,5 @@
-package com.elideus.pocketdex.adapters
+package com.elideus.pocketdex.views
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,20 +10,19 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.elideus.pocketdex.R
 import com.elideus.pocketdex.models.PokemonModel
-import com.elideus.pocketdex.network.BaseNameAndUrl
-import com.elideus.pocketdex.network.PokemonDetailedData
-import com.elideus.pocketdex.utils.getPokemonBackgroundColor
-import com.elideus.pocketdex.utils.getPokemonTextColor
-import com.elideus.pocketdex.utils.loadImageWithGlide
-import com.elideus.pocketdex.utils.manipulateColor
+import com.elideus.pocketdex.utils.*
 
 
-class PokemonListAdapter :
-    ListAdapter<PokemonModel, PokemonListAdapter.ViewHolder>(PokemonDiffCallback()) {
+class PokemonAdapter :
+    ListAdapter<PokemonModel, PokemonAdapter.ViewHolder>(PokemonDiffCallback()) {
+
+    lateinit var onPokemonClickedListener: OnPokemonClickedListener
 
     //Creates the view holder
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder.from(parent)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.item_pokemon_list, parent, false)
+        return ViewHolder(view, onPokemonClickedListener)
     }
 
     //Binds a new item to the view holder
@@ -34,7 +32,10 @@ class PokemonListAdapter :
     }
 
     //Private constructor, i dont want to call it by accident, i want to use the from function
-    class ViewHolder private constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class ViewHolder(
+        itemView: View,
+        private val onPokemonClickedListener: OnPokemonClickedListener
+    ) : RecyclerView.ViewHolder(itemView) {
 
         private val pokemonBackground: ImageView =
             itemView.findViewById(R.id.pokemon_list_item_background)
@@ -45,15 +46,6 @@ class PokemonListAdapter :
         private val pokemonTypeImage: ImageView =
             itemView.findViewById(R.id.pokemon_type_background)
 
-
-        companion object {
-            //This is used to create the view holder in a cleaner way
-            fun from(parent: ViewGroup): ViewHolder {
-                val view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_pokemon_list, parent, false)
-                return ViewHolder(view)
-            }
-        }
 
         //This is used to bind the data to the view holder
         fun bind(item: PokemonModel) {
@@ -67,32 +59,47 @@ class PokemonListAdapter :
             val pokemonColor = getPokemonBackgroundColor(itemView.context, type)
             val pokemonDarkerColor = manipulateColor(pokemonColor, 0.75f)
 
-            pokemonName.text = item.name
-            pokemonName.setTextColor(getPokemonTextColor(itemView.context, type))
+            pokemonName.text = formatPocketdexObjectName(item.name)
+            pokemonName.setTextColor(getTextColorByBackgroundColor(itemView.context, pokemonColor))
             pokemonId.text = "#${item.id}"
             pokemonTypeText.text = type
+            pokemonTypeText.setTextColor(
+                getTextColorByBackgroundColor(
+                    itemView.context,
+                    pokemonDarkerColor
+                )
+            )
             pokemonTypeImage.setColorFilter(pokemonDarkerColor)
             pokemonBackground.setColorFilter(pokemonColor)
             loadImageWithGlide(item.maleSprite, pokemonImage)
+
+            pokemonBackground.setOnClickListener { v: View ->
+                onPokemonClickedListener.onPokemonClicked(
+                    item.name
+                )
+            }
         }
     }
+}
 
-    //This util is used to avoid redrawing an item that was not changed
-    class PokemonDiffCallback : DiffUtil.ItemCallback<PokemonModel>() {
-        override fun areItemsTheSame(
-            oldItem: PokemonModel,
-            newItem: PokemonModel
-        ): Boolean {
-            return oldItem.id == newItem.id
-        }
-
-        override fun areContentsTheSame(
-            oldItem: PokemonModel,
-            newItem: PokemonModel
-        ): Boolean {
-            return oldItem.id == newItem.id
-        }
-
+//This util is used to avoid redrawing an item that was not changed
+class PokemonDiffCallback : DiffUtil.ItemCallback<PokemonModel>() {
+    override fun areItemsTheSame(
+        oldItem: PokemonModel,
+        newItem: PokemonModel
+    ): Boolean {
+        return oldItem.id == newItem.id
     }
 
+    override fun areContentsTheSame(
+        oldItem: PokemonModel,
+        newItem: PokemonModel
+    ): Boolean {
+        return oldItem.id == newItem.id
+    }
+
+}
+
+interface OnPokemonClickedListener {
+    fun onPokemonClicked(pokemonName: String)
 }

@@ -21,10 +21,13 @@
         android:id="@+id/navigation_pokedex"
         android:name="com.elideus.pocketdex.fragments.pokedex.PokedexFragment"
         android:label="Pokedex"
-        tools:layout="@layout/fragment_pokedex" >
+        tools:layout="@layout/fragment_pokedex">
         <action
             android:id="@+id/action_navigation_pokedex_to_pokedexFilterFragment"
             app:destination="@id/pokedexFilterFragment" />
+        <action
+            android:id="@+id/action_navigation_pokedex_to_pokemonDetailsFragment"
+            app:destination="@id/pokemonDetailsFragment" />
     </fragment>
 
     <fragment
@@ -45,5 +48,14 @@
         <action
             android:id="@+id/action_pokedexFilterFragment_to_navigation_pokedex"
             app:destination="@id/navigation_pokedex" />
+    </fragment>
+    <fragment
+        android:id="@+id/pokemonDetailsFragment"
+        android:name="com.elideus.pocketdex.fragments.pokedex.PokemonDetailsFragment"
+        android:label="PokemonDetailsFragment"
+        tools:layout="@layout/fragment_pokemon_details" >
+        <argument
+            android:name="pokemonName"
+            app:argType="string" />
     </fragment>
 </navigation>

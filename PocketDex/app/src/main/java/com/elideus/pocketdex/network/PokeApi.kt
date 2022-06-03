@@ -14,21 +14,24 @@ import retrofit2.http.Query
 
 private const val BASE_URL = "https://pokeapi.co/api/v2/"
 
+//Build the moshi adapter
 private val moshi = Moshi.Builder()
     .add(KotlinJsonAdapterFactory())
     .build()
 
 
+//Build the retrofit service
 private fun retrofit(): Retrofit {
-
     val okHttpClientBuilder = OkHttpClient.Builder()
 
+    //Create http client logging
     okHttpClientBuilder.addInterceptor(
         HttpLoggingInterceptor().setLevel(
             HttpLoggingInterceptor.Level.BASIC
         )
     )
 
+    //Build retrofit with moshi adapter and client logging
     return Retrofit.Builder()
         .addConverterFactory(MoshiConverterFactory.create(moshi))
         .baseUrl(BASE_URL)
