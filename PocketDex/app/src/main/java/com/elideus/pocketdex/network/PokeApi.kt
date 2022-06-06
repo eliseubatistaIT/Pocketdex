@@ -1,7 +1,6 @@
 package com.elideus.pocketdex.network
 
-import com.elideus.pocketdex.network.data.ItemDetailedData
-import com.elideus.pocketdex.network.data.TypeDetailedData
+import com.elideus.pocketdex.network.data.*
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import com.squareup.moshi.Moshi
@@ -48,7 +47,7 @@ interface PokeApiService {
     ): GlobalSearchData
 
     @GET("pokemon/{pokemonName}/")
-    suspend fun getPokemonByName(@Path("pokemonName") name: String): PokemonDetailedData
+    suspend fun getPokemonByName(@Path("pokemonName") name: String): PokemonData
 
     @GET("item")
     suspend fun getItems(
@@ -57,10 +56,16 @@ interface PokeApiService {
     ): GlobalSearchData
 
     @GET("item/{itemName}/")
-    suspend fun getItemByName(@Path("itemName") name: String): ItemDetailedData
+    suspend fun getItemByName(@Path("itemName") name: String): ItemData
 
     @GET("type/{typeName}/")
-    suspend fun getTypeByName(@Path("typeName") name: String): TypeDetailedData
+    suspend fun getTypeByName(@Path("typeName") name: String): TypeData
+
+    @GET("pokemon-species/{speciesName}/")
+    suspend fun getSpeciesByName(@Path("speciesName") name: String): SpeciesData
+
+    @GET("evolution-chain/{chainID}/")
+    suspend fun getEvolutionChainById(@Path("chainID") id: String): EvolutionChainData
 }
 
 object PokeApi {

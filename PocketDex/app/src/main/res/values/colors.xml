@@ -8,27 +8,37 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
+    <color name="pokemon_black">#292929</color>
+    <color name="pokemon_blue">#4485B8</color>
+    <color name="pokemon_brown">#73644E</color>
+    <color name="pokemon_gray">#938686</color>
+    <color name="pokemon_green">#71A873</color>
+    <color name="pokemon_pink">#BD6C88</color>
+    <color name="pokemon_purple">#A169AA</color>
+    <color name="pokemon_red">#BA5151</color>
+    <color name="pokemon_white">#F1F1F1</color>
+    <color name="pokemon_yellow">#D5C754</color>
 
-    <color name="pokemon_normal">#938686</color>
-    <color name="pokemon_fighting">#C1B2B1</color>
-    <color name="pokemon_flying">#71A5AC</color>
-    <color name="pokemon_poison">#9C27B0</color>
-    <color name="pokemon_ground">#73493C</color>
-    <color name="pokemon_rock">#534F4F</color>
-    <color name="pokemon_bug">#8BC34A</color>
-    <color name="pokemon_ghost">#512D91</color>
-    <color name="pokemon_steel">#686868</color>
-    <color name="pokemon_fire">#FF5722</color>
-    <color name="pokemon_water">#2196F3</color>
-    <color name="pokemon_grass">#4CAF50</color>
-    <color name="pokemon_electric">#FFEB3B</color>
-    <color name="pokemon_psychic">#734F69</color>
-    <color name="pokemon_ice">#8BC9D1</color>
-    <color name="pokemon_dragon">#681313</color>
-    <color name="pokemon_dark">#272727</color>
-    <color name="pokemon_fairy">#DBA1E4</color>
-    <color name="pokemon_unknown">#222222</color>
-    <color name="pokemon_shadow">#380042</color>
+    <color name="type_normal">#938686</color>
+    <color name="type_fighting">#C1B2B1</color>
+    <color name="type_flying">#71A5AC</color>
+    <color name="type_poison">#9C27B0</color>
+    <color name="type_ground">#73493C</color>
+    <color name="type_rock">#534F4F</color>
+    <color name="type_bug">#8BC34A</color>
+    <color name="type_ghost">#512D91</color>
+    <color name="type_steel">#686868</color>
+    <color name="type_fire">#FF5722</color>
+    <color name="type_water">#2196F3</color>
+    <color name="type_grass">#4CAF50</color>
+    <color name="type_electric">#FFEB3B</color>
+    <color name="type_psychic">#734F69</color>
+    <color name="type_ice">#8BC9D1</color>
+    <color name="type_dragon">#681313</color>
+    <color name="type_dark">#272727</color>
+    <color name="type_fairy">#DBA1E4</color>
+    <color name="type_shadow">#380042</color>
+    <color name="type_unknown">#222222</color>
 
 
 </resources>

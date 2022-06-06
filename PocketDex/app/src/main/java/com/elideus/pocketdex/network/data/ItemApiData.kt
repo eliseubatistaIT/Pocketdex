@@ -7,13 +7,13 @@ import com.squareup.moshi.Json
 This is the detailed data of each Item
  */
 
-data class ItemDetailedData(
+data class ItemData(
     @Json(name = "attributes") val attributes: List<BaseNameAndUrl>,
     @Json(name = "baby_trigger_for") val babyTriggerFor: Boolean,
     @Json(name = "category") val category: List<BaseNameAndUrl>,
     @Json(name = "cost") val cost: Int,
     @Json(name = "effect_entries") val effectEntries: List<ItemEffectData>,
-    @Json(name = "flavor_text_entries") val flavorTextEntries: List<PokemonHeldItemsData>,
+    @Json(name = "flavor_text_entries") val flavorTextEntries: List<ItemFlavorEntriesData>,
     @Json(name = "fling_effect") val flingEffect: String?,
     @Json(name = "fling_power") val flingPower: String?,
     @Json(name = "game_indices") val gameIndices: List<ItemGameIndiceData>,

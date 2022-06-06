@@ -1,6 +1,6 @@
 package com.elideus.pocketdex.utils
 
-import android.util.Log
+import java.util.*
 
 //Function used to format pokemon, item and locations names
 fun formatPocketdexObjectName(name: String): String {
@@ -23,3 +23,22 @@ fun formatPocketdexObjectName(name: String): String {
 
     return newName
 }
+
+//Function used to format pokemon, item and locations names
+fun formatPocketdexObjectDescription(description: String): String {
+    if (description.isEmpty()) {
+        return description
+    }
+
+    val newDescription = description
+    val tokenizer = StringTokenizer(newDescription)
+    val builder = StringBuilder()
+
+    while (tokenizer.hasMoreTokens()) {
+        val string = tokenizer.nextToken();
+        builder.append(string).append(" ");
+    }
+
+    return builder.toString()
+}
+

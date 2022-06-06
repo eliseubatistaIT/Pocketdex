@@ -29,7 +29,19 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/pokemon_image"
+                android:id="@+id/pokemon_list_watermark"
+                android:layout_width="185dp"
+                android:layout_height="151dp"
+                android:alpha="0.4"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="h,"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0"
+                tools:srcCompat="@drawable/img_pokeball_watermark" />
+
+            <ImageView
+                android:id="@+id/pokemon_list_image"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_marginTop="8dp"
@@ -39,7 +51,7 @@
                 tools:srcCompat="@tools:sample/avatars" />
 
             <TextView
-                android:id="@+id/pokemon_id"
+                android:id="@+id/pokemon_list_id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
@@ -52,7 +64,7 @@
                 tools:text="#014" />
 
             <TextView
-                android:id="@+id/pokemon_name"
+                android:id="@+id/pokemon_list_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
@@ -60,36 +72,71 @@
                 android:textColor="#FFFFFF"
                 android:textSize="24sp"
                 android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@+id/pokemon_id"
-                app:layout_constraintTop_toBottomOf="@+id/pokemon_id" />
+                app:layout_constraintStart_toStartOf="@+id/pokemon_list_id"
+                app:layout_constraintTop_toBottomOf="@+id/pokemon_list_id" />
 
-            <ImageView
-                android:id="@+id/pokemon_type_background"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:scaleType="fitXY"
-                app:layout_constraintBottom_toBottomOf="@+id/pokemon_type_text"
-                app:layout_constraintEnd_toEndOf="@+id/pokemon_type_text"
-                app:layout_constraintStart_toStartOf="@+id/pokemon_type_text"
-                app:layout_constraintTop_toTopOf="@+id/pokemon_type_text"
-                app:srcCompat="@drawable/img_plain_white"
-                app:tint="#A590A8" />
-
-            <TextView
-                android:id="@+id/pokemon_type_text"
+            <FrameLayout
+                android:id="@+id/pokemon_list_first_type"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:paddingLeft="3dp"
-                android:paddingTop="1dp"
-                android:paddingRight="3dp"
-                android:paddingBottom="1dp"
-                android:text="TextView"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="@id/pokemon_name"
-                app:layout_constraintTop_toBottomOf="@id/pokemon_name"
-                tools:text="Poision" />
+                android:layout_height="25dp"
+                android:layout_marginTop="4dp"
+                app:layout_constraintStart_toStartOf="@+id/pokemon_list_name"
+                app:layout_constraintTop_toBottomOf="@+id/pokemon_list_name">
+
+                <ImageView
+                    android:id="@+id/pokemon_list_first_type_background"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY"
+                    app:srcCompat="@drawable/img_plain_white"
+                    app:tint="#A590A8" />
+
+                <TextView
+                    android:id="@+id/pokemon_list_first_type_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginEnd="4dp"
+                    android:layout_marginBottom="2dp"
+                    android:text="TextView"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp"
+                    tools:text="Poision" />
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/pokemon_list_second_type"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
+                app:layout_constraintStart_toEndOf="@+id/pokemon_list_first_type"
+                app:layout_constraintTop_toBottomOf="@+id/pokemon_list_name">
+
+                <ImageView
+                    android:id="@+id/pokemon_list_second_type_background"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY"
+                    app:srcCompat="@drawable/img_plain_white"
+                    app:tint="#A590A8" />
+
+                <TextView
+                    android:id="@+id/pokemon_list_second_type_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginEnd="4dp"
+                    android:layout_marginBottom="2dp"
+                    android:text="TextView"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp"
+                    tools:text="Poision" />
+
+            </FrameLayout>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

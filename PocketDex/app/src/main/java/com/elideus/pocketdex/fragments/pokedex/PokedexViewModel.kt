@@ -4,10 +4,8 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.elideus.pocketdex.models.PokemonModel
-import com.elideus.pocketdex.network.BaseNameAndUrl
+import com.elideus.pocketdex.models.pokemon.PokemonModel
 import com.elideus.pocketdex.network.PokeApi
-import com.elideus.pocketdex.network.PokemonDetailedData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -44,13 +42,11 @@ class PokedexViewModel : ViewModel() {
             return
         }
 
-        Log.i("END", "FETCHING MORE POKEMONS")
+        Log.i("RECYLCER VIEW", "FETCHING MORE POKEMONS")
 
         _isLoadingMorePokemons.value = true
 
         coroutineScope.launch {
-            //Also, we want to load ten more
-
             try {
                 //Try to get all the pokemons in a specific range
                 val pokemonsData =
@@ -64,7 +60,7 @@ class PokedexViewModel : ViewModel() {
 
                 //For each pokemon retrieved, get its data
                 for (pokeData in pokemonsData.results) {
-                    val pokemon = PokemonModel.getPokemonShortData(pokeData.name)
+                    val pokemon = PokemonModel.getPokemonData(pokeData.name)
                     pokemon?.let { listOfPokemonsDetails.add(it) }
                 }
 

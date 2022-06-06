@@ -3,13 +3,14 @@ package com.elideus.pocketdex.views
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.elideus.pocketdex.R
-import com.elideus.pocketdex.models.PokemonModel
+import com.elideus.pocketdex.models.pokemon.PokemonModel
 import com.elideus.pocketdex.utils.*
 
 
@@ -39,39 +40,78 @@ class PokemonAdapter :
 
         private val pokemonBackground: ImageView =
             itemView.findViewById(R.id.pokemon_list_item_background)
-        private val pokemonImage: ImageView = itemView.findViewById(R.id.pokemon_image)
-        private val pokemonName: TextView = itemView.findViewById(R.id.pokemon_name)
-        private val pokemonId: TextView = itemView.findViewById(R.id.pokemon_id)
-        private val pokemonTypeText: TextView = itemView.findViewById(R.id.pokemon_type_text)
-        private val pokemonTypeImage: ImageView =
-            itemView.findViewById(R.id.pokemon_type_background)
-
+        private val pokemonImage: ImageView = itemView.findViewById(R.id.pokemon_list_image)
+        private val pokemonName: TextView = itemView.findViewById(R.id.pokemon_list_name)
+        private val pokemonId: TextView = itemView.findViewById(R.id.pokemon_list_id)
+        private val pokemonFirstTypeContainer: FrameLayout =
+            itemView.findViewById(R.id.pokemon_list_first_type)
+        private val pokemonFirstTypeText: TextView =
+            itemView.findViewById(R.id.pokemon_list_first_type_text)
+        private val pokemonFirstTypeImage: ImageView =
+            itemView.findViewById(R.id.pokemon_list_first_type_background)
+        private val pokemonSecondTypeContainer: FrameLayout =
+            itemView.findViewById(R.id.pokemon_list_second_type)
+        private val pokemonSecondTypeText: TextView =
+            itemView.findViewById(R.id.pokemon_list_second_type_text)
+        private val pokemonSecondTypeImage: ImageView =
+            itemView.findViewById(R.id.pokemon_list_second_type_background)
 
         //This is used to bind the data to the view holder
         fun bind(item: PokemonModel) {
 
-            var type = "unknown"
+            loadImageWithGlide(item.maleSprite, pokemonImage)
 
-            if (item.types.isNotEmpty()) {
-                type = item.types[0].name
-            }
+            val pokemonColor = getPokemonBackgroundColor(itemView.context, item.species.color)
 
-            val pokemonColor = getPokemonBackgroundColor(itemView.context, type)
-            val pokemonDarkerColor = manipulateColor(pokemonColor, 0.75f)
+            pokemonBackground.setColorFilter(pokemonColor)
 
-            pokemonName.text = formatPocketdexObjectName(item.name)
-            pokemonName.setTextColor(getTextColorByBackgroundColor(itemView.context, pokemonColor))
             pokemonId.text = "#${item.id}"
-            pokemonTypeText.text = type
-            pokemonTypeText.setTextColor(
+            pokemonId.setTextColor(
                 getTextColorByBackgroundColor(
                     itemView.context,
-                    pokemonDarkerColor
+                    pokemonColor
                 )
             )
-            pokemonTypeImage.setColorFilter(pokemonDarkerColor)
-            pokemonBackground.setColorFilter(pokemonColor)
-            loadImageWithGlide(item.maleSprite, pokemonImage)
+
+            pokemonName.text = item.name
+            pokemonName.setTextColor(
+                getTextColorByBackgroundColor(
+                    itemView.context,
+                    pokemonColor
+                )
+            )
+
+            if (item.types.size > 0) {
+                val typeOneColor = getPokemonTypeColor(itemView.context, item.types[0].name)
+
+                pokemonFirstTypeText.text = item.types[0].name
+                pokemonFirstTypeText.setTextColor(
+                    getTextColorByBackgroundColor(
+                        itemView.context,
+                        typeOneColor
+                    )
+                )
+
+                pokemonFirstTypeImage.setColorFilter(typeOneColor)
+
+                if (item.types.size > 1) {
+                    val typeTwoColor = getPokemonTypeColor(itemView.context, item.types[1].name)
+
+                    pokemonSecondTypeText.text = item.types[1].name
+                    pokemonSecondTypeText.setTextColor(
+                        getTextColorByBackgroundColor(
+                            itemView.context,
+                            typeTwoColor
+                        )
+                    )
+                    pokemonSecondTypeImage.setColorFilter(typeTwoColor)
+                } else {
+                    pokemonSecondTypeContainer.visibility = View.GONE
+                }
+            } else {
+                pokemonFirstTypeContainer.visibility = View.GONE
+                pokemonSecondTypeContainer.visibility = View.GONE
+            }
 
             pokemonBackground.setOnClickListener { v: View ->
                 onPokemonClickedListener.onPokemonClicked(

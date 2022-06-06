@@ -73,6 +73,7 @@ class PokedexFragment : Fragment() {
                 super.onScrollStateChanged(recyclerView, newState)
 
                 //If we reach the end of the list, we want to show more pokemons
+                //TODO: Verificar scroll
                 if (recyclerView.canScrollVertically(3) == false) {
                     viewModel.getMorePokemons()
                 }

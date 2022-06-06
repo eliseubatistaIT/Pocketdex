@@ -3,37 +3,58 @@ package com.elideus.pocketdex.utils
 import android.content.Context
 import android.graphics.Color
 import androidx.core.content.ContextCompat.getColor
-import androidx.core.graphics.red
 import com.elideus.pocketdex.R
-import com.elideus.pocketdex.models.TypeModel
 
-//Function to get a pokemon color by its type
-fun getPokemonBackgroundColor(context: Context, pokemonType: String): Int {
+//Function to get a pokemon color
+fun getPokemonBackgroundColor(context: Context, pokemonColorName: String): Int {
     val res = context.resources
 
-    var newColor = res.getColor(R.color.pokemon_unknown)
+    var newColor = res.getColor(R.color.pokemon_white)
+
+    when (pokemonColorName) {
+        "black" -> newColor = getColor(context, R.color.pokemon_black)
+        "blue" -> newColor = getColor(context, R.color.pokemon_blue)
+        "brown" -> newColor = getColor(context, R.color.pokemon_brown)
+        "gray" -> newColor = getColor(context, R.color.pokemon_gray)
+        "green" -> newColor = getColor(context, R.color.pokemon_green)
+        "pink" -> newColor = getColor(context, R.color.pokemon_pink)
+        "purple" -> newColor = getColor(context, R.color.pokemon_purple)
+        "red" -> newColor = getColor(context, R.color.pokemon_red)
+        "white" -> newColor = getColor(context, R.color.pokemon_white)
+        "yellow" -> newColor = getColor(context, R.color.pokemon_yellow)
+        else -> newColor = getColor(context, R.color.pokemon_white)
+    }
+
+    return newColor
+}
+
+//Function to get a pokemon type color
+fun getPokemonTypeColor(context: Context, pokemonType: String): Int {
+    val res = context.resources
+
+    var newColor = res.getColor(R.color.type_unknown)
 
     when (pokemonType) {
-        "normal" -> newColor = getColor(context, R.color.pokemon_normal)
-        "fighting" -> newColor = getColor(context, R.color.pokemon_fighting)
-        "flying" -> newColor = getColor(context, R.color.pokemon_flying)
-        "poison" -> newColor = getColor(context, R.color.pokemon_poison)
-        "ground" -> newColor = getColor(context, R.color.pokemon_ground)
-        "rock" -> newColor = getColor(context, R.color.pokemon_rock)
-        "bug" -> newColor = getColor(context, R.color.pokemon_bug)
-        "ghost" -> newColor = getColor(context, R.color.pokemon_ghost)
-        "steel" -> newColor = getColor(context, R.color.pokemon_steel)
-        "fire" -> newColor = getColor(context, R.color.pokemon_fire)
-        "water" -> newColor = getColor(context, R.color.pokemon_water)
-        "grass" -> newColor = getColor(context, R.color.pokemon_grass)
-        "electric" -> newColor = getColor(context, R.color.pokemon_electric)
-        "psychic" -> newColor = getColor(context, R.color.pokemon_psychic)
-        "ice" -> newColor = getColor(context, R.color.pokemon_ice)
-        "dragon" -> newColor = getColor(context, R.color.pokemon_dragon)
-        "dark" -> newColor = getColor(context, R.color.pokemon_dark)
-        "fairy" -> newColor = getColor(context, R.color.pokemon_fairy)
-        "shadow" -> newColor = getColor(context, R.color.pokemon_shadow)
-        else -> newColor = getColor(context, R.color.pokemon_unknown)
+        "normal" -> newColor = getColor(context, R.color.type_normal)
+        "fighting" -> newColor = getColor(context, R.color.type_fighting)
+        "flying" -> newColor = getColor(context, R.color.type_flying)
+        "poison" -> newColor = getColor(context, R.color.type_poison)
+        "ground" -> newColor = getColor(context, R.color.type_ground)
+        "rock" -> newColor = getColor(context, R.color.type_rock)
+        "bug" -> newColor = getColor(context, R.color.type_bug)
+        "ghost" -> newColor = getColor(context, R.color.type_ghost)
+        "steel" -> newColor = getColor(context, R.color.type_steel)
+        "fire" -> newColor = getColor(context, R.color.type_fire)
+        "water" -> newColor = getColor(context, R.color.type_water)
+        "grass" -> newColor = getColor(context, R.color.type_grass)
+        "electric" -> newColor = getColor(context, R.color.type_electric)
+        "psychic" -> newColor = getColor(context, R.color.type_psychic)
+        "ice" -> newColor = getColor(context, R.color.type_ice)
+        "dragon" -> newColor = getColor(context, R.color.type_dragon)
+        "black" -> newColor = getColor(context, R.color.type_dark)
+        "fairy" -> newColor = getColor(context, R.color.type_fairy)
+        "shadow" -> newColor = getColor(context, R.color.type_shadow)
+        else -> newColor = getColor(context, R.color.type_unknown)
     }
 
     return newColor
