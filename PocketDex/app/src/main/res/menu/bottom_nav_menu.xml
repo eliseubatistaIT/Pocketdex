@@ -1,30 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-
     <item
-        android:id="@+id/navigation_location"
+        android:id="@+id/nav_locations"
         android:icon="@drawable/ic_map"
-        android:title="@string/bar_item_locations" />
+        android:title="Locations" />
 
     <item
-        android:id="@+id/navigation_items"
+        android:id="@+id/nav_items"
         android:icon="@drawable/ic_items"
-        android:title="@string/bar_item_items" />
+        android:title="Items" />
 
     <item
-        android:id="@+id/navigation_pokedex"
+        android:id="@+id/nav_pokedex"
         android:icon="@drawable/ic_pokedex"
-        android:title="@string/bar_item_pokedex" />
+        android:title="Pokedex" />
 
     <item
-        android:id="@+id/navigation_profile"
+        android:id="@+id/nav_profile"
         android:icon="@drawable/ic_person"
-        android:title="@string/bar_item_profile" />
+        android:title="Profile" />
 
     <item
-        android:id="@+id/navigation_settings"
+        android:id="@+id/nav_settings"
         android:icon="@drawable/ic_settings"
-        android:title="@string/bar_item_settings" />
+        android:title="Settings" />
 
 </menu>
