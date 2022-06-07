@@ -2,7 +2,7 @@ package com.eliseubatista.pocketdex.models.pokemons
 
 import android.util.Log
 import com.eliseubatista.pocketdex.network.PokeApi
-import com.eliseubatista.pocketdex.network.getNamesFromNamesAndUrl
+import com.eliseubatista.pocketdex.network.getNames
 
 class TypeModel {
 
@@ -43,18 +43,12 @@ class TypeModel {
                 //Try to get the type data, and if we succeed, return the data
                 val typeDetailedData = PokeApi.retrofitService.getTypeByName(typeName)
 
-                val doubleDamageFrom =
-                    getNamesFromNamesAndUrl(typeDetailedData.damageRelations.doubleDamageFrom)
-                val doubleDamageTo =
-                    getNamesFromNamesAndUrl(typeDetailedData.damageRelations.doubleDamageTo)
-                val halfDamageFrom =
-                    getNamesFromNamesAndUrl(typeDetailedData.damageRelations.halfDamageFrom)
-                val halfDamageTo =
-                    getNamesFromNamesAndUrl(typeDetailedData.damageRelations.halfDamageTo)
-                val noDamageFrom =
-                    getNamesFromNamesAndUrl(typeDetailedData.damageRelations.noDamageFrom)
-                val noDamageTo =
-                    getNamesFromNamesAndUrl(typeDetailedData.damageRelations.noDamageTo)
+                val doubleDamageFrom = typeDetailedData.damageRelations.doubleDamageFrom.getNames()
+                val doubleDamageTo = typeDetailedData.damageRelations.doubleDamageTo.getNames()
+                val halfDamageFrom = typeDetailedData.damageRelations.halfDamageFrom.getNames()
+                val halfDamageTo = typeDetailedData.damageRelations.halfDamageTo.getNames()
+                val noDamageFrom = typeDetailedData.damageRelations.noDamageFrom.getNames()
+                val noDamageTo = typeDetailedData.damageRelations.noDamageTo.getNames()
 
                 typeModel = TypeModel(
                     typeDetailedData.id,

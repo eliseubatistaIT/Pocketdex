@@ -62,6 +62,12 @@ interface PokeApiService {
     @GET("item/{itemName}/")
     suspend fun getItemByName(@Path("itemName") name: String): ItemData
 
+    @GET("type")
+    suspend fun getTypes(
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int
+    ): GlobalSearchData
+
     @GET("type/{typeName}/")
     suspend fun getTypeByName(@Path("typeName") name: String): TypeData
 

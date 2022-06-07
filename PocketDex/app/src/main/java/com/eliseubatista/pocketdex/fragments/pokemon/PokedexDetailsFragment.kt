@@ -1,12 +1,10 @@
 package com.eliseubatista.pocketdex.fragments.pokemon
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -52,6 +50,7 @@ class PokedexDetailsFragment : Fragment() {
     ) {
         refreshPokemonHeader(binding, pokemon)
         refreshPokemonAbout(binding, pokemon)
+        refreshPokemonStats(binding, pokemon)
     }
 
     private fun refreshPokemonHeader(
@@ -116,21 +115,30 @@ class PokedexDetailsFragment : Fragment() {
     private fun refreshPokemonAbout(binding: FragmentPokedexDetailsBinding, pokemon: PokemonModel) {
         val pokemonColor = getPokemonBackgroundColor(requireContext(), pokemon.species.color)
 
-        val flavor = formatPocketdexObjectDescription(pokemon.species.flavor)
+        binding.pokemonDetailsDescriptionText.text =
+            formatPocketdexObjectDescription(pokemon.species.flavor)
 
-        binding.pokemonDetailsDescriptionText.text = flavor
+        binding.pokemonDetailsBaseStatsFixedText.setTextColor(pokemonColor)
 
-        binding.pokemonDetailsPokedexDataFixedText.setTextColor(pokemonColor)
+        binding.pokemonDetailsBar1.setColorFilter(pokemonColor)
+        binding.pokemonDetailsBar2.setColorFilter(pokemonColor)
 
-        binding.pokemonDetaisSpeciesText.text = pokemon.species.genus
+        binding.pokemonDetailsSpeciesText.text = formatPokemonGenus(pokemon.species.genus)
 
-        val height = pokemon.height / 10.0f;
+        binding.pokemonDetailsHeightText.text = formatPokemonHeight(pokemon.height)
 
-        binding.pokemonDetaisHeightText.text = "${height}m"
+        binding.pokemonDetailsWeightText.text = formatPokemonWeight(pokemon.weight)
+    }
 
-        val weight = pokemon.weight / 10.0f;
+    private fun refreshPokemonStats(binding: FragmentPokedexDetailsBinding, pokemon: PokemonModel) {
+        val pokemonColor = getPokemonBackgroundColor(requireContext(), pokemon.species.color)
 
-        binding.pokemonDetaisWeightText.text = "${weight}kg"
+        binding.pokemonDetailsHpText.text = pokemon.stats[0].value.toString()
+        binding.pokemonDetailsAttackText.text = pokemon.stats[1].value.toString()
+        binding.pokemonDetailsDefenseText.text = pokemon.stats[2].value.toString()
+        binding.pokemonDetailsSpAttackText.text = pokemon.stats[3].value.toString()
+        binding.pokemonDetailsSpDefenseText.text = pokemon.stats[4].value.toString()
+        binding.pokemonDetailsSpeedText.text = pokemon.stats[5].value.toString()
 
 
     }

@@ -20,20 +20,42 @@ data class GlobalSearchData(
     @Json(name = "results") val results: List<BaseNameAndUrl>
 )
 
-fun getNamesFromNamesAndUrl(listOfNamesAndUrls: List<BaseNameAndUrl>): List<String> {
-    val result = mutableListOf<String>()
-    for (nameAndUrl in listOfNamesAndUrls) {
-        result.add(nameAndUrl.name)
+fun List<BaseNameAndUrl>.getNames(): List<String> {
+    val names = mutableListOf<String>()
+
+    for (element in this) {
+        names.add(element.name)
     }
 
-    return result
+    return names
 }
 
-fun getUrlFromNamesAndUrl(listOfNamesAndUrls: List<BaseNameAndUrl>): List<String> {
-    val result = mutableListOf<String>()
-    for (nameAndUrl in listOfNamesAndUrls) {
-        result.add(nameAndUrl.url)
+fun List<BaseNameAndUrl>.getUrls(): List<String> {
+    val urls = mutableListOf<String>()
+
+    for (element in this) {
+        urls.add(element.url)
     }
 
-    return result
+    return urls
+}
+
+fun GlobalSearchData.getNames(): List<String> {
+    val globalNames = mutableListOf<String>()
+
+    for (result in results) {
+        globalNames.add(result.name)
+    }
+
+    return globalNames
+}
+
+fun GlobalSearchData.getUrls(): List<String> {
+    val globalUrls = mutableListOf<String>()
+
+    for (result in results) {
+        globalUrls.add(result.url)
+    }
+
+    return globalUrls
 }

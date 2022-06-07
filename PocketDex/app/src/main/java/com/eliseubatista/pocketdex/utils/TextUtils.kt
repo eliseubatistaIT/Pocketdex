@@ -1,5 +1,6 @@
 package com.eliseubatista.pocketdex.utils
 
+import android.util.Log
 import java.util.*
 
 //Function used to format pokemon, item and locations names
@@ -24,7 +25,6 @@ fun formatPocketdexObjectName(name: String): String {
     return newName
 }
 
-//Function used to format pokemon, item and locations names
 fun formatPocketdexObjectDescription(description: String): String {
     if (description.isEmpty()) {
         return description
@@ -41,3 +41,40 @@ fun formatPocketdexObjectDescription(description: String): String {
 
     return builder.toString()
 }
+
+fun formatPokemonGenus(genus: String): String {
+
+    Log.i("Genus", genus)
+
+    if (genus.isEmpty()) {
+        return genus
+    }
+
+    //Make sure first char is uppercase
+    val upperCaseGenus = genus.toCharArray()
+    upperCaseGenus[0] = upperCaseGenus[0].uppercaseChar()
+
+    var newGenus = String(upperCaseGenus)
+
+    //For types like "Seed-Pokemon"
+    if (newGenus.contains("Pokémon")) {
+        newGenus = newGenus.replace("Pokémon", "")
+    }
+
+    return newGenus
+}
+
+fun formatPokemonHeight(height: Int): String {
+
+    val formattedHeight = "${height / 10.0f}m"
+
+    return formattedHeight
+}
+
+fun formatPokemonWeight(weight: Int): String {
+
+    val formattedWeight = "${weight / 10.0f}Kg"
+
+    return formattedWeight
+}
+
