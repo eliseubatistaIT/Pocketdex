@@ -45,26 +45,16 @@ class PokemonAdapter :
         //This is used to bind the data to the view holder
         fun bind(clickedListener: OnPokemonClickedListener, item: PokemonModel) {
 
-            val imageSizeDp = getImageViewSizeByEvolutionChain(item.name, item.evolutionChain)
-            val imageSizePx = dpToPx(itemView.context, imageSizeDp)
+            val imageScale = getImageScaleByEvolutionChain(item.name, item.evolutionChain)
+
+            binding.pokemonListImage.scaleX = imageScale
+            binding.pokemonListImage.scaleY = imageScale
 
             loadImageWithGlide(item.maleSprite, binding.pokemonListImage)
-            //val pokemonBitmapImage = loadImageWithGlide(item.maleSprite, itemView.context)
-            //binding.pokemonListImage.setImageBitmap(pokemonBitmapImage)
-
-/*
-
-            val imageParams = getPokemonItemListImageMarginsByImageSize(imageSizePx)
-
-            binding.pokemonListImage.layoutParams = imageParams
-            binding.pokemonListImage.layoutParams.height = imageSizePx
-            binding.pokemonListImage.layoutParams.width = imageSizePx
-
- */
 
             val pokemonColor = getPokemonBackgroundColor(itemView.context, item.color)
 
-            binding.pokemonListItemBackground.setColorFilter(pokemonColor)
+            binding.pokemonListItemBackground.background.setTint(pokemonColor)
 
             binding.pokemonListId.text = "#${item.id}"
             binding.pokemonListId.setTextColor(

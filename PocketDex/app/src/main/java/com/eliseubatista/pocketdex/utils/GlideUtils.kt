@@ -15,15 +15,3 @@ fun loadImageWithGlide(imageUrl: String, imageView: ImageView) {
         .load(imgUri)
         .into(imageView)
 }
-
-fun loadImageWithGlide(imageUrl: String, context: Context): Bitmap {
-    val imgUri = imageUrl.toUri().buildUpon().scheme("https").build()
-
-    val loadedBitmap = Glide.with(context)
-        .asBitmap()
-        .load(imgUri)
-        .submit()
-        .get()
-
-    return loadedBitmap
-}

@@ -54,6 +54,12 @@ class PokedexDetailsFragment : Fragment() {
         binding: FragmentPokedexDetailsBinding,
         pokemon: PokemonModel
     ) {
+
+        val imageScale = getImageScaleByEvolutionChain(pokemon.name, pokemon.evolutionChain)
+
+        binding.pokemonDetailsAvatar.scaleX = imageScale
+        binding.pokemonDetailsAvatar.scaleY = imageScale
+
         loadImageWithGlide(pokemon.maleSprite, binding.pokemonDetailsAvatar)
 
         val pokemonColor = getPokemonBackgroundColor(requireContext(), pokemon.color)

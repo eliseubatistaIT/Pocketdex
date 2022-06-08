@@ -9,41 +9,46 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="160dp">
 
         <ImageView
             android:id="@+id/pokemon_list_item_background"
             android:layout_width="match_parent"
-            android:layout_height="120dp"
+            android:layout_height="match_parent"
             android:layout_marginTop="24dp"
+            android:background="@drawable/shape_rounded_rectangle"
             android:scaleType="fitXY"
-            app:srcCompat="@drawable/img_plain_white"
-            app:tint="#009688" />
-
-        <ImageView
-            android:id="@+id/pokemon_list_watermark"
-            android:layout_width="185dp"
-            android:layout_height="140dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="14dp"
-            android:alpha="0.4"
-            tools:srcCompat="@drawable/img_pokeball_watermark" />
+            tools:backgroundTint="#BD2555" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
+            <ImageView
+                android:id="@+id/pokemon_list_watermark"
+                android:layout_width="250dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="-55dp"
+                android:alpha="0.1"
+                android:scaleType="centerCrop"
+                android:scaleY="1"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/img_pokeball_watermark" />
 
             <ImageView
                 android:id="@+id/pokemon_list_image"
-                android:layout_width="175dp"
-                android:layout_height="175dp"
-                android:layout_marginTop="-8dp"
-                android:scaleType="center"
+                android:layout_width="170dp"
+                android:layout_height="170dp"
+                android:layout_marginBottom="-28dp"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 tools:srcCompat="@drawable/img_pokemon_very_large" />
+
 
             <TextView
                 android:id="@+id/pokemon_list_id"
