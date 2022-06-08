@@ -61,41 +61,5 @@ class TypeModel {
                 databaseType.name
             )
         }
-
-        /*
-        suspend fun getType(typeName: String): TypeModel? {
-            var typeModel: TypeModel? = null
-
-            try {
-                //Try to get the type data, and if we succeed, return the data
-                val typeDetailedData = PokeApi.retrofitService.getTypeByName(typeName)
-
-                val doubleDamageFrom = typeDetailedData.damageRelations.doubleDamageFrom.getNames()
-                val doubleDamageTo = typeDetailedData.damageRelations.doubleDamageTo.getNames()
-                val halfDamageFrom = typeDetailedData.damageRelations.halfDamageFrom.getNames()
-                val halfDamageTo = typeDetailedData.damageRelations.halfDamageTo.getNames()
-                val noDamageFrom = typeDetailedData.damageRelations.noDamageFrom.getNames()
-                val noDamageTo = typeDetailedData.damageRelations.noDamageTo.getNames()
-
-                typeModel = TypeModel(
-                    typeDetailedData.id,
-                    doubleDamageFrom,
-                    doubleDamageTo,
-                    halfDamageFrom,
-                    halfDamageTo,
-                    noDamageFrom,
-                    noDamageTo,
-                    typeDetailedData.name
-                )
-            } catch (e: Exception) {
-                //Otherwise, return null
-                Log.i("ERROR FETCHING TYPE", e.toString())
-                typeModel = null
-            }
-
-            return typeModel
-        }
-
-         */
     }
 }

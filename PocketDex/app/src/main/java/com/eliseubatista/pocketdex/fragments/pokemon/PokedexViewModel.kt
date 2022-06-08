@@ -52,45 +52,12 @@ class PokedexViewModel(val application: Application) : ViewModel() {
 
         coroutineScope.launch {
 
-            pocketdexRepository.refreshTypes()
-            pocketdexRepository.refreshPokemons(10, pokemonsLoaded)
+            pocketdexRepository.refreshTypes(application)
+            pocketdexRepository.refreshPokemons(application,10, pokemonsLoaded)
 
             pokemonsLoaded += 10
 
             _isLoadingMorePokemons.value = false
-
-            /*
-            try {
-                //Try to get all the pokemons in a specific range
-                val pokemonsData =
-                    PokeApi.retrofitService.getPokemons(10, pokemonsLoaded)
-
-                pokemonsLoaded += 10
-
-                //Copy the value of the listOfPokemons (if its null, create a new list)
-                val listOfPokemonsDetails =
-                    _listOfPokemons.value?.toMutableList() ?: mutableListOf<PokemonModel>()
-
-                //For each pokemon retrieved, get its data
-                for (pokeData in pokemonsData.results) {
-                    val pokemon = PokemonModel.getPokemonData(pokeData.name, pocketdexRepository)
-                    pokemon?.let { listOfPokemonsDetails.add(it) }
-                }
-
-                //Update the live data to refresh the observers
-                _listOfPokemons.value = listOfPokemonsDetails
-
-                _isLoadingMorePokemons.value = false
-
-            } catch (e: Exception) {
-                //If we get an exception, create an empty list
-                Log.i("ERRO", e.toString())
-                _listOfPokemons.value = ArrayList()
-
-                _isLoadingMorePokemons.value = false
-            }
-
-             */
         }
     }
 

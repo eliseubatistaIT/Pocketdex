@@ -50,24 +50,9 @@ class PokemonDetailsViewModel(val application: Application, val pokemonName: Str
 
         coroutineScope.launch {
 
-            _pokemon.value = pocketdexRepository.getPokemonByName(pokemonName)
+            _pokemon.value = pocketdexRepository.getPokemonByName(application, pokemonName)
 
             _isLoadingPokemon.value = false
-
-            /*
-            try {
-                _pokemon.value = PokemonModel.getPokemonData(pokemonName, pocketdexRepository)
-
-                _isLoadingPokemon.value = false
-
-            } catch (e: Exception) {
-                //If we get an exception, create an empty list
-                Log.i("ERRO", e.toString())
-
-                _isLoadingPokemon.value = false
-            }
-
-             */
         }
     }
 

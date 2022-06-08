@@ -29,13 +29,10 @@ class PokedexDetailsFragment : Fragment() {
         val bundle = requireArguments()
         pokemonName = bundle.getString("POKEMON_NAME", "")
 
-        viewModelFactory = PokemonDetailsViewModel.Factory(requireActivity().application, pokemonName)
+        viewModelFactory =
+            PokemonDetailsViewModel.Factory(requireActivity().application, pokemonName)
         viewModel =
             ViewModelProvider(this, viewModelFactory).get(PokemonDetailsViewModel::class.java)
-
-        /*
-        (activity as AppCompatActivity).supportActionBar?.title =
-            "${formatPocketdexObjectName(pokemonName)} details" */
 
         viewModel.pokemon.observe(
             viewLifecycleOwner,
@@ -82,33 +79,33 @@ class PokedexDetailsFragment : Fragment() {
         if (pokemon.types.size > 0) {
             val typeOneColor = getPokemonTypeColor(requireContext(), pokemon.types[0])
 
-            binding.pokemonDetailsFirstTypeText.text = pokemon.types[0]
-            binding.pokemonDetailsFirstTypeText.setTextColor(
+            binding.pokemonDetailsFirstType.typeText.text = pokemon.types[0]
+            binding.pokemonDetailsFirstType.typeText.setTextColor(
                 getTextColorByBackgroundColor(
                     requireContext(),
                     typeOneColor
                 )
             )
 
-            binding.pokemonDetailsFirstTypeBackground.setColorFilter(typeOneColor)
+            binding.pokemonDetailsFirstType.typeBackground.setColorFilter(typeOneColor)
 
             if (pokemon.types.size > 1) {
                 val typeTwoColor = getPokemonTypeColor(requireContext(), pokemon.types[1])
 
-                binding.pokemonDetailsSecondTypeText.text = pokemon.types[1]
-                binding.pokemonDetailsSecondTypeText.setTextColor(
+                binding.pokemonDetailsSecondType.typeText.text = pokemon.types[1]
+                binding.pokemonDetailsSecondType.typeText.setTextColor(
                     getTextColorByBackgroundColor(
                         requireContext(),
                         typeTwoColor
                     )
                 )
-                binding.pokemonDetailsSecondTypeBackground.setColorFilter(typeTwoColor)
+                binding.pokemonDetailsSecondType.typeBackground.setColorFilter(typeTwoColor)
             } else {
-                binding.pokemonDetailsSecondType.visibility = View.GONE
+                binding.pokemonDetailsSecondType.typeContainer.visibility = View.GONE
             }
         } else {
-            binding.pokemonDetailsFirstType.visibility = View.GONE
-            binding.pokemonDetailsSecondType.visibility = View.GONE
+            binding.pokemonDetailsFirstType.typeContainer.visibility = View.GONE
+            binding.pokemonDetailsSecondType.typeContainer.visibility = View.GONE
         }
     }
 
@@ -118,26 +115,26 @@ class PokedexDetailsFragment : Fragment() {
         binding.pokemonDetailsDescriptionText.text =
             formatPocketdexObjectDescription(pokemon.flavor)
 
-        binding.pokemonDetailsBaseStatsFixedText.setTextColor(pokemonColor)
+        binding.pokemonDetailsAbout.pokemonDetailsBar1.setColorFilter(pokemonColor)
+        binding.pokemonDetailsAbout.pokemonDetailsBar2.setColorFilter(pokemonColor)
 
-        binding.pokemonDetailsBar1.setColorFilter(pokemonColor)
-        binding.pokemonDetailsBar2.setColorFilter(pokemonColor)
+        binding.pokemonDetailsAbout.speciesValue.text = formatPokemonGenus(pokemon.genus)
 
-        binding.pokemonDetailsSpeciesText.text = formatPokemonGenus(pokemon.genus)
+        binding.pokemonDetailsAbout.heightValue.text = formatPokemonHeight(pokemon.height)
 
-        binding.pokemonDetailsHeightText.text = formatPokemonHeight(pokemon.height)
-
-        binding.pokemonDetailsWeightText.text = formatPokemonWeight(pokemon.weight)
+        binding.pokemonDetailsAbout.weightValue.text = formatPokemonWeight(pokemon.weight)
     }
 
     private fun refreshPokemonStats(binding: FragmentPokedexDetailsBinding, pokemon: PokemonModel) {
         val pokemonColor = getPokemonBackgroundColor(requireContext(), pokemon.color)
 
-        binding.pokemonDetailsHpText.text = pokemon.hp.toString()
-        binding.pokemonDetailsAttackText.text = pokemon.attack.toString()
-        binding.pokemonDetailsDefenseText.text = pokemon.defense.toString()
-        binding.pokemonDetailsSpAttackText.text = pokemon.specialAttack.toString()
-        binding.pokemonDetailsSpDefenseText.text = pokemon.specialDefense.toString()
-        binding.pokemonDetailsSpeedText.text = pokemon.speed.toString()
+        binding.pokemonDetailsStats.baseStatsFixedText.setTextColor(pokemonColor)
+
+        binding.pokemonDetailsStats.hpValue.text = pokemon.hp.toString()
+        binding.pokemonDetailsStats.attackValue.text = pokemon.attack.toString()
+        binding.pokemonDetailsStats.defenseValue.text = pokemon.defense.toString()
+        binding.pokemonDetailsStats.spAttackValue.text = pokemon.specialAttack.toString()
+        binding.pokemonDetailsStats.spDefenseValue.text = pokemon.specialDefense.toString()
+        binding.pokemonDetailsStats.speedValue.text = pokemon.speed.toString()
     }
 }

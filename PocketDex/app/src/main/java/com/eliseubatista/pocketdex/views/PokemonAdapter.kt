@@ -10,73 +10,72 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.eliseubatista.pocketdex.R
+import com.eliseubatista.pocketdex.databinding.ItemPokemonListBinding
 import com.eliseubatista.pocketdex.models.pokemons.PokemonModel
-import com.eliseubatista.pocketdex.utils.getPokemonBackgroundColor
-import com.eliseubatista.pocketdex.utils.getPokemonTypeColor
-import com.eliseubatista.pocketdex.utils.getTextColorByBackgroundColor
-import com.eliseubatista.pocketdex.utils.loadImageWithGlide
+import com.eliseubatista.pocketdex.utils.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 
 class PokemonAdapter :
     ListAdapter<PokemonModel, PokemonAdapter.ViewHolder>(PokemonDiffCallback()) {
 
+    private var coroutineJob = Job()
+    private val coroutineScope = CoroutineScope(coroutineJob + Dispatchers.Main)
+
     lateinit var onPokemonClickedListener: OnPokemonClickedListener
 
     //Creates the view holder
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.item_pokemon_list, parent, false)
-        return ViewHolder(view, onPokemonClickedListener)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PokemonAdapter.ViewHolder {
+        val layoutInflater = LayoutInflater.from(parent.context)
+        val binding = ItemPokemonListBinding.inflate(layoutInflater, parent, false)
+        return PokemonAdapter.ViewHolder(binding)
     }
 
     //Binds a new item to the view holder
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item)
+        holder.bind(onPokemonClickedListener, item)
     }
 
     //Private constructor, i dont want to call it by accident, i want to use the from function
-    class ViewHolder(
-        itemView: View,
-        private val onPokemonClickedListener: OnPokemonClickedListener
-    ) : RecyclerView.ViewHolder(itemView) {
-
-        private val pokemonBackground: ImageView =
-            itemView.findViewById(R.id.pokemon_list_item_background)
-        private val pokemonImage: ImageView = itemView.findViewById(R.id.pokemon_list_image)
-        private val pokemonName: TextView = itemView.findViewById(R.id.pokemon_list_name)
-        private val pokemonId: TextView = itemView.findViewById(R.id.pokemon_list_id)
-        private val pokemonFirstTypeContainer: FrameLayout =
-            itemView.findViewById(R.id.pokemon_list_first_type)
-        private val pokemonFirstTypeText: TextView =
-            itemView.findViewById(R.id.pokemon_list_first_type_text)
-        private val pokemonFirstTypeImage: ImageView =
-            itemView.findViewById(R.id.pokemon_list_first_type_background)
-        private val pokemonSecondTypeContainer: FrameLayout =
-            itemView.findViewById(R.id.pokemon_list_second_type)
-        private val pokemonSecondTypeText: TextView =
-            itemView.findViewById(R.id.pokemon_list_second_type_text)
-        private val pokemonSecondTypeImage: ImageView =
-            itemView.findViewById(R.id.pokemon_list_second_type_background)
+    class ViewHolder(val binding: ItemPokemonListBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         //This is used to bind the data to the view holder
-        fun bind(item: PokemonModel) {
+        fun bind(clickedListener: OnPokemonClickedListener, item: PokemonModel) {
 
-            loadImageWithGlide(item.maleSprite, pokemonImage)
+            val imageSizeDp = getImageViewSizeByEvolutionChain(item.name, item.evolutionChain)
+            val imageSizePx = dpToPx(itemView.context, imageSizeDp)
+
+            loadImageWithGlide(item.maleSprite, binding.pokemonListImage)
+            //val pokemonBitmapImage = loadImageWithGlide(item.maleSprite, itemView.context)
+            //binding.pokemonListImage.setImageBitmap(pokemonBitmapImage)
+
+/*
+
+            val imageParams = getPokemonItemListImageMarginsByImageSize(imageSizePx)
+
+            binding.pokemonListImage.layoutParams = imageParams
+            binding.pokemonListImage.layoutParams.height = imageSizePx
+            binding.pokemonListImage.layoutParams.width = imageSizePx
+
+ */
 
             val pokemonColor = getPokemonBackgroundColor(itemView.context, item.color)
 
-            pokemonBackground.setColorFilter(pokemonColor)
+            binding.pokemonListItemBackground.setColorFilter(pokemonColor)
 
-            pokemonId.text = "#${item.id}"
-            pokemonId.setTextColor(
+            binding.pokemonListId.text = "#${item.id}"
+            binding.pokemonListId.setTextColor(
                 getTextColorByBackgroundColor(
                     itemView.context,
                     pokemonColor
                 )
             )
 
-            pokemonName.text = item.name
-            pokemonName.setTextColor(
+            binding.pokemonListName.text = item.name
+            binding.pokemonListName.setTextColor(
                 getTextColorByBackgroundColor(
                     itemView.context,
                     pokemonColor
@@ -86,40 +85,42 @@ class PokemonAdapter :
             if (item.types.size > 0) {
                 val typeOneColor = getPokemonTypeColor(itemView.context, item.types[0])
 
-                pokemonFirstTypeText.text = item.types[0]
-                pokemonFirstTypeText.setTextColor(
+                binding.pokemonListFirstType.typeText.text = item.types[0]
+                binding.pokemonListFirstType.typeText.setTextColor(
                     getTextColorByBackgroundColor(
                         itemView.context,
                         typeOneColor
                     )
                 )
 
-                pokemonFirstTypeImage.setColorFilter(typeOneColor)
+                binding.pokemonListFirstType.typeBackground.setColorFilter(typeOneColor)
 
                 if (item.types.size > 1) {
                     val typeTwoColor = getPokemonTypeColor(itemView.context, item.types[1])
 
-                    pokemonSecondTypeText.text = item.types[1]
-                    pokemonSecondTypeText.setTextColor(
+                    binding.pokemonListSecondType.typeText.text = item.types[1]
+                    binding.pokemonListSecondType.typeText.setTextColor(
                         getTextColorByBackgroundColor(
                             itemView.context,
                             typeTwoColor
                         )
                     )
-                    pokemonSecondTypeImage.setColorFilter(typeTwoColor)
+                    binding.pokemonListSecondType.typeBackground.setColorFilter(typeTwoColor)
                 } else {
-                    pokemonSecondTypeContainer.visibility = View.GONE
+                    binding.pokemonListSecondType.typeContainer.visibility = View.GONE
                 }
             } else {
-                pokemonFirstTypeContainer.visibility = View.GONE
-                pokemonSecondTypeContainer.visibility = View.GONE
+                binding.pokemonListFirstType.typeContainer.visibility = View.GONE
+                binding.pokemonListSecondType.typeContainer.visibility = View.GONE
             }
 
-            pokemonBackground.setOnClickListener { v: View ->
-                onPokemonClickedListener.onPokemonClicked(
+            binding.pokemonListItemBackground.setOnClickListener { v: View ->
+                clickedListener.onPokemonClicked(
                     item.name
                 )
             }
+
+            binding.executePendingBindings()
         }
     }
 }

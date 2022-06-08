@@ -42,7 +42,6 @@ private fun retrofit(): Retrofit {
         .build()
 }
 
-
 interface PokeApiService {
     @GET("pokemon")
     suspend fun getPokemons(
