@@ -27,6 +27,11 @@ data class DatabasePokemon constructor(
     val weight: Int
 )
 
+fun DatabasePokemon.asDomainModel(): PokemonModel {
+    val pokemon = PokemonModel.fromDatabasePokemon(this)
+    return pokemon
+}
+
 fun List<DatabasePokemon>.asDomainModel(): List<PokemonModel> {
     val pokemons = mutableListOf<PokemonModel>()
 

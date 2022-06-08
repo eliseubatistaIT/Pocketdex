@@ -12,6 +12,9 @@ interface TypesDao {
     @Query("select * from databasetypes")
     fun getTypes(): LiveData<List<DatabaseTypes>>
 
+    @Query("select * from databasetypes where name = :name")
+    fun getTypeByName(name: String): DatabaseTypes
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(vararg types: DatabaseTypes)
 
@@ -27,6 +30,9 @@ interface PokemonDao {
 
     @Query("select * from databasepokemon")
     fun getPokemons(): LiveData<List<DatabasePokemon>>
+
+    @Query("select * from databasepokemon where name = :name")
+    fun getPokemonByName(name: String): DatabasePokemon
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(vararg pokemons: DatabasePokemon)

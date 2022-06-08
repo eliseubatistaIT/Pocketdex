@@ -34,7 +34,9 @@ class PocketdexRepository(private val database: PocketdexDatabase) {
 
             for (typeResult in typesGlobalData.results) {
                 val typeData = PokeApi.retrofitService.getTypeByName(typeResult.name)
-                typesDataList.add(typeData.asDatabaseModel())
+                val typeDatabase = TypeApiToTypeDatabase(typeData)
+                typesDataList.add(typeDatabase)
+                //typesDataList.add(typeData.asDatabaseModel())
             }
 
             //database.typesDao.insertAll(*typesDataList.asDatabaseModel())
@@ -51,6 +53,7 @@ class PocketdexRepository(private val database: PocketdexDatabase) {
             for (pokemonResult in pokemonsGlobalData.results) {
                 val pokemonDetailedData =
                     PokeApi.retrofitService.getPokemonByName(pokemonResult.name)
+                /*
                 val pokemonStats = pokemonDetailedData.getPokemonStats()
                 val pokemonTypes = pokemonDetailedData.getPokemonTypes()
                 val speciesData =
@@ -71,25 +74,9 @@ class PocketdexRepository(private val database: PocketdexDatabase) {
                 val pokemonMaleSprite = pokemonDetailedData.sprites.frontDefault ?: ""
                 val pokemonFemaleSprite = pokemonDetailedData.sprites.frontFemale ?: ""
 
-                val databasePokemon = DatabasePokemon(
-                    pokemonDetailedData.id,
-                    pokemonDetailedData.height,
-                    pokemonDetailedData.name,
-                    speciesData.color.name,
-                    evolutionChain,
-                    flavor,
-                    genus,
-                    pokemonMaleSprite,
-                    pokemonFemaleSprite,
-                    pokemonStats[0],
-                    pokemonStats[1],
-                    pokemonStats[2],
-                    pokemonStats[3],
-                    pokemonStats[4],
-                    pokemonStats[5],
-                    pokemonTypes,
-                    pokemonDetailedData.weight
-                )
+                 */
+
+                val databasePokemon = PokemonApiToPokemonDatabase(pokemonDetailedData)
 
                 pokemonsDataList.add(databasePokemon)
             }
@@ -100,10 +87,6 @@ class PocketdexRepository(private val database: PocketdexDatabase) {
     }
 
     fun getTypeByName(name: String): TypeModel? {
-        if (pokemonTypes == null) {
-            Log.i("REPOSITORY", "Pokemon Types is Null")
-            return null
-        }
 
         if (pokemonTypes.value == null) {
             Log.i("REPOSITORY", "Pokemon Types Value is Null")
@@ -119,4 +102,24 @@ class PocketdexRepository(private val database: PocketdexDatabase) {
         return pokemonTypes.value!![0]
     }
 
+    suspend fun getPokemonByName(name: String): PokemonModel? {
+
+        var pokeModel: PokemonModel? = null
+
+        withContext(Dispatchers.IO) {
+
+            var pokeDatabase = database.pokemonDao.getPokemonByName(name)
+
+            if (pokeDatabase == null) {
+                val pokemonDetailedData = PokeApi.retrofitService.getPokemonByName(name)
+
+                pokeDatabase = PokemonApiToPokemonDatabase(pokemonDetailedData)
+            }
+
+            pokeModel = pokeDatabase.asDomainModel()
+        }
+
+        return pokeModel
+
+    }
 }

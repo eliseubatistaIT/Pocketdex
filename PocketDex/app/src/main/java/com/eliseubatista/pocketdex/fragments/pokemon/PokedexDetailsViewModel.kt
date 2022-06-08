@@ -49,6 +49,12 @@ class PokemonDetailsViewModel(val application: Application, val pokemonName: Str
         _isLoadingPokemon.value = true
 
         coroutineScope.launch {
+
+            _pokemon.value = pocketdexRepository.getPokemonByName(pokemonName)
+
+            _isLoadingPokemon.value = false
+
+            /*
             try {
                 _pokemon.value = PokemonModel.getPokemonData(pokemonName, pocketdexRepository)
 
@@ -60,6 +66,8 @@ class PokemonDetailsViewModel(val application: Application, val pokemonName: Str
 
                 _isLoadingPokemon.value = false
             }
+
+             */
         }
     }
 
