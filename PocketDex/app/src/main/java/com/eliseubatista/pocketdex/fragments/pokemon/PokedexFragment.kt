@@ -62,15 +62,8 @@ class PokedexFragment : Fragment() {
             }
 
         //Create and observer to refresh the list automatically
-        viewModel.listOfPokemons.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                pokemonListAdapter.submitList(it)
-            }
-        })
-
-        //Create and observer to refresh the list automatically
-        viewModel.types.observe(viewLifecycleOwner, Observer {
-            Log.i("TYPES", it.toString())
+        viewModel.pokemons.observe(viewLifecycleOwner, Observer {
+            pokemonListAdapter.submitList(it)
         })
 
         //Scroll listenner

@@ -21,6 +21,11 @@ class PocketdexRepository(private val database: PocketdexDatabase) {
             it.asDomainModel()
         }
 
+    val pokemons: LiveData<List<PokemonModel>> =
+        Transformations.map(database.pokemonDao.getPokemons()) {
+            it.asDomainModel()
+        }
+
     suspend fun refreshTypes() {
         withContext(Dispatchers.IO) {
             val typesGlobalData = PokeApi.retrofitService.getTypes(100, 0)
@@ -37,9 +42,9 @@ class PocketdexRepository(private val database: PocketdexDatabase) {
         }
     }
 
-    suspend fun refreshPokemons() {
+    suspend fun refreshPokemons(limit: Int, offset: Int) {
         withContext(Dispatchers.IO) {
-            val pokemonsGlobalData = PokeApi.retrofitService.getPokemons(20, 0)
+            val pokemonsGlobalData = PokeApi.retrofitService.getPokemons(limit, offset)
 
             val pokemonsDataList = mutableListOf<DatabasePokemon>()
 

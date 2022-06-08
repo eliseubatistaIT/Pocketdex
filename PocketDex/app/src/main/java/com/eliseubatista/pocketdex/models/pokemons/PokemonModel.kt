@@ -68,6 +68,13 @@ class PokemonModel {
         this.weight = weight
     }
 
+    override fun toString(): String {
+        return "\nPokemon: ${id}, ${name}" +
+                "\nEvolution Chain: ${evolutionChain}" +
+                "\nTypes: ${types}" +
+                "\nGenus: ${genus}\n"
+    }
+
     companion object {
 
         fun fromDatabasePokemon(databasePokemon: DatabasePokemon): PokemonModel {

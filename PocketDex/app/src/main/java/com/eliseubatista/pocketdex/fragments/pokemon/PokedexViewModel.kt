@@ -21,10 +21,7 @@ class PokedexViewModel(val application: Application) : ViewModel() {
     private val pocketdexRepository = PocketdexRepository(database)
 
     val types = pocketdexRepository.pokemonTypes
-
-    private var _listOfPokemons = MutableLiveData<List<PokemonModel>>()
-    val listOfPokemons: LiveData<List<PokemonModel>>
-        get() = _listOfPokemons
+    val pokemons = pocketdexRepository.pokemons
 
     private var _isLoadingMorePokemons = MutableLiveData<Boolean>()
     val isLoadingMorePokemons: LiveData<Boolean>
@@ -56,7 +53,13 @@ class PokedexViewModel(val application: Application) : ViewModel() {
         coroutineScope.launch {
 
             pocketdexRepository.refreshTypes()
+            pocketdexRepository.refreshPokemons(10, pokemonsLoaded)
 
+            pokemonsLoaded += 10
+
+            _isLoadingMorePokemons.value = false
+
+            /*
             try {
                 //Try to get all the pokemons in a specific range
                 val pokemonsData =
@@ -86,6 +89,8 @@ class PokedexViewModel(val application: Application) : ViewModel() {
 
                 _isLoadingMorePokemons.value = false
             }
+
+             */
         }
     }
 
