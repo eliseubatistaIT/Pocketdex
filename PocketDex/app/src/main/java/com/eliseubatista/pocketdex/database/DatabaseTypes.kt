@@ -1,5 +1,6 @@
 package com.eliseubatista.pocketdex.database
 
+import android.util.Log
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.eliseubatista.pocketdex.models.pokemons.TypeModel
@@ -17,12 +18,12 @@ data class DatabaseTypes constructor(
     val name: String
 )
 
-fun List<DatabaseTypes>.asTypeModel() : List<TypeModel>{
+fun List<DatabaseTypes>.asDomainModel(): List<TypeModel> {
     val types = mutableListOf<TypeModel>()
 
     for (element in this) {
-        //val type = TypeModel.
-        //names.add(element.name)
+        val type = TypeModel.fromDatabaseType(element)
+        types.add(type)
     }
 
     return types

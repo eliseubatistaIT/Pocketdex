@@ -1,17 +1,26 @@
 package com.eliseubatista.pocketdex.fragments.pokemon
 
+import android.app.Application
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import com.eliseubatista.pocketdex.database.getDatabase
 import com.eliseubatista.pocketdex.models.pokemons.PokemonModel
 import com.eliseubatista.pocketdex.network.PokeApi
+import com.eliseubatista.pocketdex.repository.PocketdexRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-class PokedexViewModel : ViewModel() {
+class PokedexViewModel(val application: Application) : ViewModel() {
+
+    private val database = getDatabase(application)
+    private val pocketdexRepository = PocketdexRepository(database)
+
+    val types = pocketdexRepository.pokemonTypes
 
     private var _listOfPokemons = MutableLiveData<List<PokemonModel>>()
     val listOfPokemons: LiveData<List<PokemonModel>>
@@ -42,11 +51,12 @@ class PokedexViewModel : ViewModel() {
             return
         }
 
-        Log.i("RECYLCER VIEW", "FETCHING MORE POKEMONS")
-
         _isLoadingMorePokemons.value = true
 
         coroutineScope.launch {
+
+            pocketdexRepository.refreshTypes()
+
             try {
                 //Try to get all the pokemons in a specific range
                 val pokemonsData =
@@ -60,7 +70,7 @@ class PokedexViewModel : ViewModel() {
 
                 //For each pokemon retrieved, get its data
                 for (pokeData in pokemonsData.results) {
-                    val pokemon = PokemonModel.getPokemonData(pokeData.name)
+                    val pokemon = PokemonModel.getPokemonData(pokeData.name, pocketdexRepository)
                     pokemon?.let { listOfPokemonsDetails.add(it) }
                 }
 
@@ -76,6 +86,15 @@ class PokedexViewModel : ViewModel() {
 
                 _isLoadingMorePokemons.value = false
             }
+        }
+    }
+
+    class Factory(val application: Application) : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(PokedexViewModel::class.java)) {
+                return PokedexViewModel(application) as T
+            }
+            throw IllegalArgumentException("Unknown ViewModel class")
         }
     }
 }

@@ -63,7 +63,7 @@ class PokemonAdapter :
 
             loadImageWithGlide(item.maleSprite, pokemonImage)
 
-            val pokemonColor = getPokemonBackgroundColor(itemView.context, item.species.color)
+            val pokemonColor = getPokemonBackgroundColor(itemView.context, item.color)
 
             pokemonBackground.setColorFilter(pokemonColor)
 
@@ -84,9 +84,9 @@ class PokemonAdapter :
             )
 
             if (item.types.size > 0) {
-                val typeOneColor = getPokemonTypeColor(itemView.context, item.types[0].name)
+                val typeOneColor = getPokemonTypeColor(itemView.context, item.types[0])
 
-                pokemonFirstTypeText.text = item.types[0].name
+                pokemonFirstTypeText.text = item.types[0]
                 pokemonFirstTypeText.setTextColor(
                     getTextColorByBackgroundColor(
                         itemView.context,
@@ -97,9 +97,9 @@ class PokemonAdapter :
                 pokemonFirstTypeImage.setColorFilter(typeOneColor)
 
                 if (item.types.size > 1) {
-                    val typeTwoColor = getPokemonTypeColor(itemView.context, item.types[1].name)
+                    val typeTwoColor = getPokemonTypeColor(itemView.context, item.types[1])
 
-                    pokemonSecondTypeText.text = item.types[1].name
+                    pokemonSecondTypeText.text = item.types[1]
                     pokemonSecondTypeText.setTextColor(
                         getTextColorByBackgroundColor(
                             itemView.context,

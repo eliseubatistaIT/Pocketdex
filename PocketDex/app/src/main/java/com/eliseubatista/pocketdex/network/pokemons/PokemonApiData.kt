@@ -1,9 +1,12 @@
 package com.eliseubatista.pocketdex.network.pokemons
 
+import com.eliseubatista.pocketdex.database.DatabasePokemon
+import com.eliseubatista.pocketdex.database.DatabaseTypes
 import com.eliseubatista.pocketdex.network.BaseNameAndUrl
+import com.eliseubatista.pocketdex.network.getNames
 import com.squareup.moshi.Json
 
-data class PokemonData (
+data class PokemonData(
     @Json(name = "height") val height: Int,
     @Json(name = "id") val id: Int,
     @Json(name = "name") val name: String,
@@ -36,3 +39,27 @@ This is the pokemon type data retrieved from the pokemon detailed data
 data class PokemonTypeData(
     @Json(name = "type") val type: BaseNameAndUrl,
 )
+
+fun PokemonData.getPokemonStats(): List<Int> {
+    val statsList = mutableListOf<Int>()
+
+    for (stat in this.stats) {
+        val statValue = stat.statValue
+
+        statsList.add(statValue)
+    }
+
+    return statsList
+}
+
+fun PokemonData.getPokemonTypes(): List<String> {
+
+    val pokemonTypesList = mutableListOf<String>()
+
+    for (typeData in this.types) {
+        val type = typeData.type.name
+        pokemonTypesList.add(type)
+    }
+
+    return pokemonTypesList
+}

@@ -1,6 +1,7 @@
 package com.eliseubatista.pocketdex.fragments.pokemon
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +21,7 @@ import com.eliseubatista.pocketdex.views.PokemonAdapter
 class PokedexFragment : Fragment() {
 
     private lateinit var viewModel: PokedexViewModel
+    private lateinit var viewModelFactory: PokedexViewModel.Factory
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,7 +32,9 @@ class PokedexFragment : Fragment() {
 
         (activity as AppCompatActivity).supportActionBar?.title = "Pokédex"
 
-        viewModel = ViewModelProvider(this).get(PokedexViewModel::class.java)
+        viewModelFactory = PokedexViewModel.Factory(requireActivity().application)
+        viewModel =
+            ViewModelProvider(this, viewModelFactory).get(PokedexViewModel::class.java)
 
         setupLinearRecyclerView(binding)
 
@@ -62,6 +66,11 @@ class PokedexFragment : Fragment() {
             it?.let {
                 pokemonListAdapter.submitList(it)
             }
+        })
+
+        //Create and observer to refresh the list automatically
+        viewModel.types.observe(viewLifecycleOwner, Observer {
+            Log.i("TYPES", it.toString())
         })
 
         //Scroll listenner

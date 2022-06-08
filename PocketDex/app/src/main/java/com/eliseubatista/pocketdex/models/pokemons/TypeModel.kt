@@ -1,6 +1,7 @@
 package com.eliseubatista.pocketdex.models.pokemons
 
 import android.util.Log
+import com.eliseubatista.pocketdex.database.DatabaseTypes
 import com.eliseubatista.pocketdex.network.PokeApi
 import com.eliseubatista.pocketdex.network.getNames
 
@@ -35,7 +36,33 @@ class TypeModel {
         this.name = name
     }
 
+    override fun toString(): String {
+        return "\nType: ${id}, ${name}" +
+                "\nDouble Damage From: ${doubleDamageFrom}" +
+                "\nDouble Damage To: ${doubleDamageTo}" +
+                "\nHalf Damage From: ${halfDamageFrom}" +
+                "\nHalf Damage To: ${halfDamageTo}" +
+                "\nNo Damage From: ${noDamageFrom}" +
+                "\nNo Damage To: ${noDamageTo}\n"
+    }
+
     companion object {
+
+        fun fromDatabaseType(databaseType: DatabaseTypes): TypeModel {
+
+            return TypeModel(
+                databaseType.id,
+                databaseType.doubleDamageFrom,
+                databaseType.doubleDamageTo,
+                databaseType.halfDamageFrom,
+                databaseType.halfDamageTo,
+                databaseType.noDamageFrom,
+                databaseType.noDamageTo,
+                databaseType.name
+            )
+        }
+
+        /*
         suspend fun getType(typeName: String): TypeModel? {
             var typeModel: TypeModel? = null
 
@@ -68,5 +95,7 @@ class TypeModel {
 
             return typeModel
         }
+
+         */
     }
 }

@@ -22,8 +22,12 @@ data class GlobalSearchData(
 
 fun List<BaseNameAndUrl>.getNames(): List<String> {
     val names = mutableListOf<String>()
+    names.clear()
 
     for (element in this) {
+        if (element.name.isEmpty()) {
+            continue
+        }
         names.add(element.name)
     }
 
@@ -32,8 +36,12 @@ fun List<BaseNameAndUrl>.getNames(): List<String> {
 
 fun List<BaseNameAndUrl>.getUrls(): List<String> {
     val urls = mutableListOf<String>()
+    urls.clear()
 
     for (element in this) {
+        if (element.url.isEmpty()) {
+            continue
+        }
         urls.add(element.url)
     }
 
