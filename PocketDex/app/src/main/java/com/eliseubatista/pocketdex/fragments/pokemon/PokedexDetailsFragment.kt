@@ -1,6 +1,7 @@
 package com.eliseubatista.pocketdex.fragments.pokemon
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -8,16 +9,30 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.eliseubatista.pocketdex.R
 import com.eliseubatista.pocketdex.databinding.FragmentPokedexDetailsBinding
 import com.eliseubatista.pocketdex.models.pokemons.PokemonModel
+import com.eliseubatista.pocketdex.models.pokemons.TypeModel
 import com.eliseubatista.pocketdex.utils.*
+import com.eliseubatista.pocketdex.views.OnPokemonClickedListener
+import com.eliseubatista.pocketdex.views.PokemonAdapter
+import com.eliseubatista.pocketdex.views.PokemonTypeSmallAdapter
 
 class PokedexDetailsFragment : Fragment() {
 
     private var pokemonName = ""
     private lateinit var viewModel: PokemonDetailsViewModel
     private lateinit var viewModelFactory: PokemonDetailsViewModel.Factory
+
+    private lateinit var defenseDoubleDamageAdapter: PokemonTypeSmallAdapter
+    private lateinit var defenseHalfDamageAdapter: PokemonTypeSmallAdapter
+    private lateinit var defenseNoDamageAdapter: PokemonTypeSmallAdapter
+    private lateinit var attackDoubleDamageAdapter: PokemonTypeSmallAdapter
+    private lateinit var attackHalfDamageAdapter: PokemonTypeSmallAdapter
+    private lateinit var attackNoDamageAdapter: PokemonTypeSmallAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,11 +49,52 @@ class PokedexDetailsFragment : Fragment() {
         viewModel =
             ViewModelProvider(this, viewModelFactory).get(PokemonDetailsViewModel::class.java)
 
+        setupRecyclerViews(binding)
+
         viewModel.pokemon.observe(
             viewLifecycleOwner,
             Observer { pokemon -> refreshPokemonDisplay(binding, pokemon) })
 
         return binding.root
+    }
+
+    private fun setupRecyclerViews(binding: FragmentPokedexDetailsBinding) {
+
+        defenseDoubleDamageAdapter = PokemonTypeSmallAdapter()
+        binding.pokemonDetailsDamages.defenseDoubleDamageContainer.gridView.layoutManager =
+            GridLayoutManager(context, 8)
+        binding.pokemonDetailsDamages.defenseDoubleDamageContainer.gridView.adapter =
+            defenseDoubleDamageAdapter
+
+        defenseHalfDamageAdapter = PokemonTypeSmallAdapter()
+        binding.pokemonDetailsDamages.defenseHalfDamageContainer.gridView.layoutManager =
+            GridLayoutManager(context, 8)
+        binding.pokemonDetailsDamages.defenseHalfDamageContainer.gridView.adapter =
+            defenseHalfDamageAdapter
+
+        defenseNoDamageAdapter = PokemonTypeSmallAdapter()
+        binding.pokemonDetailsDamages.defenseNoDamageContainer.gridView.layoutManager =
+            GridLayoutManager(context, 8)
+        binding.pokemonDetailsDamages.defenseNoDamageContainer.gridView.adapter =
+            defenseNoDamageAdapter
+
+        attackDoubleDamageAdapter = PokemonTypeSmallAdapter()
+        binding.pokemonDetailsDamages.attackDoubleDamageContainer.gridView.layoutManager =
+            GridLayoutManager(context, 8)
+        binding.pokemonDetailsDamages.attackDoubleDamageContainer.gridView.adapter =
+            attackDoubleDamageAdapter
+
+        attackHalfDamageAdapter = PokemonTypeSmallAdapter()
+        binding.pokemonDetailsDamages.attackHalfDamageContainer.gridView.layoutManager =
+            GridLayoutManager(context, 8)
+        binding.pokemonDetailsDamages.attackHalfDamageContainer.gridView.adapter =
+            attackHalfDamageAdapter
+
+        attackNoDamageAdapter = PokemonTypeSmallAdapter()
+        binding.pokemonDetailsDamages.attackNoDamageContainer.gridView.layoutManager =
+            GridLayoutManager(context, 8)
+        binding.pokemonDetailsDamages.attackNoDamageContainer.gridView.adapter =
+            attackNoDamageAdapter
     }
 
     private fun refreshPokemonDisplay(
@@ -48,6 +104,7 @@ class PokedexDetailsFragment : Fragment() {
         refreshPokemonHeader(binding, pokemon)
         refreshPokemonAbout(binding, pokemon)
         refreshPokemonStats(binding, pokemon)
+        refreshPokemonDamages(binding, pokemon, viewModel.pokeFirstType.value!!)
     }
 
     private fun refreshPokemonHeader(
@@ -82,36 +139,41 @@ class PokedexDetailsFragment : Fragment() {
             )
         )
 
-        if (pokemon.types.size > 0) {
-            val typeOneColor = getPokemonTypeColor(requireContext(), pokemon.types[0])
+        when (pokemon.types.size) {
+            1 -> {
 
-            binding.pokemonDetailsFirstType.typeText.text = pokemon.types[0]
-            binding.pokemonDetailsFirstType.typeText.setTextColor(
-                getTextColorByBackgroundColor(
-                    requireContext(),
-                    typeOneColor
-                )
+            }
+            2 -> {
+
+            }
+        }
+
+        val typeOneLogo = getPokemonTypeLogoImage(requireContext(), pokemon.types[0])
+        val typeOneTextImage = getPokemonTypeTextImage(requireContext(), pokemon.types[0])
+
+        binding.pokemonDetailsTypes.onlyTypeValue.typeLogo.setImageDrawable(typeOneLogo)
+        binding.pokemonDetailsTypes.firstTypeValue.typeLogo.setImageDrawable(typeOneLogo)
+
+        binding.pokemonDetailsTypes.onlyTypeValue.typeTextImage.setImageDrawable(typeOneTextImage)
+        binding.pokemonDetailsTypes.firstTypeValue.typeTextImage.setImageDrawable(typeOneTextImage)
+
+        if (pokemon.types.size > 1) {
+
+            val typeTwoLogo = getPokemonTypeLogoImage(requireContext(), pokemon.types[1])
+            val typeTwoTextImage = getPokemonTypeTextImage(requireContext(), pokemon.types[1])
+
+            binding.pokemonDetailsTypes.secondTypeValue.typeLogo.setImageDrawable(typeTwoLogo)
+            binding.pokemonDetailsTypes.secondTypeValue.typeTextImage.setImageDrawable(
+                typeTwoTextImage
             )
 
-            binding.pokemonDetailsFirstType.typeBackground.setColorFilter(typeOneColor)
-
-            if (pokemon.types.size > 1) {
-                val typeTwoColor = getPokemonTypeColor(requireContext(), pokemon.types[1])
-
-                binding.pokemonDetailsSecondType.typeText.text = pokemon.types[1]
-                binding.pokemonDetailsSecondType.typeText.setTextColor(
-                    getTextColorByBackgroundColor(
-                        requireContext(),
-                        typeTwoColor
-                    )
-                )
-                binding.pokemonDetailsSecondType.typeBackground.setColorFilter(typeTwoColor)
-            } else {
-                binding.pokemonDetailsSecondType.typeContainer.visibility = View.GONE
-            }
+            binding.pokemonDetailsTypes.onlyTypeContainer.visibility = View.GONE
+            binding.pokemonDetailsTypes.firstTypeContainer.visibility = View.VISIBLE
+            binding.pokemonDetailsTypes.secondTypeContainer.visibility = View.VISIBLE
         } else {
-            binding.pokemonDetailsFirstType.typeContainer.visibility = View.GONE
-            binding.pokemonDetailsSecondType.typeContainer.visibility = View.GONE
+            binding.pokemonDetailsTypes.onlyTypeContainer.visibility = View.VISIBLE
+            binding.pokemonDetailsTypes.firstTypeContainer.visibility = View.GONE
+            binding.pokemonDetailsTypes.secondTypeContainer.visibility = View.GONE
         }
     }
 
@@ -142,5 +204,56 @@ class PokedexDetailsFragment : Fragment() {
         binding.pokemonDetailsStats.spAttackValue.text = pokemon.specialAttack.toString()
         binding.pokemonDetailsStats.spDefenseValue.text = pokemon.specialDefense.toString()
         binding.pokemonDetailsStats.speedValue.text = pokemon.speed.toString()
+    }
+
+    private fun refreshPokemonDamages(
+        binding: FragmentPokedexDetailsBinding,
+        pokemon: PokemonModel,
+        type: TypeModel
+    ) {
+        val pokemonColor = getPokemonBackgroundColor(requireContext(), pokemon.color)
+
+        binding.pokemonDetailsDamages.attackFixedText.setTextColor(pokemonColor)
+        binding.pokemonDetailsDamages.defensesFixedText.setTextColor(pokemonColor)
+
+        binding.pokemonDetailsDamages.defenseDoubleDamageContainer.fixedText.text = "0%"
+        binding.pokemonDetailsDamages.defenseHalfDamageContainer.fixedText.text = "50%"
+        binding.pokemonDetailsDamages.defenseNoDamageContainer.fixedText.text = "100%"
+        binding.pokemonDetailsDamages.attackNoDamageContainer.fixedText.text = "0%"
+        binding.pokemonDetailsDamages.attackHalfDamageContainer.fixedText.text = "50%"
+        binding.pokemonDetailsDamages.attackDoubleDamageContainer.fixedText.text = "100%"
+
+        defenseDoubleDamageAdapter.submitList(type.doubleDamageFrom)
+        defenseHalfDamageAdapter.submitList(type.halfDamageFrom)
+        defenseNoDamageAdapter.submitList(type.noDamageFrom)
+        attackDoubleDamageAdapter.submitList(type.doubleDamageTo)
+        attackHalfDamageAdapter.submitList(type.halfDamageTo)
+        attackNoDamageAdapter.submitList(type.noDamageTo)
+
+        if (isPokemonDamageRelationEmpty(type.doubleDamageFrom)) {
+            binding.pokemonDetailsDamages.defenseDoubleDamageContainer.damageTypesContainer.visibility =
+                View.GONE
+        }
+        if (isPokemonDamageRelationEmpty(type.halfDamageFrom)) {
+            binding.pokemonDetailsDamages.defenseHalfDamageContainer.damageTypesContainer.visibility =
+                View.GONE
+        }
+        if (isPokemonDamageRelationEmpty(type.noDamageFrom)) {
+            binding.pokemonDetailsDamages.defenseNoDamageContainer.damageTypesContainer.visibility =
+                View.GONE
+        }
+        if (isPokemonDamageRelationEmpty(type.noDamageTo)) {
+            binding.pokemonDetailsDamages.attackNoDamageContainer.damageTypesContainer.visibility =
+                View.GONE
+        }
+        if (isPokemonDamageRelationEmpty(type.halfDamageTo)) {
+            binding.pokemonDetailsDamages.attackHalfDamageContainer.damageTypesContainer.visibility =
+                View.GONE
+        }
+
+        if (isPokemonDamageRelationEmpty(type.doubleDamageTo)) {
+            binding.pokemonDetailsDamages.attackDoubleDamageContainer.damageTypesContainer.visibility =
+                View.GONE
+        }
     }
 }

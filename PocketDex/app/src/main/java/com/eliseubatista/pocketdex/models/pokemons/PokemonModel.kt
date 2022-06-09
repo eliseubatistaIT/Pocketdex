@@ -77,7 +77,7 @@ class PokemonModel {
 
     companion object {
 
-        fun fromDatabasePokemon(databasePokemon: DatabasePokemon): PokemonModel {
+        fun fromDatabase(databasePokemon: DatabasePokemon): PokemonModel {
 
             return PokemonModel(
                 databasePokemon.id,

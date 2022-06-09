@@ -48,7 +48,7 @@ class TypeModel {
 
     companion object {
 
-        fun fromDatabaseType(databaseType: DatabaseTypes): TypeModel {
+        fun fromDatabase(databaseType: DatabaseTypes): TypeModel {
 
             return TypeModel(
                 databaseType.id,

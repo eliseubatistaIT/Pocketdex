@@ -32,7 +32,7 @@ fun getPokemonBackgroundColor(context: Context, pokemonColorName: String): Int {
 fun getPokemonTypeColor(context: Context, pokemonType: String): Int {
     val res = context.resources
 
-    var newColor = res.getColor(R.color.type_unknown)
+    var newColor = ContextCompat.getColor(context, R.color.type_normal)
 
     when (pokemonType) {
         "normal" -> newColor = ContextCompat.getColor(context, R.color.type_normal)
@@ -51,10 +51,10 @@ fun getPokemonTypeColor(context: Context, pokemonType: String): Int {
         "psychic" -> newColor = ContextCompat.getColor(context, R.color.type_psychic)
         "ice" -> newColor = ContextCompat.getColor(context, R.color.type_ice)
         "dragon" -> newColor = ContextCompat.getColor(context, R.color.type_dragon)
-        "black" -> newColor = ContextCompat.getColor(context, R.color.type_dark)
+        "dark" -> newColor = ContextCompat.getColor(context, R.color.type_dark)
         "fairy" -> newColor = ContextCompat.getColor(context, R.color.type_fairy)
-        "shadow" -> newColor = ContextCompat.getColor(context, R.color.type_shadow)
-        else -> newColor = ContextCompat.getColor(context, R.color.type_unknown)
+        "shadow" -> newColor = ContextCompat.getColor(context, R.color.type_dark)
+        else -> newColor = ContextCompat.getColor(context, R.color.type_normal)
     }
 
     return newColor

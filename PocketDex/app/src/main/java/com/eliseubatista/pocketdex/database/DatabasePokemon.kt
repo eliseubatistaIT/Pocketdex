@@ -25,4 +25,9 @@ data class DatabasePokemon constructor(
     val speed: Int,
     val types: List<String>,
     val weight: Int
-)
+) {
+
+
+
+
+}

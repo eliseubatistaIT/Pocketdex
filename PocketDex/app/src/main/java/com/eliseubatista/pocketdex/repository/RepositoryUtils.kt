@@ -1,7 +1,10 @@
 package com.eliseubatista.pocketdex.repository
 
+import android.util.Log
+import com.eliseubatista.pocketdex.database.DatabaseFavorites
 import com.eliseubatista.pocketdex.database.DatabasePokemon
 import com.eliseubatista.pocketdex.database.DatabaseTypes
+import com.eliseubatista.pocketdex.models.FavoriteModel
 import com.eliseubatista.pocketdex.models.pokemons.PokemonModel
 import com.eliseubatista.pocketdex.models.pokemons.TypeModel
 import com.eliseubatista.pocketdex.network.PokeApi
@@ -36,6 +39,7 @@ suspend fun TypeData.asDatabaseModel(): DatabaseTypes {
 suspend fun PokemonData.asDatabaseModel(): DatabasePokemon {
     val pokemonStats = this.getPokemonStats()
     val pokemonTypes = this.getPokemonTypes()
+
     val speciesData =
         PokeApi.retrofitService.getSpeciesByName(this.species.name)
 
@@ -79,7 +83,7 @@ suspend fun PokemonData.asDatabaseModel(): DatabasePokemon {
 
 @JvmName("asDomainModelDatabaseTypes")
 fun DatabaseTypes.asDomainModel(): TypeModel {
-    val type = TypeModel.fromDatabaseType(this)
+    val type = TypeModel.fromDatabase(this)
     return type
 }
 
@@ -88,7 +92,7 @@ fun List<DatabaseTypes>.asDomainModel(): List<TypeModel> {
     val types = mutableListOf<TypeModel>()
 
     for (element in this) {
-        val type = TypeModel.fromDatabaseType(element)
+        val type = TypeModel.fromDatabase(element)
         types.add(type)
     }
 
@@ -97,7 +101,7 @@ fun List<DatabaseTypes>.asDomainModel(): List<TypeModel> {
 
 @JvmName("asDomainModelDatabasePokemon")
 fun DatabasePokemon.asDomainModel(): PokemonModel {
-    val pokemon = PokemonModel.fromDatabasePokemon(this)
+    val pokemon = PokemonModel.fromDatabase(this)
     return pokemon
 }
 
@@ -106,9 +110,27 @@ fun List<DatabasePokemon>.asDomainModel(): List<PokemonModel> {
     val pokemons = mutableListOf<PokemonModel>()
 
     for (element in this) {
-        val pokemon = PokemonModel.fromDatabasePokemon(element)
+        val pokemon = PokemonModel.fromDatabase(element)
         pokemons.add(pokemon)
     }
 
     return pokemons
+}
+
+@JvmName("asDomainModelDatabaseFavorites")
+fun DatabaseFavorites.asDomainModel(): FavoriteModel {
+    val favorite = FavoriteModel.fromDatabase(this)
+    return favorite
+}
+
+@JvmName("asDomainModelDatabaseFavorites")
+fun List<DatabaseFavorites>.asDomainModel(): List<FavoriteModel> {
+    val favorites = mutableListOf<FavoriteModel>()
+
+    for (element in this) {
+        val favorite = FavoriteModel.fromDatabase(element)
+        favorites.add(favorite)
+    }
+
+    return favorites
 }

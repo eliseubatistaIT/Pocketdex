@@ -1,5 +1,6 @@
 package com.eliseubatista.pocketdex.network.pokemons
 
+import android.util.Log
 import com.eliseubatista.pocketdex.database.DatabasePokemon
 import com.eliseubatista.pocketdex.database.DatabaseTypes
 import com.eliseubatista.pocketdex.network.BaseNameAndUrl
@@ -55,8 +56,14 @@ fun PokemonData.getPokemonStats(): List<Int> {
 fun PokemonData.getPokemonTypes(): List<String> {
 
     val pokemonTypesList = mutableListOf<String>()
+    pokemonTypesList.clear()
 
     for (typeData in this.types) {
+
+        if (typeData.type.name.isEmpty() || typeData.type.name.isBlank() || typeData.type.name == "") {
+            continue
+        }
+
         val type = typeData.type.name
         pokemonTypesList.add(type)
     }

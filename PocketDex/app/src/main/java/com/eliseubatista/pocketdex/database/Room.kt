@@ -3,11 +3,12 @@ package com.eliseubatista.pocketdex.database
 import android.content.Context
 import androidx.room.*
 
-@Database(entities = [DatabasePokemon::class, DatabaseTypes::class], version = 1)
+@Database(entities = [DatabasePokemon::class, DatabaseTypes::class, DatabaseFavorites::class], version = 1)
 @TypeConverters(DatabaseTypeConverters::class)
 abstract class PocketdexDatabase : RoomDatabase() {
     abstract val pokemonDao : PokemonDao
     abstract val typesDao : TypesDao
+    abstract val favoritesDao: FavoritesDao
 }
 
 private lateinit var INSTANCE: PocketdexDatabase

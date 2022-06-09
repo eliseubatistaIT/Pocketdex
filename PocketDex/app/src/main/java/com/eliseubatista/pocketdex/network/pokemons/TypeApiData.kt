@@ -27,29 +27,3 @@ data class TypeDamageRelationsData(
     @Json(name = "no_damage_from") val noDamageFrom: List<BaseNameAndUrl>,
     @Json(name = "no_damage_to") val noDamageTo: List<BaseNameAndUrl>,
 )
-
-/*
-fun TypeData.asDatabaseModel(): DatabaseTypes {
-
-    val _doubleDamageFrom = this.damageRelations.doubleDamageFrom.getNames()
-    val _doubleDamageTo = this.damageRelations.doubleDamageTo.getNames()
-    val _halfDamageFrom = this.damageRelations.halfDamageFrom.getNames()
-    val _halfDamageTo = this.damageRelations.halfDamageTo.getNames()
-    val _noDamageFrom = this.damageRelations.noDamageFrom.getNames()
-    val _noDamageTo = this.damageRelations.noDamageTo.getNames()
-
-    val databaseType = DatabaseTypes(
-        this.id,
-        _doubleDamageFrom,
-        _doubleDamageTo,
-        _halfDamageFrom,
-        _halfDamageTo,
-        _noDamageFrom,
-        _noDamageTo,
-        this.name
-    )
-
-    return databaseType
-}
-
- */

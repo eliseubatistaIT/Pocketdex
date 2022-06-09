@@ -7,7 +7,7 @@ This is the pokemon name, and the url to its detailed data
  */
 data class BaseNameAndUrl(
     @Json(name = "name") val name: String,
-    @Json(name = "url") val url: String,
+    //@Json(name = "url") val url: String,
 )
 
 /*
@@ -25,27 +25,13 @@ fun List<BaseNameAndUrl>.getNames(): List<String> {
     names.clear()
 
     for (element in this) {
-        if (element.name.isEmpty()) {
+        if (element.name.isEmpty() || element.name.isBlank() || element.name == " ") {
             continue
         }
         names.add(element.name)
     }
 
     return names
-}
-
-fun List<BaseNameAndUrl>.getUrls(): List<String> {
-    val urls = mutableListOf<String>()
-    urls.clear()
-
-    for (element in this) {
-        if (element.url.isEmpty()) {
-            continue
-        }
-        urls.add(element.url)
-    }
-
-    return urls
 }
 
 fun GlobalSearchData.getNames(): List<String> {
@@ -56,14 +42,4 @@ fun GlobalSearchData.getNames(): List<String> {
     }
 
     return globalNames
-}
-
-fun GlobalSearchData.getUrls(): List<String> {
-    val globalUrls = mutableListOf<String>()
-
-    for (result in results) {
-        globalUrls.add(result.url)
-    }
-
-    return globalUrls
 }

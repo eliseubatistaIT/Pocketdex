@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.eliseubatista.pocketdex.database.getDatabase
 import com.eliseubatista.pocketdex.models.pokemons.PokemonModel
+import com.eliseubatista.pocketdex.models.pokemons.TypeModel
 import com.eliseubatista.pocketdex.repository.PocketdexRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -18,6 +19,10 @@ class PokemonDetailsViewModel(val application: Application, val pokemonName: Str
 
     private val database = getDatabase(application)
     private val pocketdexRepository = PocketdexRepository(database)
+
+    private var _pokeFirstType = MutableLiveData<TypeModel>()
+    val pokeFirstType: LiveData<TypeModel>
+        get() = _pokeFirstType
 
     private var _pokemon = MutableLiveData<PokemonModel>()
     val pokemon: LiveData<PokemonModel>
@@ -50,7 +55,10 @@ class PokemonDetailsViewModel(val application: Application, val pokemonName: Str
 
         coroutineScope.launch {
 
-            _pokemon.value = pocketdexRepository.getPokemonByName(application, pokemonName)
+            val pokemonModel = pocketdexRepository.getPokemonByName(application, pokemonName)
+            _pokeFirstType.value =
+                pocketdexRepository.getTypeByName(application, pokemonModel!!.types[0])
+            _pokemon.value = pokemonModel!!
 
             _isLoadingPokemon.value = false
         }

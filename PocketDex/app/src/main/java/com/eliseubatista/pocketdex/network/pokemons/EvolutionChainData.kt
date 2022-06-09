@@ -2,7 +2,6 @@ package com.eliseubatista.pocketdex.network.pokemons
 
 import android.util.Log
 import com.eliseubatista.pocketdex.network.BaseNameAndUrl
-import com.eliseubatista.pocketdex.network.PokeApi
 import com.squareup.moshi.Json
 
 /*
@@ -22,23 +21,46 @@ data class EvolutionChainChainData(
 fun EvolutionChainData.getEvolutionChain(): MutableList<String> {
     val evolutionChain = mutableListOf<String>()
 
-    evolutionChain.add(this.chain?.baseForm!!.name)
+    val baseForm = this.chain?.baseForm!!.name
+    //evolutionChain.add(this.chain?.baseForm!!.name)
+
+    var chainString = ""
 
     for (evolution in this.chain.evolvesTo) {
         if (evolution == null) {
             continue;
         }
 
-        evolutionChain.add(evolution.baseForm.name)
+        chainString = baseForm + getEvolutionChainString(evolution)
+
+        Log.i("CHAIN", chainString.toString())
+
+
+        evolutionChain.add(chainString)
+    }
+
+    return evolutionChain
+}
+
+private fun getEvolutionChainString(evolutionChain: EvolutionChainChainData): String {
+
+    var chainString = ";" + evolutionChain.baseForm.name
+
+    for (evolution in evolutionChain.evolvesTo) {
+        if (evolution == null) {
+            continue;
+        }
+
+        chainString += ";" + evolution.baseForm.name
 
         for (evolutionOfEvolution in evolution.evolvesTo) {
             if (evolutionOfEvolution == null) {
                 continue;
             }
 
-            evolutionChain.add(evolutionOfEvolution.baseForm.name)
+            chainString += ";" + evolutionOfEvolution.baseForm.name
         }
     }
 
-    return evolutionChain
+    return chainString
 }

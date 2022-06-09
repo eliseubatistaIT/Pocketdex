@@ -7,6 +7,7 @@ import androidx.lifecycle.Transformations
 import com.eliseubatista.pocketdex.database.DatabasePokemon
 import com.eliseubatista.pocketdex.database.DatabaseTypes
 import com.eliseubatista.pocketdex.database.PocketdexDatabase
+import com.eliseubatista.pocketdex.models.FavoriteModel
 import com.eliseubatista.pocketdex.models.pokemons.PokemonModel
 import com.eliseubatista.pocketdex.models.pokemons.TypeModel
 import com.eliseubatista.pocketdex.network.PokeApi
@@ -23,6 +24,21 @@ class PocketdexRepository(private val database: PocketdexDatabase) {
 
     val pokemons: LiveData<List<PokemonModel>> =
         Transformations.map(database.pokemonDao.getPokemons()) {
+            it.asDomainModel()
+        }
+
+    val favoritePokemons: LiveData<List<FavoriteModel>> =
+        Transformations.map(database.favoritesDao.getFavoritePokemons()) {
+            it.asDomainModel()
+        }
+
+    val favoriteItems: LiveData<List<FavoriteModel>> =
+        Transformations.map(database.favoritesDao.getFavoriteItems()) {
+            it.asDomainModel()
+        }
+
+    val favoriteLocations: LiveData<List<FavoriteModel>> =
+        Transformations.map(database.favoritesDao.getFavoriteLocations()) {
             it.asDomainModel()
         }
 

@@ -73,29 +73,17 @@ class PokemonAdapter :
             )
 
             if (item.types.size > 0) {
-                val typeOneColor = getPokemonTypeColor(itemView.context, item.types[0])
 
-                binding.pokemonListFirstType.typeText.text = item.types[0]
-                binding.pokemonListFirstType.typeText.setTextColor(
-                    getTextColorByBackgroundColor(
-                        itemView.context,
-                        typeOneColor
-                    )
-                )
+                val typeOneLogo = getPokemonTypeLogoImage(itemView.context, item.types[0])
 
-                binding.pokemonListFirstType.typeBackground.setColorFilter(typeOneColor)
+                binding.pokemonListFirstType.typeLogo.setImageDrawable(typeOneLogo)
 
                 if (item.types.size > 1) {
-                    val typeTwoColor = getPokemonTypeColor(itemView.context, item.types[1])
 
-                    binding.pokemonListSecondType.typeText.text = item.types[1]
-                    binding.pokemonListSecondType.typeText.setTextColor(
-                        getTextColorByBackgroundColor(
-                            itemView.context,
-                            typeTwoColor
-                        )
-                    )
-                    binding.pokemonListSecondType.typeBackground.setColorFilter(typeTwoColor)
+                    val typeTwoLogo = getPokemonTypeLogoImage(itemView.context, item.types[1])
+
+                    binding.pokemonListSecondType.typeLogo.setImageDrawable(typeTwoLogo)
+
                 } else {
                     binding.pokemonListSecondType.typeContainer.visibility = View.GONE
                 }
