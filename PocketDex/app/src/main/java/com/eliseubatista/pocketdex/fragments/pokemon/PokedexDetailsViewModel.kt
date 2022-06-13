@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.eliseubatista.pocketdex.database.DatabaseFavorites
 import com.eliseubatista.pocketdex.database.getDatabase
 import com.eliseubatista.pocketdex.models.pokemons.EvolutionChainModel
 import com.eliseubatista.pocketdex.models.pokemons.PokemonModel
@@ -28,6 +29,9 @@ class PokemonDetailsViewModel(val application: Application, val pokemonName: Str
     val pokemon: LiveData<PokemonModel>
         get() = _pokemon
 
+    private var _isInFavorites = MutableLiveData<Boolean>()
+    val isInFavorites: LiveData<Boolean>
+        get() = _isInFavorites
 
     private var _isLoadingPokemon = MutableLiveData<Boolean>()
     val isLoadingPokemon: LiveData<Boolean>
@@ -84,12 +88,43 @@ class PokemonDetailsViewModel(val application: Application, val pokemonName: Str
                 pokeEvolutionChain.add(evolutionChainModel)
             }
 
+            val favorite = pocketdexRepository.getFavoriteByName(pokemonName)
+
+            _isInFavorites.value = favorite != null
+
             _pokemon.value = pokemonModel
-
-
 
             _isLoadingPokemon.value = false
         }
+    }
+
+    fun addOrRemoveFavorite() {
+
+        coroutineScope.launch {
+            val favoriteInDatabase = pocketdexRepository.getFavoriteByName(pokemonName)
+
+            if (favoriteInDatabase == null) {
+                Log.i("FAV", "Adding ${pokemonName} to favorites")
+
+                coroutineScope.launch {
+                    val favoriteData = DatabaseFavorites(
+                        0,
+                        pokemonName,
+                        "pokemon"
+                    )
+
+                    pocketdexRepository.addToFavorites(favoriteData)
+                    _isInFavorites.value = true
+                }
+            } else {
+                Log.i("FAV", "Removing ${pokemonName} from favorites")
+
+                pocketdexRepository.removeFromFavorites(favoriteInDatabase)
+                _isInFavorites.value = false
+            }
+        }
+
+
     }
 
     class Factory(val application: Application, val pokemonName: String) :

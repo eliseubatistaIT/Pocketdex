@@ -1,6 +1,7 @@
 package com.eliseubatista.pocketdex.fragments.pokemon
 
 import android.os.Bundle
+import android.text.Html
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -55,9 +56,20 @@ class PokedexDetailsFragment : Fragment() {
 
         setupRecyclerViews(binding)
 
+        viewModel.isInFavorites.observe(
+            viewLifecycleOwner,
+            Observer { inFavorites ->
+                refreshFavorites(binding, inFavorites)
+            })
+
         viewModel.pokemon.observe(
             viewLifecycleOwner,
             Observer { pokemon -> refreshPokemonDisplay(binding, pokemon) })
+
+        binding.toolbarPokedexDetails.favorite.setOnClickListener { view: View ->
+            viewModel.addOrRemoveFavorite()
+        }
+        binding.toolbarPokedexDetails.arrowBack.setOnClickListener { view: View -> parentFragmentManager.popBackStack() }
 
         return binding.root
     }
@@ -131,33 +143,31 @@ class PokedexDetailsFragment : Fragment() {
         loadImageWithGlide(pokemon.maleSprite, binding.pokemonDetailsAvatar)
 
         val pokemonColor = getPokemonBackgroundColor(requireContext(), pokemon.color)
+        val textColor = getTextColorByBackgroundColor(requireContext(), pokemonColor)
 
         binding.pokemonDetailsBackground.setColorFilter(pokemonColor)
 
-        binding.pokemonDetailsId.text = "#${pokemon.id}"
-        binding.pokemonDetailsId.setTextColor(
+        binding.toolbarPokedexDetails.pokemonName.text =
+            formatPocketdexObjectName(pokemon.name)
+
+        binding.toolbarPokedexDetails.pokemonId.text = "#${pokemon.id}"
+
+        binding.toolbarPokedexDetails.pokemonName.setTextColor(
             getTextColorByBackgroundColor(
                 requireContext(),
                 pokemonColor
             )
         )
 
-        binding.pokemonDetailsName.text = pokemon.name
-        binding.pokemonDetailsName.setTextColor(
+        binding.toolbarPokedexDetails.pokemonId.setTextColor(
             getTextColorByBackgroundColor(
                 requireContext(),
                 pokemonColor
             )
         )
 
-        when (pokemon.types.size) {
-            1 -> {
-
-            }
-            2 -> {
-
-            }
-        }
+        binding.toolbarPokedexDetails.arrowBack.setColorFilter(textColor)
+        binding.toolbarPokedexDetails.favorite.setColorFilter(textColor)
 
         val typeOneLogo = getPokemonTypeLogoImage(requireContext(), pokemon.types[0])
         val typeOneTextImage = getPokemonTypeTextImage(requireContext(), pokemon.types[0])
@@ -289,5 +299,13 @@ class PokedexDetailsFragment : Fragment() {
         }
 
         evolutionChainAdapter.submitList(viewModel.pokeEvolutionChain)
+    }
+
+    private fun refreshFavorites(binding: FragmentPokedexDetailsBinding, isInFavorites: Boolean) {
+        if (isInFavorites) {
+            binding.toolbarPokedexDetails.favorite.setImageResource(R.drawable.ic_star_fill)
+        } else {
+            binding.toolbarPokedexDetails.favorite.setImageResource(R.drawable.ic_star_border)
+        }
     }
 }

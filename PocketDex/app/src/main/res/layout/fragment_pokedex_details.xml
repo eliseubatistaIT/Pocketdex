@@ -9,7 +9,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/pokemon_details_background"
@@ -19,9 +19,19 @@
             app:srcCompat="@drawable/img_plain_white"
             tools:tint="#FF9800" />
 
+        <include
+            android:id="@+id/toolbar_pokedex_details"
+            layout="@layout/toolbar_pokedex_details"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize" />
+
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="?attr/actionBarSize">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -30,36 +40,11 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/pokemon_details_header_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="195dp"
+                    android:layout_height="185dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:context=".fragments.pokedex.PokemonDetailsFragment">
-
-                    <TextView
-                        android:id="@+id/pokemon_details_id"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="30dp"
-                        android:layout_marginEnd="24dp"
-                        android:textSize="20sp"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:text="#004" />
-
-                    <TextView
-                        android:id="@+id/pokemon_details_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginTop="16dp"
-                        android:textColor="#FFFFFF"
-                        android:textSize="34sp"
-                        android:textStyle="bold"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:text="Charmander" />
 
                     <ImageView
                         android:id="@+id/pokemon_details_watermark"
@@ -162,6 +147,8 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="30dp"
                         android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="200dp"
+
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/pokemon_details_damages" />

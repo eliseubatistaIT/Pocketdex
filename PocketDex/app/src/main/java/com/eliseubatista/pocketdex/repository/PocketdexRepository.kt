@@ -1,14 +1,12 @@
 package com.eliseubatista.pocketdex.repository
 
 import android.app.Application
-import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
+import com.eliseubatista.pocketdex.database.DatabaseFavorites
 import com.eliseubatista.pocketdex.database.DatabasePokemon
 import com.eliseubatista.pocketdex.database.DatabaseTypes
 import com.eliseubatista.pocketdex.database.PocketdexDatabase
-import com.eliseubatista.pocketdex.models.FavoriteModel
 import com.eliseubatista.pocketdex.models.pokemons.PokemonModel
 import com.eliseubatista.pocketdex.models.pokemons.TypeModel
 import com.eliseubatista.pocketdex.network.PokeApi
@@ -28,20 +26,29 @@ class PocketdexRepository(private val database: PocketdexDatabase) {
             it.asDomainModel()
         }
 
-    val favoritePokemons: LiveData<List<FavoriteModel>> =
-        Transformations.map(database.favoritesDao.getFavoritePokemons()) {
-            it.asDomainModel()
+    val favoritePokemons: LiveData<List<DatabaseFavorites>> =
+        database.favoritesDao.getFavoritePokemons()
+
+    val favoriteItems: LiveData<List<DatabaseFavorites>> = database.favoritesDao.getFavoriteItems()
+
+    val favoriteLocations: LiveData<List<DatabaseFavorites>> =
+        database.favoritesDao.getFavoriteLocations()
+
+    suspend fun addToFavorites(favorite: DatabaseFavorites) {
+        withContext(Dispatchers.IO) {
+            database.favoritesDao.insert(favorite)
+        }
+    }
+
+    suspend fun removeFromFavorites(favorite: DatabaseFavorites?) {
+        if (favorite == null) {
+            return
         }
 
-    val favoriteItems: LiveData<List<FavoriteModel>> =
-        Transformations.map(database.favoritesDao.getFavoriteItems()) {
-            it.asDomainModel()
+        withContext(Dispatchers.IO) {
+            database.favoritesDao.delete(favorite)
         }
-
-    val favoriteLocations: LiveData<List<FavoriteModel>> =
-        Transformations.map(database.favoritesDao.getFavoriteLocations()) {
-            it.asDomainModel()
-        }
+    }
 
     suspend fun refreshTypes(application: Application) {
         if (!hasInternetConnection(application)) {
@@ -82,6 +89,18 @@ class PocketdexRepository(private val database: PocketdexDatabase) {
 
             database.pokemonDao.insertAll(pokemonsDataList)
         }
+    }
+
+    suspend fun getFavoriteByName(name: String): DatabaseFavorites? {
+
+        var favorite: DatabaseFavorites? = null
+
+        withContext(Dispatchers.IO) {
+
+            favorite = database.favoritesDao.getFavoriteByName(name)
+        }
+
+        return favorite
     }
 
     suspend fun getTypeByName(application: Application, name: String): TypeModel? {

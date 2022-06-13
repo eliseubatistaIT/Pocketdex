@@ -1,10 +1,8 @@
 package com.eliseubatista.pocketdex.repository
 
-import android.util.Log
 import com.eliseubatista.pocketdex.database.DatabaseFavorites
 import com.eliseubatista.pocketdex.database.DatabasePokemon
 import com.eliseubatista.pocketdex.database.DatabaseTypes
-import com.eliseubatista.pocketdex.models.FavoriteModel
 import com.eliseubatista.pocketdex.models.pokemons.PokemonModel
 import com.eliseubatista.pocketdex.models.pokemons.TypeModel
 import com.eliseubatista.pocketdex.network.PokeApi
@@ -117,20 +115,3 @@ fun List<DatabasePokemon>.asDomainModel(): List<PokemonModel> {
     return pokemons
 }
 
-@JvmName("asDomainModelDatabaseFavorites")
-fun DatabaseFavorites.asDomainModel(): FavoriteModel {
-    val favorite = FavoriteModel.fromDatabase(this)
-    return favorite
-}
-
-@JvmName("asDomainModelDatabaseFavorites")
-fun List<DatabaseFavorites>.asDomainModel(): List<FavoriteModel> {
-    val favorites = mutableListOf<FavoriteModel>()
-
-    for (element in this) {
-        val favorite = FavoriteModel.fromDatabase(element)
-        favorites.add(favorite)
-    }
-
-    return favorites
-}
