@@ -30,15 +30,20 @@ class PokedexViewModel(val application: Application) : ViewModel() {
     private var coroutineJob = Job()
     private val coroutineScope = CoroutineScope(coroutineJob + Dispatchers.Main)
 
-    private var pokemonsLoaded = 0;
-
     init {
+        getMoreTypes()
         getMorePokemons()
     }
 
     override fun onCleared() {
         super.onCleared()
         coroutineJob.cancel()
+    }
+
+    fun getMoreTypes() {
+        coroutineScope.launch {
+            pocketdexRepository.refreshTypes(application)
+        }
     }
 
     fun getMorePokemons() {
@@ -52,13 +57,14 @@ class PokedexViewModel(val application: Application) : ViewModel() {
 
         coroutineScope.launch {
 
-            pocketdexRepository.refreshTypes(application)
-            pocketdexRepository.refreshPokemons(application,10, pokemonsLoaded)
+            val pokemonsLoaded = pokemons.value?.size ?: 0
 
-            pokemonsLoaded += 10
+            pocketdexRepository.refreshPokemons(application, 10, pokemonsLoaded)
 
             _isLoadingMorePokemons.value = false
         }
+
+
     }
 
     class Factory(val application: Application) : ViewModelProvider.Factory {

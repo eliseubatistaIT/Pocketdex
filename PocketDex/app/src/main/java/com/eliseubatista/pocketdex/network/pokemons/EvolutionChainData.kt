@@ -33,32 +33,32 @@ fun EvolutionChainData.getEvolutionChain(): MutableList<String> {
 
         chainString = baseForm + getEvolutionChainString(evolution)
 
-        Log.i("CHAIN", chainString.toString())
-
-
         evolutionChain.add(chainString)
     }
+
+    Log.i("CHAIN", evolutionChain.toString())
+
 
     return evolutionChain
 }
 
 private fun getEvolutionChainString(evolutionChain: EvolutionChainChainData): String {
 
-    var chainString = ";" + evolutionChain.baseForm.name
+    var chainString = ":" + evolutionChain.baseForm.name
 
     for (evolution in evolutionChain.evolvesTo) {
         if (evolution == null) {
             continue;
         }
 
-        chainString += ";" + evolution.baseForm.name
+        chainString += ":" + evolution.baseForm.name
 
         for (evolutionOfEvolution in evolution.evolvesTo) {
             if (evolutionOfEvolution == null) {
                 continue;
             }
 
-            chainString += ";" + evolutionOfEvolution.baseForm.name
+            chainString += ":" + evolutionOfEvolution.baseForm.name
         }
     }
 

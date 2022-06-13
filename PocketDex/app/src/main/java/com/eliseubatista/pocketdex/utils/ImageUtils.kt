@@ -16,10 +16,12 @@ fun getImageScaleByEvolutionChain(
     for (evolutionChain in evolutionChains) {
 
         //Split the url to get the chain id
-        val splitChain = evolutionChain.split(";")
+        val splitChain = evolutionChain.split(":")
+
 
         for ((index, evolution) in splitChain.withIndex()) {
             if (pokemonName == evolution) {
+
                 pokemonIndex = index
                 break
             }
@@ -27,6 +29,7 @@ fun getImageScaleByEvolutionChain(
     }
 
     var imageScale = 1.0f
+
 
     when (pokemonIndex) {
         0 -> imageScale = 1.4f

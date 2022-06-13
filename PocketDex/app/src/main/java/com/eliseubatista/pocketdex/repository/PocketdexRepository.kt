@@ -2,6 +2,7 @@ package com.eliseubatista.pocketdex.repository
 
 import android.app.Application
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.eliseubatista.pocketdex.database.DatabasePokemon
