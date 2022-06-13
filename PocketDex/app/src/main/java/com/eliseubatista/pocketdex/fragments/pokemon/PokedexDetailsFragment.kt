@@ -19,6 +19,7 @@ import com.eliseubatista.pocketdex.models.pokemons.TypeModel
 import com.eliseubatista.pocketdex.utils.*
 import com.eliseubatista.pocketdex.views.OnPokemonClickedListener
 import com.eliseubatista.pocketdex.views.PokemonAdapter
+import com.eliseubatista.pocketdex.views.PokemonEvolutionChainAdapter
 import com.eliseubatista.pocketdex.views.PokemonTypeSmallAdapter
 
 class PokedexDetailsFragment : Fragment() {
@@ -33,6 +34,9 @@ class PokedexDetailsFragment : Fragment() {
     private lateinit var attackDoubleDamageAdapter: PokemonTypeSmallAdapter
     private lateinit var attackHalfDamageAdapter: PokemonTypeSmallAdapter
     private lateinit var attackNoDamageAdapter: PokemonTypeSmallAdapter
+
+    private lateinit var evolutionChainAdapter: PokemonEvolutionChainAdapter
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -95,6 +99,12 @@ class PokedexDetailsFragment : Fragment() {
             GridLayoutManager(context, 8)
         binding.pokemonDetailsDamages.attackNoDamageContainer.gridView.adapter =
             attackNoDamageAdapter
+
+        //----------------------------------------------------
+
+        evolutionChainAdapter = PokemonEvolutionChainAdapter()
+        binding.pokemonDetailsEvolutions.gridView.layoutManager = LinearLayoutManager(context)
+        binding.pokemonDetailsEvolutions.gridView.adapter = evolutionChainAdapter
     }
 
     private fun refreshPokemonDisplay(
@@ -104,7 +114,8 @@ class PokedexDetailsFragment : Fragment() {
         refreshPokemonHeader(binding, pokemon)
         refreshPokemonAbout(binding, pokemon)
         refreshPokemonStats(binding, pokemon)
-        refreshPokemonDamages(binding, pokemon, viewModel.pokeFirstType.value!!)
+        refreshPokemonDamages(binding, pokemon, viewModel.pokeFirstType)
+        refreshPokemonEvolutions(binding, pokemon)
     }
 
     private fun refreshPokemonHeader(
@@ -255,5 +266,28 @@ class PokedexDetailsFragment : Fragment() {
             binding.pokemonDetailsDamages.attackDoubleDamageContainer.damageTypesContainer.visibility =
                 View.GONE
         }
+    }
+
+    private fun refreshPokemonEvolutions(
+        binding: FragmentPokedexDetailsBinding,
+        pokemon: PokemonModel
+    ) {
+
+        Log.i("CARAMBA", pokemon.evolutionChain.toString())
+
+        val pokemonColor = getPokemonBackgroundColor(requireContext(), pokemon.color)
+        binding.pokemonDetailsEvolutions.evolutionFixedText.setTextColor(pokemonColor)
+
+        val size = dpToPx(requireContext(), viewModel.pokeEvolutionChain.size * 120)
+
+        binding.pokemonDetailsEvolutions.gridView.layoutParams.height = size
+
+        if (viewModel.pokeEvolutionChain.size < 1) {
+            binding.pokemonDetailsEvolutions.evolutionFixedText.visibility = View.GONE
+        } else {
+            binding.pokemonDetailsEvolutions.evolutionFixedText.visibility = View.VISIBLE
+        }
+
+        evolutionChainAdapter.submitList(viewModel.pokeEvolutionChain)
     }
 }

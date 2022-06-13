@@ -2,6 +2,7 @@ package com.eliseubatista.pocketdex.network.pokemons
 
 import android.util.Log
 import com.eliseubatista.pocketdex.network.BaseNameAndUrl
+import com.eliseubatista.pocketdex.utils.isStringBlank
 import com.squareup.moshi.Json
 
 /*
@@ -18,49 +19,56 @@ data class EvolutionChainChainData(
     @Json(name = "species") val baseForm: BaseNameAndUrl,
 )
 
-fun EvolutionChainData.getEvolutionChain(): MutableList<String> {
-    val evolutionChain = mutableListOf<String>()
-
+fun EvolutionChainData.getEvolutionChain(): List<String> {
     val baseForm = this.chain?.baseForm!!.name
     //evolutionChain.add(this.chain?.baseForm!!.name)
 
-    var chainString = ""
+    val listOfChains = getListOfChains(baseForm, this.chain.evolvesTo)
 
-    for (evolution in this.chain.evolvesTo) {
-        if (evolution == null) {
-            continue;
-        }
+    Log.i("CHAIN", listOfChains.toString())
 
-        chainString = baseForm + getEvolutionChainString(evolution)
-
-        evolutionChain.add(chainString)
-    }
-
-    Log.i("CHAIN", evolutionChain.toString())
-
-
-    return evolutionChain
+    return listOfChains
 }
 
-private fun getEvolutionChainString(evolutionChain: EvolutionChainChainData): String {
+private fun getListOfChains(
+    baseForm: String,
+    evolutionChain: List<EvolutionChainChainData?>
+): List<String> {
 
-    var chainString = ":" + evolutionChain.baseForm.name
+    val listOfChains = mutableListOf<String>()
+    var chainString = baseForm
 
-    for (evolution in evolutionChain.evolvesTo) {
-        if (evolution == null) {
+    for (evolution1 in evolutionChain) {
+        if (evolution1 == null) {
             continue;
         }
+        if (isStringBlank(evolution1.baseForm.name)) {
+            continue
+        }
 
-        chainString += ":" + evolution.baseForm.name
+        chainString = baseForm + ":" + evolution1.baseForm.name
 
-        for (evolutionOfEvolution in evolution.evolvesTo) {
-            if (evolutionOfEvolution == null) {
-                continue;
+        if(evolution1.evolvesTo.isEmpty())
+        {
+            listOfChains.add(chainString)
+        }
+        else{
+            for (evolution2 in evolution1.evolvesTo) {
+                if (evolution2 == null) {
+                    continue
+                }
+
+                if (isStringBlank(evolution2.baseForm.name)) {
+                    continue
+                }
+
+                chainString =
+                    baseForm + ":" + evolution1.baseForm.name + ":" + evolution2.baseForm.name
+
+                listOfChains.add(chainString)
             }
-
-            chainString += ":" + evolutionOfEvolution.baseForm.name
         }
     }
 
-    return chainString
+    return listOfChains
 }

@@ -3,6 +3,10 @@ package com.eliseubatista.pocketdex.utils
 import android.util.Log
 import java.util.*
 
+fun isStringBlank(string: String): Boolean {
+    return string == "" || string.isBlank() || string.isEmpty()
+}
+
 //Function used to format pokemon, item and locations names
 fun formatPocketdexObjectName(name: String): String {
     if (name.isEmpty()) {

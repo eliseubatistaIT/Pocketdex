@@ -10,7 +10,7 @@ fun getImageScaleByEvolutionChain(
     pokemonName: String,
     evolutionChains: List<String>
 ): Float {
-    var pokemonIndex = 0
+    var pokemonIndex = 3
 
     //for each evolution chain
     for (evolutionChain in evolutionChains) {

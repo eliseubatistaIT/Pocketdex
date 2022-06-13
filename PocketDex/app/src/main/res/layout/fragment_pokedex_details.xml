@@ -156,7 +156,7 @@
 
                     <include
                         android:id="@+id/pokemon_details_evolutions"
-                        layout="@layout/pokemon_details_evolution_of_three"
+                        layout="@layout/pokemon_details_evolutions"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"

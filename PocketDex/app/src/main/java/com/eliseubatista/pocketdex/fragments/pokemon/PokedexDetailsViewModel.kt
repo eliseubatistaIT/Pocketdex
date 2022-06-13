@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.eliseubatista.pocketdex.database.getDatabase
+import com.eliseubatista.pocketdex.models.pokemons.EvolutionChainModel
 import com.eliseubatista.pocketdex.models.pokemons.PokemonModel
 import com.eliseubatista.pocketdex.models.pokemons.TypeModel
 import com.eliseubatista.pocketdex.repository.PocketdexRepository
@@ -20,13 +21,13 @@ class PokemonDetailsViewModel(val application: Application, val pokemonName: Str
     private val database = getDatabase(application)
     private val pocketdexRepository = PocketdexRepository(database)
 
-    private var _pokeFirstType = MutableLiveData<TypeModel>()
-    val pokeFirstType: LiveData<TypeModel>
-        get() = _pokeFirstType
+    lateinit var pokeFirstType: TypeModel
+    var pokeEvolutionChain = mutableListOf<EvolutionChainModel>()
 
     private var _pokemon = MutableLiveData<PokemonModel>()
     val pokemon: LiveData<PokemonModel>
         get() = _pokemon
+
 
     private var _isLoadingPokemon = MutableLiveData<Boolean>()
     val isLoadingPokemon: LiveData<Boolean>
@@ -56,9 +57,36 @@ class PokemonDetailsViewModel(val application: Application, val pokemonName: Str
         coroutineScope.launch {
 
             val pokemonModel = pocketdexRepository.getPokemonByName(application, pokemonName)
-            _pokeFirstType.value =
-                pocketdexRepository.getTypeByName(application, pokemonModel!!.types[0])
-            _pokemon.value = pokemonModel!!
+
+            pokeFirstType =
+                pocketdexRepository.getTypeByName(application, pokemonModel!!.types[0])!!
+
+            //for each evolution chain
+            for (evolutionChain in pokemonModel.evolutionChain) {
+
+                if (!evolutionChain.contains(pokemonName)) {
+                    continue
+                }
+
+                val evolutionChainModel = EvolutionChainModel(evolutionChain)
+
+                //Split the url to get the chain id
+                val splitChain = evolutionChain.split(":")
+
+                for (evolution in splitChain) {
+                    val evolutionPokemon =
+                        pocketdexRepository.getPokemonByName(application, evolution)
+
+                    evolutionChainModel.evolutions.add(evolutionPokemon!!)
+                }
+
+
+                pokeEvolutionChain.add(evolutionChainModel)
+            }
+
+            _pokemon.value = pokemonModel
+
+
 
             _isLoadingPokemon.value = false
         }

@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.eliseubatista.pocketdex.R
 import com.eliseubatista.pocketdex.databinding.FragmentPokedexBinding
+import com.eliseubatista.pocketdex.utils.ProgressBarDialog
 import com.eliseubatista.pocketdex.views.OnPokemonClickedListener
 import com.eliseubatista.pocketdex.views.PokemonAdapter
 
@@ -22,6 +23,7 @@ class PokedexFragment : Fragment() {
 
     private lateinit var viewModel: PokedexViewModel
     private lateinit var viewModelFactory: PokedexViewModel.Factory
+    private lateinit var progressBarDialog: ProgressBarDialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,6 +37,8 @@ class PokedexFragment : Fragment() {
         viewModelFactory = PokedexViewModel.Factory(requireActivity().application)
         viewModel =
             ViewModelProvider(this, viewModelFactory).get(PokedexViewModel::class.java)
+
+        progressBarDialog = ProgressBarDialog(inflater, requireContext())
 
         setupLinearRecyclerView(binding)
 
@@ -64,6 +68,14 @@ class PokedexFragment : Fragment() {
         //Create and observer to refresh the list automatically
         viewModel.pokemons.observe(viewLifecycleOwner, Observer {
             pokemonListAdapter.submitList(it)
+        })
+
+        viewModel.isLoadingMorePokemons.observe(viewLifecycleOwner, Observer {
+            if (it) {
+                progressBarDialog.startLoading("Loading More Pokemons..")
+            } else {
+                progressBarDialog.dismiss()
+            }
         })
 
         //Scroll listenner

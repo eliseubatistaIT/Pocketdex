@@ -10,6 +10,7 @@ import com.eliseubatista.pocketdex.database.getDatabase
 import com.eliseubatista.pocketdex.models.pokemons.PokemonModel
 import com.eliseubatista.pocketdex.network.PokeApi
 import com.eliseubatista.pocketdex.repository.PocketdexRepository
+import com.eliseubatista.pocketdex.utils.ProgressBarDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
