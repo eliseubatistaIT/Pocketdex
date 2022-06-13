@@ -22,6 +22,11 @@
         <entry key="..\:/Projects/Pocketdex-App/PocketDex/app/src/main/res/layout/custom_pokemon_type.xml" value="0.2151268115942029" />
         <entry key="..\:/Projects/Pocketdex-App/PocketDex/app/src/main/res/layout/fragment_pokedex.xml" value="0.26614583333333336" />
         <entry key="..\:/Projects/Pocketdex-App/PocketDex/app/src/main/res/layout/fragment_pokedex_details.xml" value="0.264" />
+        <entry key="..\:/Projects/Pocketdex-App/PocketDex/app/src/main/res/layout/fragment_pokedex_details_about.xml" value="0.26614583333333336" />
+        <entry key="..\:/Projects/Pocketdex-App/PocketDex/app/src/main/res/layout/fragment_pokedex_details_evolutions.xml" value="0.26614583333333336" />
+        <entry key="..\:/Projects/Pocketdex-App/PocketDex/app/src/main/res/layout/fragment_pokedex_details_stats.xml" value="0.26614583333333336" />
+        <entry key="..\:/Projects/Pocketdex-App/PocketDex/app/src/main/res/layout/fragment_pokemon_details_evolutions.xml" value="0.26614583333333336" />
+        <entry key="..\:/Projects/Pocketdex-App/PocketDex/app/src/main/res/layout/fragment_pokemon_details_stats.xml" value="0.26614583333333336" />
         <entry key="..\:/Projects/Pocketdex-App/PocketDex/app/src/main/res/layout/fragment_profile.xml" value="0.26614583333333336" />
         <entry key="..\:/Projects/Pocketdex-App/PocketDex/app/src/main/res/layout/grid_pokemon_types.xml" value="0.264" />
         <entry key="..\:/Projects/Pocketdex-App/PocketDex/app/src/main/res/layout/item_damage_relation.xml" value="0.26614583333333336" />

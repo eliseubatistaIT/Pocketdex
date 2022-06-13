@@ -1,5 +1,8 @@
 package com.eliseubatista.pocketdex.fragments.pokemon
 
+import PokedexDetailsAboutFragment
+import PokedexDetailsEvolutionsFragment
+import PokedexDetailsStatsFragment
 import android.os.Bundle
 import android.text.Html
 import android.util.Log
@@ -13,31 +16,22 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.eliseubatista.pocketdex.R
 import com.eliseubatista.pocketdex.databinding.FragmentPokedexDetailsBinding
+import com.eliseubatista.pocketdex.fragments.locations.LocationsFragment
 import com.eliseubatista.pocketdex.models.pokemons.PokemonModel
 import com.eliseubatista.pocketdex.models.pokemons.TypeModel
 import com.eliseubatista.pocketdex.utils.*
-import com.eliseubatista.pocketdex.views.OnPokemonClickedListener
-import com.eliseubatista.pocketdex.views.PokemonAdapter
-import com.eliseubatista.pocketdex.views.PokemonEvolutionChainAdapter
-import com.eliseubatista.pocketdex.views.PokemonTypeSmallAdapter
+import com.eliseubatista.pocketdex.views.*
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
+import com.google.android.material.tabs.TabLayoutMediator
 
 class PokedexDetailsFragment : Fragment() {
-
     private var pokemonName = ""
     private lateinit var viewModel: PokemonDetailsViewModel
     private lateinit var viewModelFactory: PokemonDetailsViewModel.Factory
-
-    private lateinit var defenseDoubleDamageAdapter: PokemonTypeSmallAdapter
-    private lateinit var defenseHalfDamageAdapter: PokemonTypeSmallAdapter
-    private lateinit var defenseNoDamageAdapter: PokemonTypeSmallAdapter
-    private lateinit var attackDoubleDamageAdapter: PokemonTypeSmallAdapter
-    private lateinit var attackHalfDamageAdapter: PokemonTypeSmallAdapter
-    private lateinit var attackNoDamageAdapter: PokemonTypeSmallAdapter
-
-    private lateinit var evolutionChainAdapter: PokemonEvolutionChainAdapter
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,6 +39,8 @@ class PokedexDetailsFragment : Fragment() {
     ): View {
         val binding: FragmentPokedexDetailsBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_pokedex_details, container, false)
+
+        setUpViewPagerAndTabLayout(binding)
 
         val bundle = requireArguments()
         pokemonName = bundle.getString("POKEMON_NAME", "")
@@ -54,17 +50,16 @@ class PokedexDetailsFragment : Fragment() {
         viewModel =
             ViewModelProvider(this, viewModelFactory).get(PokemonDetailsViewModel::class.java)
 
-        setupRecyclerViews(binding)
-
         viewModel.isInFavorites.observe(
             viewLifecycleOwner,
             Observer { inFavorites ->
                 refreshFavorites(binding, inFavorites)
             })
 
+
         viewModel.pokemon.observe(
             viewLifecycleOwner,
-            Observer { pokemon -> refreshPokemonDisplay(binding, pokemon) })
+            Observer { pokemon -> refreshPokemonHeader(binding, pokemon) })
 
         binding.toolbarPokedexDetails.favorite.setOnClickListener { view: View ->
             viewModel.addOrRemoveFavorite()
@@ -74,60 +69,34 @@ class PokedexDetailsFragment : Fragment() {
         return binding.root
     }
 
-    private fun setupRecyclerViews(binding: FragmentPokedexDetailsBinding) {
+    private fun setUpViewPagerAndTabLayout(binding: FragmentPokedexDetailsBinding) {
+        val viewPager = binding.pokedexDetailsViewPager
+        val tabLayout = binding.pokedexDetailsTabLayout
 
-        defenseDoubleDamageAdapter = PokemonTypeSmallAdapter()
-        binding.pokemonDetailsDamages.defenseDoubleDamageContainer.gridView.layoutManager =
-            GridLayoutManager(context, 8)
-        binding.pokemonDetailsDamages.defenseDoubleDamageContainer.gridView.adapter =
-            defenseDoubleDamageAdapter
+        val adapter = SectionPagerAdapter(childFragmentManager, lifecycle)
+        adapter.addFragment(PokedexDetailsAboutFragment(), "About")
+        adapter.addFragment(PokedexDetailsStatsFragment(), "Stats")
+        adapter.addFragment(PokedexDetailsEvolutionsFragment(), "Evolutions")
 
-        defenseHalfDamageAdapter = PokemonTypeSmallAdapter()
-        binding.pokemonDetailsDamages.defenseHalfDamageContainer.gridView.layoutManager =
-            GridLayoutManager(context, 8)
-        binding.pokemonDetailsDamages.defenseHalfDamageContainer.gridView.adapter =
-            defenseHalfDamageAdapter
+        viewPager.adapter = adapter
 
-        defenseNoDamageAdapter = PokemonTypeSmallAdapter()
-        binding.pokemonDetailsDamages.defenseNoDamageContainer.gridView.layoutManager =
-            GridLayoutManager(context, 8)
-        binding.pokemonDetailsDamages.defenseNoDamageContainer.gridView.adapter =
-            defenseNoDamageAdapter
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+            tab.text = adapter.getPageTitle(position)
+        }.attach()
 
-        attackDoubleDamageAdapter = PokemonTypeSmallAdapter()
-        binding.pokemonDetailsDamages.attackDoubleDamageContainer.gridView.layoutManager =
-            GridLayoutManager(context, 8)
-        binding.pokemonDetailsDamages.attackDoubleDamageContainer.gridView.adapter =
-            attackDoubleDamageAdapter
+        tabLayout.addOnTabSelectedListener(object : OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+            }
 
-        attackHalfDamageAdapter = PokemonTypeSmallAdapter()
-        binding.pokemonDetailsDamages.attackHalfDamageContainer.gridView.layoutManager =
-            GridLayoutManager(context, 8)
-        binding.pokemonDetailsDamages.attackHalfDamageContainer.gridView.adapter =
-            attackHalfDamageAdapter
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+            }
 
-        attackNoDamageAdapter = PokemonTypeSmallAdapter()
-        binding.pokemonDetailsDamages.attackNoDamageContainer.gridView.layoutManager =
-            GridLayoutManager(context, 8)
-        binding.pokemonDetailsDamages.attackNoDamageContainer.gridView.adapter =
-            attackNoDamageAdapter
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+            }
 
-        //----------------------------------------------------
 
-        evolutionChainAdapter = PokemonEvolutionChainAdapter()
-        binding.pokemonDetailsEvolutions.gridView.layoutManager = LinearLayoutManager(context)
-        binding.pokemonDetailsEvolutions.gridView.adapter = evolutionChainAdapter
-    }
+        })
 
-    private fun refreshPokemonDisplay(
-        binding: FragmentPokedexDetailsBinding,
-        pokemon: PokemonModel
-    ) {
-        refreshPokemonHeader(binding, pokemon)
-        refreshPokemonAbout(binding, pokemon)
-        refreshPokemonStats(binding, pokemon)
-        refreshPokemonDamages(binding, pokemon, viewModel.pokeFirstType)
-        refreshPokemonEvolutions(binding, pokemon)
     }
 
     private fun refreshPokemonHeader(
@@ -168,137 +137,6 @@ class PokedexDetailsFragment : Fragment() {
 
         binding.toolbarPokedexDetails.arrowBack.setColorFilter(textColor)
         binding.toolbarPokedexDetails.favorite.setColorFilter(textColor)
-
-        val typeOneLogo = getPokemonTypeLogoImage(requireContext(), pokemon.types[0])
-        val typeOneTextImage = getPokemonTypeTextImage(requireContext(), pokemon.types[0])
-
-        binding.pokemonDetailsTypes.onlyTypeValue.typeLogo.setImageDrawable(typeOneLogo)
-        binding.pokemonDetailsTypes.firstTypeValue.typeLogo.setImageDrawable(typeOneLogo)
-
-        binding.pokemonDetailsTypes.onlyTypeValue.typeTextImage.setImageDrawable(typeOneTextImage)
-        binding.pokemonDetailsTypes.firstTypeValue.typeTextImage.setImageDrawable(typeOneTextImage)
-
-        if (pokemon.types.size > 1) {
-
-            val typeTwoLogo = getPokemonTypeLogoImage(requireContext(), pokemon.types[1])
-            val typeTwoTextImage = getPokemonTypeTextImage(requireContext(), pokemon.types[1])
-
-            binding.pokemonDetailsTypes.secondTypeValue.typeLogo.setImageDrawable(typeTwoLogo)
-            binding.pokemonDetailsTypes.secondTypeValue.typeTextImage.setImageDrawable(
-                typeTwoTextImage
-            )
-
-            binding.pokemonDetailsTypes.onlyTypeContainer.visibility = View.GONE
-            binding.pokemonDetailsTypes.firstTypeContainer.visibility = View.VISIBLE
-            binding.pokemonDetailsTypes.secondTypeContainer.visibility = View.VISIBLE
-        } else {
-            binding.pokemonDetailsTypes.onlyTypeContainer.visibility = View.VISIBLE
-            binding.pokemonDetailsTypes.firstTypeContainer.visibility = View.GONE
-            binding.pokemonDetailsTypes.secondTypeContainer.visibility = View.GONE
-        }
-    }
-
-    private fun refreshPokemonAbout(binding: FragmentPokedexDetailsBinding, pokemon: PokemonModel) {
-        val pokemonColor = getPokemonBackgroundColor(requireContext(), pokemon.color)
-
-        binding.pokemonDetailsDescriptionText.text =
-            formatPocketdexObjectDescription(pokemon.flavor)
-
-        binding.pokemonDetailsAbout.pokemonDetailsBar1.setColorFilter(pokemonColor)
-        binding.pokemonDetailsAbout.pokemonDetailsBar2.setColorFilter(pokemonColor)
-
-        binding.pokemonDetailsAbout.speciesValue.text = formatPokemonGenus(pokemon.genus)
-
-        binding.pokemonDetailsAbout.heightValue.text = formatPokemonHeight(pokemon.height)
-
-        binding.pokemonDetailsAbout.weightValue.text = formatPokemonWeight(pokemon.weight)
-    }
-
-    private fun refreshPokemonStats(binding: FragmentPokedexDetailsBinding, pokemon: PokemonModel) {
-        val pokemonColor = getPokemonBackgroundColor(requireContext(), pokemon.color)
-
-        binding.pokemonDetailsStats.baseStatsFixedText.setTextColor(pokemonColor)
-
-        binding.pokemonDetailsStats.hpValue.text = pokemon.hp.toString()
-        binding.pokemonDetailsStats.attackValue.text = pokemon.attack.toString()
-        binding.pokemonDetailsStats.defenseValue.text = pokemon.defense.toString()
-        binding.pokemonDetailsStats.spAttackValue.text = pokemon.specialAttack.toString()
-        binding.pokemonDetailsStats.spDefenseValue.text = pokemon.specialDefense.toString()
-        binding.pokemonDetailsStats.speedValue.text = pokemon.speed.toString()
-    }
-
-    private fun refreshPokemonDamages(
-        binding: FragmentPokedexDetailsBinding,
-        pokemon: PokemonModel,
-        type: TypeModel
-    ) {
-        val pokemonColor = getPokemonBackgroundColor(requireContext(), pokemon.color)
-
-        binding.pokemonDetailsDamages.attackFixedText.setTextColor(pokemonColor)
-        binding.pokemonDetailsDamages.defensesFixedText.setTextColor(pokemonColor)
-
-        binding.pokemonDetailsDamages.defenseDoubleDamageContainer.fixedText.text = "0%"
-        binding.pokemonDetailsDamages.defenseHalfDamageContainer.fixedText.text = "50%"
-        binding.pokemonDetailsDamages.defenseNoDamageContainer.fixedText.text = "100%"
-        binding.pokemonDetailsDamages.attackNoDamageContainer.fixedText.text = "0%"
-        binding.pokemonDetailsDamages.attackHalfDamageContainer.fixedText.text = "50%"
-        binding.pokemonDetailsDamages.attackDoubleDamageContainer.fixedText.text = "100%"
-
-        defenseDoubleDamageAdapter.submitList(type.doubleDamageFrom)
-        defenseHalfDamageAdapter.submitList(type.halfDamageFrom)
-        defenseNoDamageAdapter.submitList(type.noDamageFrom)
-        attackDoubleDamageAdapter.submitList(type.doubleDamageTo)
-        attackHalfDamageAdapter.submitList(type.halfDamageTo)
-        attackNoDamageAdapter.submitList(type.noDamageTo)
-
-        if (isPokemonDamageRelationEmpty(type.doubleDamageFrom)) {
-            binding.pokemonDetailsDamages.defenseDoubleDamageContainer.damageTypesContainer.visibility =
-                View.GONE
-        }
-        if (isPokemonDamageRelationEmpty(type.halfDamageFrom)) {
-            binding.pokemonDetailsDamages.defenseHalfDamageContainer.damageTypesContainer.visibility =
-                View.GONE
-        }
-        if (isPokemonDamageRelationEmpty(type.noDamageFrom)) {
-            binding.pokemonDetailsDamages.defenseNoDamageContainer.damageTypesContainer.visibility =
-                View.GONE
-        }
-        if (isPokemonDamageRelationEmpty(type.noDamageTo)) {
-            binding.pokemonDetailsDamages.attackNoDamageContainer.damageTypesContainer.visibility =
-                View.GONE
-        }
-        if (isPokemonDamageRelationEmpty(type.halfDamageTo)) {
-            binding.pokemonDetailsDamages.attackHalfDamageContainer.damageTypesContainer.visibility =
-                View.GONE
-        }
-
-        if (isPokemonDamageRelationEmpty(type.doubleDamageTo)) {
-            binding.pokemonDetailsDamages.attackDoubleDamageContainer.damageTypesContainer.visibility =
-                View.GONE
-        }
-    }
-
-    private fun refreshPokemonEvolutions(
-        binding: FragmentPokedexDetailsBinding,
-        pokemon: PokemonModel
-    ) {
-
-        Log.i("CARAMBA", pokemon.evolutionChain.toString())
-
-        val pokemonColor = getPokemonBackgroundColor(requireContext(), pokemon.color)
-        binding.pokemonDetailsEvolutions.evolutionFixedText.setTextColor(pokemonColor)
-
-        val size = dpToPx(requireContext(), viewModel.pokeEvolutionChain.size * 120)
-
-        binding.pokemonDetailsEvolutions.gridView.layoutParams.height = size
-
-        if (viewModel.pokeEvolutionChain.size < 1) {
-            binding.pokemonDetailsEvolutions.evolutionFixedText.visibility = View.GONE
-        } else {
-            binding.pokemonDetailsEvolutions.evolutionFixedText.visibility = View.VISIBLE
-        }
-
-        evolutionChainAdapter.submitList(viewModel.pokeEvolutionChain)
     }
 
     private fun refreshFavorites(binding: FragmentPokedexDetailsBinding, isInFavorites: Boolean) {
@@ -308,4 +146,5 @@ class PokedexDetailsFragment : Fragment() {
             binding.toolbarPokedexDetails.favorite.setImageResource(R.drawable.ic_star_border)
         }
     }
+
 }
