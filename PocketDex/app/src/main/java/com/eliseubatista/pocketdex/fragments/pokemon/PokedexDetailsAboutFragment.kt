@@ -8,7 +8,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.eliseubatista.pocketdex.R
-import com.eliseubatista.pocketdex.database.DatabasePokemon
+import com.eliseubatista.pocketdex.database.pokemons.DatabasePokemon
 import com.eliseubatista.pocketdex.databinding.FragmentPokedexDetailsAboutBinding
 import com.eliseubatista.pocketdex.utils.*
 

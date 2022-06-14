@@ -1,6 +1,8 @@
 package com.eliseubatista.pocketdex.network.pokemons
 
+import com.eliseubatista.pocketdex.database.pokemons.DatabasePokemon
 import com.eliseubatista.pocketdex.network.BaseNameAndUrl
+import com.eliseubatista.pocketdex.network.PokeApi
 import com.squareup.moshi.Json
 
 data class PokemonData(
@@ -36,6 +38,47 @@ This is the pokemon type data retrieved from the pokemon detailed data
 data class PokemonTypeData(
     @Json(name = "type") val type: BaseNameAndUrl,
 )
+
+suspend fun PokemonData.asDatabaseModel(): DatabasePokemon {
+    val pokemonStats = this.getPokemonStats()
+    val pokemonTypes = this.getPokemonTypes()
+
+    val speciesData =
+        PokeApi.retrofitService.getSpeciesByName(this.species.name)
+
+    //Split the url to get the chain id
+    val splitUrl = speciesData.evolutionChain.url.split("/")
+    val chainID = splitUrl[splitUrl.size - 2]
+
+    val evolutionChainData = PokeApi.retrofitService.getEvolutionChainById(chainID)
+
+    val evolutionChain = evolutionChainData.getEvolutionChain()
+
+    val flavor = speciesData.getFlavor()
+
+    val genus = speciesData.getGenus()
+
+    val sprite = this.sprites.frontDefault ?: ""
+
+    return DatabasePokemon(
+        id,
+        height,
+        name,
+        speciesData.color.name,
+        evolutionChain,
+        flavor,
+        genus,
+        sprite,
+        pokemonStats[0],
+        pokemonStats[1],
+        pokemonStats[2],
+        pokemonStats[3],
+        pokemonStats[4],
+        pokemonStats[5],
+        pokemonTypes,
+        weight
+    )
+}
 
 fun PokemonData.getPokemonStats(): List<Int> {
     val statsList = mutableListOf<Int>()

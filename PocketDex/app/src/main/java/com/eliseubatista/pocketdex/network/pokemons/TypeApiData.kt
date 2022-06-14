@@ -1,6 +1,8 @@
 package com.eliseubatista.pocketdex.network.pokemons
 
+import com.eliseubatista.pocketdex.database.pokemons.DatabaseTypes
 import com.eliseubatista.pocketdex.network.BaseNameAndUrl
+import com.eliseubatista.pocketdex.network.getNames
 import com.squareup.moshi.Json
 
 /*
@@ -24,3 +26,24 @@ data class TypeDamageRelationsData(
     @Json(name = "no_damage_from") val noDamageFrom: List<BaseNameAndUrl>,
     @Json(name = "no_damage_to") val noDamageTo: List<BaseNameAndUrl>,
 )
+
+fun TypeData.asDatabaseModel(): DatabaseTypes {
+
+    val doubleDamageFrom = this.damageRelations.doubleDamageFrom.getNames()
+    val doubleDamageTo = this.damageRelations.doubleDamageTo.getNames()
+    val halfDamageFrom = this.damageRelations.halfDamageFrom.getNames()
+    val halfDamageTo = this.damageRelations.halfDamageTo.getNames()
+    val noDamageFrom = this.damageRelations.noDamageFrom.getNames()
+    val noDamageTo = this.damageRelations.noDamageTo.getNames()
+
+    return DatabaseTypes(
+        id,
+        doubleDamageFrom,
+        doubleDamageTo,
+        halfDamageFrom,
+        halfDamageTo,
+        noDamageFrom,
+        noDamageTo,
+        name
+    )
+}

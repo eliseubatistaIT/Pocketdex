@@ -1,7 +1,6 @@
 package com.eliseubatista.pocketdex.fragments.pokemon
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -18,8 +17,8 @@ class PokedexViewModel(val application: Application) : ViewModel() {
     private val database = getDatabase(application)
     private val pocketdexRepository = PocketdexRepository(database)
 
-    val types = pocketdexRepository.pokemonTypes
-    val pokemons = pocketdexRepository.pokemons
+    val types = pocketdexRepository.pokedexRepository.pokemonTypes
+    val pokemons = pocketdexRepository.pokedexRepository.pokemons
 
     private var _isLoadingMorePokemons = MutableLiveData<Boolean>()
     val isLoadingMorePokemons: LiveData<Boolean>
@@ -40,7 +39,7 @@ class PokedexViewModel(val application: Application) : ViewModel() {
 
     private fun getMoreTypes() {
         coroutineScope.launch {
-            pocketdexRepository.getTypes(application.applicationContext)
+            pocketdexRepository.pokedexRepository.getTypes(application.applicationContext)
         }
     }
 
@@ -58,7 +57,7 @@ class PokedexViewModel(val application: Application) : ViewModel() {
             val pokemonsLoaded = pokemons.value?.size ?: 0
 
             //pocketdexRepository.refreshPokemons(application.applicationContext, 10, pokemonsLoaded)
-            pocketdexRepository.getPokemons(application.applicationContext, 10, pokemonsLoaded)
+            pocketdexRepository.pokedexRepository.getPokemons(application.applicationContext, 10, pokemonsLoaded)
 
             _isLoadingMorePokemons.value = false
         }

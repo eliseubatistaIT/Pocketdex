@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.eliseubatista.pocketdex.database.DatabasePokemon
+import com.eliseubatista.pocketdex.database.pokemons.DatabasePokemon
 import com.eliseubatista.pocketdex.databinding.ItemPokemonListBinding
 import com.eliseubatista.pocketdex.utils.*
 

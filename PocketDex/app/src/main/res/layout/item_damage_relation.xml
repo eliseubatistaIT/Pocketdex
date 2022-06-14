@@ -43,7 +43,7 @@
             android:id="@+id/types_grid"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:columnCount="11"
+            android:columnCount="7"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/fixed_Text"

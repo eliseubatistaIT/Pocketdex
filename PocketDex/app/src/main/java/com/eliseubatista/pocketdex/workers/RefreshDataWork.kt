@@ -1,6 +1,5 @@
 package com.eliseubatista.pocketdex.workers
 
-import android.app.Application
 import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
@@ -18,8 +17,8 @@ class RefreshDataWorker(
         val repository = PocketdexRepository(database)
 
         return try {
-            repository.refreshTypes(appContext)
-            repository.refreshPokemons(appContext, 5000, 0)
+            repository.pokedexRepository.refreshTypes(appContext)
+            repository.pokedexRepository.refreshPokemons(appContext, 5000, 0)
 
             Result.success()
         } catch (exception: Exception) {

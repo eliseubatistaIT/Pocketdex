@@ -22,7 +22,7 @@
 
             <include
                 android:id="@+id/evolution_of_two"
-                layout="@layout/pokemon_details_evolution_of_two"
+                layout="@layout/item_pokemon_evolution_of_two"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -44,7 +44,7 @@
 
             <include
                 android:id="@+id/evolution_of_three"
-                layout="@layout/pokemon_details_evolution_of_three"
+                layout="@layout/item_pokemon_evolution_of_three"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"

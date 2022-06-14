@@ -9,7 +9,7 @@ import com.eliseubatista.pocketdex.databinding.ProgressBarBinding
 
 class ProgressBarDialog(val inflater: LayoutInflater, val context: Context) {
 
-    private lateinit var alertDialog: AlertDialog
+    private var alertDialog: AlertDialog? = null
 
     fun startLoading(loadingMessage: String) {
         val binding: ProgressBarBinding =
@@ -25,11 +25,13 @@ class ProgressBarDialog(val inflater: LayoutInflater, val context: Context) {
         builder.setCancelable(false)
 
         alertDialog = builder.create()
-        alertDialog.show()
+        alertDialog!!.show()
     }
 
     fun dismiss() {
-        alertDialog.dismiss()
+        if (alertDialog != null && alertDialog!!.isShowing) {
+            alertDialog!!.dismiss()
+        }
     }
 
 }

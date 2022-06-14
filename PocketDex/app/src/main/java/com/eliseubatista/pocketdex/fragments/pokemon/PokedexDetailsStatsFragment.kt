@@ -4,16 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.GridLayout
-import android.widget.ImageView
+import android.widget.LinearLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.eliseubatista.pocketdex.R
-import com.eliseubatista.pocketdex.database.DatabasePokemon
-import com.eliseubatista.pocketdex.database.DatabaseTypes
+import com.eliseubatista.pocketdex.database.pokemons.DatabasePokemon
+import com.eliseubatista.pocketdex.database.pokemons.DatabaseTypes
 import com.eliseubatista.pocketdex.databinding.FragmentPokedexDetailsStatsBinding
-import com.eliseubatista.pocketdex.utils.dpToPx
+import com.eliseubatista.pocketdex.databinding.ItemDamageRelationBinding
+import com.eliseubatista.pocketdex.databinding.ItemPokemonTypeSmallBinding
 import com.eliseubatista.pocketdex.utils.getPokemonBackgroundColor
 import com.eliseubatista.pocketdex.utils.getPokemonTypeLogoImage
 import com.eliseubatista.pocketdex.utils.isPokemonDamageRelationEmpty
@@ -23,6 +23,9 @@ class PokedexDetailsStatsFragment : Fragment() {
     private var pokemonName = ""
     private lateinit var viewModel: PokemonDetailsViewModel
     private lateinit var viewModelFactory: PokemonDetailsViewModel.Factory
+
+    private lateinit var fragmentInflater: LayoutInflater
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,6 +38,8 @@ class PokedexDetailsStatsFragment : Fragment() {
                 container,
                 true
             )
+
+        fragmentInflater = inflater
 
         viewModelFactory =
             PokemonDetailsViewModel.Factory(requireActivity().application, pokemonName)
@@ -87,82 +92,74 @@ class PokedexDetailsStatsFragment : Fragment() {
         binding.pokemonDetailsDamages.attackFixedText.setTextColor(pokemonColor)
         binding.pokemonDetailsDamages.defensesFixedText.setTextColor(pokemonColor)
 
-        binding.pokemonDetailsDamages.defenseDoubleDamageContainer.fixedText.text = "0%"
-        binding.pokemonDetailsDamages.defenseHalfDamageContainer.fixedText.text = "50%"
-        binding.pokemonDetailsDamages.defenseNoDamageContainer.fixedText.text = "100%"
-        binding.pokemonDetailsDamages.attackNoDamageContainer.fixedText.text = "0%"
-        binding.pokemonDetailsDamages.attackHalfDamageContainer.fixedText.text = "50%"
-        binding.pokemonDetailsDamages.attackDoubleDamageContainer.fixedText.text = "100%"
+        binding.pokemonDetailsDamages.defenseLinearLayout.removeAllViews()
+        binding.pokemonDetailsDamages.attackLinearLayout.removeAllViews()
 
         addDamageRelations(
+            0,
             type.doubleDamageFrom,
-            binding.pokemonDetailsDamages.defenseDoubleDamageContainer.typesGrid
+            binding.pokemonDetailsDamages.defenseLinearLayout
         )
         addDamageRelations(
+            50,
             type.halfDamageFrom,
-            binding.pokemonDetailsDamages.defenseHalfDamageContainer.typesGrid
+            binding.pokemonDetailsDamages.defenseLinearLayout
         )
         addDamageRelations(
+            100,
             type.noDamageFrom,
-            binding.pokemonDetailsDamages.defenseNoDamageContainer.typesGrid
+            binding.pokemonDetailsDamages.defenseLinearLayout
         )
         addDamageRelations(
+            100,
             type.doubleDamageTo,
-            binding.pokemonDetailsDamages.attackDoubleDamageContainer.typesGrid
+            binding.pokemonDetailsDamages.attackLinearLayout
         )
         addDamageRelations(
+            50,
             type.halfDamageTo,
-            binding.pokemonDetailsDamages.attackHalfDamageContainer.typesGrid
+            binding.pokemonDetailsDamages.attackLinearLayout
         )
         addDamageRelations(
+            0,
             type.noDamageTo,
-            binding.pokemonDetailsDamages.attackNoDamageContainer.typesGrid
+            binding.pokemonDetailsDamages.attackLinearLayout
         )
-
-        if (isPokemonDamageRelationEmpty(type.doubleDamageFrom)) {
-            binding.pokemonDetailsDamages.defenseDoubleDamageContainer.damageTypesContainer.visibility =
-                View.GONE
-        }
-        if (isPokemonDamageRelationEmpty(type.halfDamageFrom)) {
-            binding.pokemonDetailsDamages.defenseHalfDamageContainer.damageTypesContainer.visibility =
-                View.GONE
-        }
-        if (isPokemonDamageRelationEmpty(type.noDamageFrom)) {
-            binding.pokemonDetailsDamages.defenseNoDamageContainer.damageTypesContainer.visibility =
-                View.GONE
-        }
-        if (isPokemonDamageRelationEmpty(type.noDamageTo)) {
-            binding.pokemonDetailsDamages.attackNoDamageContainer.damageTypesContainer.visibility =
-                View.GONE
-        }
-        if (isPokemonDamageRelationEmpty(type.halfDamageTo)) {
-            binding.pokemonDetailsDamages.attackHalfDamageContainer.damageTypesContainer.visibility =
-                View.GONE
-        }
-
-        if (isPokemonDamageRelationEmpty(type.doubleDamageTo)) {
-            binding.pokemonDetailsDamages.attackDoubleDamageContainer.damageTypesContainer.visibility =
-                View.GONE
-        }
     }
 
     private fun addDamageRelations(
+        relationsValue: Int,
         damageRelations: List<String>,
-        layout: GridLayout
+        layout: LinearLayout
     ) {
-        for (relation in damageRelations) {
-            val image = ImageView(requireContext())
-            val imageSize = dpToPx(requireContext(), 30)
-            val marginSize = dpToPx(requireContext(), 3)
+        val relationBinding: ItemDamageRelationBinding =
+            DataBindingUtil.inflate(
+                fragmentInflater,
+                R.layout.item_damage_relation,
+                layout,
+                true
+            )
 
-            val layoutParams = ViewGroup.MarginLayoutParams(imageSize, imageSize)
-            layoutParams.setMargins(marginSize, marginSize, marginSize, marginSize)
-            image.layoutParams = layoutParams
+        relationBinding.fixedText.text = "${relationsValue}%"
+
+        relationBinding.typesGrid.removeAllViews()
+
+        for (relation in damageRelations) {
+
+            val pokeTypeBinding: ItemPokemonTypeSmallBinding =
+                DataBindingUtil.inflate(
+                    fragmentInflater,
+                    R.layout.item_pokemon_type_small,
+                    relationBinding.typesGrid,
+                    true
+                )
 
             val pokeTypeLogo = getPokemonTypeLogoImage(requireContext(), relation)
-            image.setImageDrawable(pokeTypeLogo)
+            pokeTypeBinding.typeLogo.setImageDrawable(pokeTypeLogo)
+        }
 
-            layout.addView(image)
+        if (isPokemonDamageRelationEmpty(damageRelations)) {
+            relationBinding.damageTypesContainer.visibility = View.GONE
         }
     }
 }

@@ -6,9 +6,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.eliseubatista.pocketdex.database.DatabaseFavorites
-import com.eliseubatista.pocketdex.database.DatabasePokemon
-import com.eliseubatista.pocketdex.database.DatabaseTypes
+import com.eliseubatista.pocketdex.database.favorites.DatabaseFavorites
+import com.eliseubatista.pocketdex.database.pokemons.DatabasePokemon
+import com.eliseubatista.pocketdex.database.pokemons.DatabaseTypes
 import com.eliseubatista.pocketdex.database.getDatabase
 import com.eliseubatista.pocketdex.models.pokemons.EvolutionChainModel
 import com.eliseubatista.pocketdex.repository.PocketdexRepository
@@ -62,10 +62,10 @@ class PokemonDetailsViewModel(val application: Application, private val pokemonN
         coroutineScope.launch {
 
             val pokemonModel =
-                pocketdexRepository.getPokemonByName(application.applicationContext, pokemonName)
+                pocketdexRepository.pokedexRepository.getPokemonByName(application.applicationContext, pokemonName)
 
             pokeFirstType =
-                pocketdexRepository.getTypeByName(
+                pocketdexRepository.pokedexRepository.getTypeByName(
                     application.applicationContext,
                     pokemonModel!!.types[0]
                 )!!
@@ -84,7 +84,7 @@ class PokemonDetailsViewModel(val application: Application, private val pokemonN
 
                 for (evolution in splitChain) {
                     val evolutionPokemon =
-                        pocketdexRepository.getPokemonByName(
+                        pocketdexRepository.pokedexRepository.getPokemonByName(
                             application.applicationContext,
                             evolution
                         )
@@ -96,7 +96,7 @@ class PokemonDetailsViewModel(val application: Application, private val pokemonN
                 pokeEvolutionChain.add(evolutionChainModel)
             }
 
-            val favorite = pocketdexRepository.getFavoriteByName(pokemonName)
+            val favorite = pocketdexRepository.favoritesRepository.getFavoriteByName(pokemonName)
 
             _isInFavorites.value = favorite != null
 
@@ -109,7 +109,7 @@ class PokemonDetailsViewModel(val application: Application, private val pokemonN
     fun addOrRemoveFavorite() {
 
         coroutineScope.launch {
-            val favoriteInDatabase = pocketdexRepository.getFavoriteByName(pokemonName)
+            val favoriteInDatabase = pocketdexRepository.favoritesRepository.getFavoriteByName(pokemonName)
 
             if (favoriteInDatabase == null) {
                 Log.i("FAV", "Adding $pokemonName to favorites")
@@ -121,13 +121,13 @@ class PokemonDetailsViewModel(val application: Application, private val pokemonN
                         "pokemon"
                     )
 
-                    pocketdexRepository.addToFavorites(favoriteData)
+                    pocketdexRepository.favoritesRepository.addToFavorites(favoriteData)
                     _isInFavorites.value = true
                 }
             } else {
                 Log.i("FAV", "Removing $pokemonName from favorites")
 
-                pocketdexRepository.removeFromFavorites(favoriteInDatabase)
+                pocketdexRepository.favoritesRepository.removeFromFavorites(favoriteInDatabase)
                 _isInFavorites.value = false
             }
         }

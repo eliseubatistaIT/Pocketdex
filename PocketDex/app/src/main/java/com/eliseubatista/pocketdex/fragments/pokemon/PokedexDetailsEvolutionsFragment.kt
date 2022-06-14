@@ -4,16 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.eliseubatista.pocketdex.R
-import com.eliseubatista.pocketdex.database.DatabasePokemon
+import com.eliseubatista.pocketdex.database.pokemons.DatabasePokemon
 import com.eliseubatista.pocketdex.databinding.FragmentPokedexDetailsEvolutionsBinding
-import com.eliseubatista.pocketdex.utils.dpToPx
+import com.eliseubatista.pocketdex.databinding.ItemPokemonEvolutionListBinding
+import com.eliseubatista.pocketdex.models.pokemons.EvolutionChainModel
+import com.eliseubatista.pocketdex.utils.getImageScaleByEvolutionChain
 import com.eliseubatista.pocketdex.utils.getPokemonBackgroundColor
-import com.eliseubatista.pocketdex.views.pokemons.PokemonEvolutionChainAdapter
+import com.eliseubatista.pocketdex.utils.loadImageWithGlide
 
 class PokedexDetailsEvolutionsFragment : Fragment() {
 
@@ -21,8 +23,7 @@ class PokedexDetailsEvolutionsFragment : Fragment() {
     private lateinit var viewModel: PokemonDetailsViewModel
     private lateinit var viewModelFactory: PokemonDetailsViewModel.Factory
 
-    private lateinit var evolutionChainAdapter: PokemonEvolutionChainAdapter
-
+    private lateinit var fragmentInflater: LayoutInflater
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,6 +37,8 @@ class PokedexDetailsEvolutionsFragment : Fragment() {
                 true
             )
 
+        fragmentInflater = inflater
+
         viewModelFactory =
             PokemonDetailsViewModel.Factory(requireActivity().application, pokemonName)
         viewModel =
@@ -44,20 +47,11 @@ class PokedexDetailsEvolutionsFragment : Fragment() {
                 viewModelFactory
             )[PokemonDetailsViewModel::class.java]
 
-        setupRecyclerViews(binding)
-
         viewModel.pokemon.observe(
             viewLifecycleOwner
         ) { pokemon -> refreshPokemonEvolutions(binding, pokemon) }
 
         return binding.root
-    }
-
-    private fun setupRecyclerViews(binding: FragmentPokedexDetailsEvolutionsBinding) {
-
-        evolutionChainAdapter = PokemonEvolutionChainAdapter()
-        binding.pokemonDetailsEvolutions.gridView.layoutManager = LinearLayoutManager(context)
-        binding.pokemonDetailsEvolutions.gridView.adapter = evolutionChainAdapter
     }
 
     private fun refreshPokemonEvolutions(
@@ -68,16 +62,83 @@ class PokedexDetailsEvolutionsFragment : Fragment() {
         val pokemonColor = getPokemonBackgroundColor(requireContext(), pokemon.color)
         binding.pokemonDetailsEvolutions.evolutionFixedText.setTextColor(pokemonColor)
 
-        val size = dpToPx(requireContext(), viewModel.pokeEvolutionChain.size * 120)
-
-        binding.pokemonDetailsEvolutions.gridView.layoutParams.height = size
-
         if (viewModel.pokeEvolutionChain.size < 1) {
             binding.pokemonDetailsEvolutions.evolutionFixedText.visibility = View.GONE
         } else {
             binding.pokemonDetailsEvolutions.evolutionFixedText.visibility = View.VISIBLE
         }
 
-        evolutionChainAdapter.submitList(viewModel.pokeEvolutionChain)
+        binding.pokemonDetailsEvolutions.evolutionsLinearLayout.removeAllViews()
+
+        addEvolutions(
+            viewModel.pokeEvolutionChain,
+            binding.pokemonDetailsEvolutions.evolutionsLinearLayout
+        )
+    }
+
+
+    private fun addEvolutions(
+        pokeEvolutionChain: List<EvolutionChainModel>,
+        layout: LinearLayout
+    ) {
+        for (chain in pokeEvolutionChain) {
+
+            val evolutionBinding: ItemPokemonEvolutionListBinding =
+                DataBindingUtil.inflate(
+                    fragmentInflater,
+                    R.layout.item_pokemon_evolution_list,
+                    layout,
+                    true
+                )
+
+            setupEvolutionChain(evolutionBinding, chain)
+        }
+    }
+
+    private fun setupEvolutionChain(
+        binding: ItemPokemonEvolutionListBinding,
+        chain: EvolutionChainModel
+    ) {
+        when (chain.evolutions.size) {
+            1 -> {
+                binding.evolutionOfTwoContainer.visibility = View.GONE
+                binding.evolutionOfThreeContainer.visibility = View.GONE
+            }
+            2 -> {
+                binding.evolutionOfTwoContainer.visibility = View.VISIBLE
+                binding.evolutionOfThreeContainer.visibility = View.GONE
+            }
+            else -> {
+                binding.evolutionOfTwoContainer.visibility = View.GONE
+                binding.evolutionOfThreeContainer.visibility = View.VISIBLE
+            }
+        }
+
+        for ((index, evo) in chain.evolutions.withIndex()) {
+            val imageViewOfTwo = when (index) {
+                0 -> binding.evolutionOfTwo.baseForm
+                else -> binding.evolutionOfTwo.evolution
+            }
+
+            val imageViewOfThree = when (index) {
+                0 -> binding.evolutionOfThree.baseForm
+                1 -> binding.evolutionOfThree.evolution1
+                else -> binding.evolutionOfThree.evolution2
+            }
+
+            val imageScale = getImageScaleByEvolutionChain(
+                evo.name,
+                evo.evolutionChain
+            )
+
+            imageViewOfTwo.scaleX = imageScale
+            imageViewOfTwo.scaleY = imageScale
+
+            imageViewOfThree.scaleX = imageScale
+            imageViewOfThree.scaleY = imageScale
+
+            loadImageWithGlide(evo.spriteUrl, imageViewOfTwo)
+            loadImageWithGlide(evo.spriteUrl, imageViewOfThree)
+        }
     }
 }

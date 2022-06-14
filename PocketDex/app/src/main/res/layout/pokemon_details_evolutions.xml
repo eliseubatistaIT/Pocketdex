@@ -24,17 +24,52 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/grid_view"
+        <LinearLayout
+            android:id="@+id/evolutions_linear_layout"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_min="120dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/evolution_fixedText"
-            tools:listitem="@layout/item_pokemon_evolution_list" />
+            app:layout_constraintTop_toBottomOf="@id/evolution_fixedText">
+
+            <include
+                layout="@layout/item_pokemon_evolution_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+            <include
+                layout="@layout/item_pokemon_evolution_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+            <include
+                layout="@layout/item_pokemon_evolution_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+        </LinearLayout>
+
+        <!--        <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/grid_view"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHeight_min="120dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/evolution_fixedText"
+                    tools:listitem="@layout/item_pokemon_evolution_list" />-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

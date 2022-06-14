@@ -1,5 +1,6 @@
 package com.eliseubatista.pocketdex.network
 
+import com.eliseubatista.pocketdex.network.items.ItemCategoriesApiData
 import com.eliseubatista.pocketdex.network.items.ItemData
 import com.eliseubatista.pocketdex.network.pokemons.EvolutionChainData
 import com.eliseubatista.pocketdex.network.pokemons.PokemonData
@@ -43,23 +44,8 @@ private fun retrofit(): Retrofit {
 }
 
 interface PokeApiService {
-    @GET("pokemon")
-    suspend fun getPokemons(
-        @Query("limit") limit: Int,
-        @Query("offset") offset: Int
-    ): GlobalSearchData
 
-    @GET("pokemon/{pokemonName}/")
-    suspend fun getPokemonByName(@Path("pokemonName") name: String): PokemonData
-
-    @GET("item")
-    suspend fun getItems(
-        @Query("limit") limit: Int,
-        @Query("offset") offset: Int
-    ): GlobalSearchData
-
-    @GET("item/{itemName}/")
-    suspend fun getItemByName(@Path("itemName") name: String): ItemData
+    //TYPE ------------------------------------------------------------------------------
 
     @GET("type")
     suspend fun getTypes(
@@ -70,11 +56,45 @@ interface PokeApiService {
     @GET("type/{typeName}/")
     suspend fun getTypeByName(@Path("typeName") name: String): TypeData
 
+    //POKEMON ------------------------------------------------------------------------------
+    @GET("pokemon")
+    suspend fun getPokemons(
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int
+    ): GlobalSearchData
+
+    @GET("pokemon/{pokemonName}/")
+    suspend fun getPokemonByName(@Path("pokemonName") name: String): PokemonData
+
     @GET("pokemon-species/{speciesName}/")
     suspend fun getSpeciesByName(@Path("speciesName") name: String): SpeciesData
 
     @GET("evolution-chain/{chainID}/")
     suspend fun getEvolutionChainById(@Path("chainID") id: String): EvolutionChainData
+
+    //ITEM CATEGORY ------------------------------------------------------------------------------
+
+    @GET("item-category")
+    suspend fun getItemCategories(
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int
+    ): GlobalSearchData
+
+    @GET("item-category/{itemName}/")
+    suspend fun getItemCategoryByName(@Path("itemCategoryName") name: String): ItemCategoriesApiData
+
+    //ITEM ------------------------------------------------------------------------------
+
+    @GET("item")
+    suspend fun getItems(
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int
+    ): GlobalSearchData
+
+    @GET("item/{itemName}/")
+    suspend fun getItemByName(@Path("itemName") name: String): ItemData
+
+
 }
 
 object PokeApi {

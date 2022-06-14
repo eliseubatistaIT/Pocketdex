@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.eliseubatista.pocketdex.R
 import com.eliseubatista.pocketdex.databinding.FragmentPokedexBinding
 import com.eliseubatista.pocketdex.utils.ProgressBarDialog
+import com.eliseubatista.pocketdex.utils.replaceFragment
 import com.eliseubatista.pocketdex.views.pokemons.OnPokemonClickedListener
 import com.eliseubatista.pocketdex.views.pokemons.PokemonAdapter
 
@@ -99,9 +100,7 @@ class PokedexFragment : Fragment() {
 
         val fragmentTransaction = parentFragmentManager.beginTransaction()
 
-        fragmentTransaction.add(R.id.fragment_container, pokedexDetailsFragment)
-        fragmentTransaction.addToBackStack("BACKSTACK")
-        fragmentTransaction.commit()
+        fragmentTransaction.replaceFragment(pokedexDetailsFragment)
     }
 
 

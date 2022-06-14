@@ -1,4 +1,4 @@
-package com.eliseubatista.pocketdex.database
+package com.eliseubatista.pocketdex.database.pokemons
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
