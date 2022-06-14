@@ -1,9 +1,7 @@
 package com.eliseubatista.pocketdex.database
 
-import android.util.Log
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.eliseubatista.pocketdex.models.pokemons.TypeModel
 
 @Entity
 data class DatabaseTypes constructor(
@@ -16,4 +14,14 @@ data class DatabaseTypes constructor(
     val noDamageFrom: List<String>,
     val noDamageTo: List<String>,
     val name: String
-)
+) {
+    override fun toString(): String {
+        return "\nType: ${id}, $name" +
+                "\nDouble Damage From: $doubleDamageFrom" +
+                "\nDouble Damage To: $doubleDamageTo" +
+                "\nHalf Damage From: $halfDamageFrom" +
+                "\nHalf Damage To: $halfDamageTo" +
+                "\nNo Damage From: $noDamageFrom" +
+                "\nNo Damage To: ${noDamageTo}\n"
+    }
+}

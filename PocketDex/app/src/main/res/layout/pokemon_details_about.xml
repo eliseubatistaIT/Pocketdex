@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -15,21 +16,21 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="Fighting"
             android:textAlignment="center"
             android:textColor="#000000"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Fighting" />
 
         <TextView
             android:id="@+id/species_fixedText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Species"
+            android:text="@string/pokemon_species"
             android:textColor="#4C4C4C"
             android:textSize="13sp"
             app:layout_constraintEnd_toEndOf="@id/species_value"
@@ -46,26 +47,27 @@
             app:layout_constraintStart_toEndOf="@+id/species_value"
             app:layout_constraintTop_toTopOf="@+id/species_value"
             app:srcCompat="@drawable/img_plain_white"
-            app:tint="#FF9800" />
+            app:tint="#FF9800"
+            tools:ignore="ContentDescription" />
 
         <TextView
             android:id="@+id/height_value"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:text="4.9m"
             android:textAlignment="center"
             android:textColor="#000000"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/species_value" />
+            app:layout_constraintTop_toTopOf="@id/species_value"
+            tools:text="4.9m" />
 
         <TextView
             android:id="@+id/height_fixedText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Height"
+            android:text="@string/pokemon_height"
             android:textColor="#4C4C4C"
             android:textSize="13sp"
             app:layout_constraintEnd_toEndOf="@id/height_value"
@@ -82,28 +84,29 @@
             app:layout_constraintStart_toEndOf="@+id/height_value"
             app:layout_constraintTop_toTopOf="@+id/height_value"
             app:srcCompat="@drawable/img_plain_white"
-            app:tint="#FF9800" />
+            app:tint="#FF9800"
+            tools:ignore="ContentDescription" />
 
         <TextView
             android:id="@+id/weight_value"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:text="4.3Kg"
             android:textAlignment="center"
             android:textColor="#000000"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/species_value" />
+            app:layout_constraintTop_toTopOf="@id/species_value"
+            tools:text="4.3Kg" />
 
         <TextView
             android:id="@+id/weight_fixedText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Weight"
+            android:text="@string/pokemon_weight"
             android:textColor="#4C4C4C"
             android:textSize="13sp"
             app:layout_constraintEnd_toEndOf="@id/weight_value"

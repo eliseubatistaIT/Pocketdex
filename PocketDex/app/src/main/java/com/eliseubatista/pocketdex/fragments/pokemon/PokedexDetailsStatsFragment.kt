@@ -1,27 +1,22 @@
+package com.eliseubatista.pocketdex.fragments.pokemon
+
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.GridLayout
 import android.widget.ImageView
-import android.widget.LinearLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.eliseubatista.pocketdex.R
-import com.eliseubatista.pocketdex.databinding.FragmentPokedexDetailsAboutBinding
-import com.eliseubatista.pocketdex.databinding.FragmentPokedexDetailsBinding
+import com.eliseubatista.pocketdex.database.DatabasePokemon
+import com.eliseubatista.pocketdex.database.DatabaseTypes
 import com.eliseubatista.pocketdex.databinding.FragmentPokedexDetailsStatsBinding
-import com.eliseubatista.pocketdex.fragments.pokemon.PokemonDetailsViewModel
-import com.eliseubatista.pocketdex.models.pokemons.PokemonModel
-import com.eliseubatista.pocketdex.models.pokemons.TypeModel
-import com.eliseubatista.pocketdex.utils.*
-import com.eliseubatista.pocketdex.views.PokemonEvolutionChainAdapter
-import com.eliseubatista.pocketdex.views.PokemonTypeSmallAdapter
+import com.eliseubatista.pocketdex.utils.dpToPx
+import com.eliseubatista.pocketdex.utils.getPokemonBackgroundColor
+import com.eliseubatista.pocketdex.utils.getPokemonTypeLogoImage
+import com.eliseubatista.pocketdex.utils.isPokemonDamageRelationEmpty
 
 class PokedexDetailsStatsFragment : Fragment() {
 
@@ -47,28 +42,27 @@ class PokedexDetailsStatsFragment : Fragment() {
             ViewModelProvider(
                 requireParentFragment(),
                 viewModelFactory
-            ).get(PokemonDetailsViewModel::class.java)
+            )[PokemonDetailsViewModel::class.java]
 
         viewModel.pokemon.observe(
-            viewLifecycleOwner,
-            Observer { pokemon -> refreshPokemonData(binding, pokemon, viewModel.pokeFirstType) })
+            viewLifecycleOwner
+        ) { pokemon -> refreshPokemonData(binding, pokemon, viewModel.pokeFirstType) }
 
         return binding.root
     }
 
     private fun refreshPokemonData(
         binding: FragmentPokedexDetailsStatsBinding,
-        pokemon: PokemonModel,
-        type: TypeModel
+        pokemon: DatabasePokemon,
+        type: DatabaseTypes
     ) {
-        refreshPokemonStats(binding, pokemon, type)
+        refreshPokemonStats(binding, pokemon)
         refreshDamageRelations(binding, pokemon, type)
     }
 
     private fun refreshPokemonStats(
         binding: FragmentPokedexDetailsStatsBinding,
-        pokemon: PokemonModel,
-        type: TypeModel
+        pokemon: DatabasePokemon
     ) {
         val pokemonColor = getPokemonBackgroundColor(requireContext(), pokemon.color)
 
@@ -85,8 +79,8 @@ class PokedexDetailsStatsFragment : Fragment() {
 
     private fun refreshDamageRelations(
         binding: FragmentPokedexDetailsStatsBinding,
-        pokemon: PokemonModel,
-        type: TypeModel
+        pokemon: DatabasePokemon,
+        type: DatabaseTypes
     ) {
         val pokemonColor = getPokemonBackgroundColor(requireContext(), pokemon.color)
 
@@ -101,32 +95,26 @@ class PokedexDetailsStatsFragment : Fragment() {
         binding.pokemonDetailsDamages.attackDoubleDamageContainer.fixedText.text = "100%"
 
         addDamageRelations(
-            binding,
             type.doubleDamageFrom,
             binding.pokemonDetailsDamages.defenseDoubleDamageContainer.typesGrid
         )
         addDamageRelations(
-            binding,
             type.halfDamageFrom,
             binding.pokemonDetailsDamages.defenseHalfDamageContainer.typesGrid
         )
         addDamageRelations(
-            binding,
             type.noDamageFrom,
             binding.pokemonDetailsDamages.defenseNoDamageContainer.typesGrid
         )
         addDamageRelations(
-            binding,
             type.doubleDamageTo,
             binding.pokemonDetailsDamages.attackDoubleDamageContainer.typesGrid
         )
         addDamageRelations(
-            binding,
             type.halfDamageTo,
             binding.pokemonDetailsDamages.attackHalfDamageContainer.typesGrid
         )
         addDamageRelations(
-            binding,
             type.noDamageTo,
             binding.pokemonDetailsDamages.attackNoDamageContainer.typesGrid
         )
@@ -159,7 +147,6 @@ class PokedexDetailsStatsFragment : Fragment() {
     }
 
     private fun addDamageRelations(
-        binding: FragmentPokedexDetailsStatsBinding,
         damageRelations: List<String>,
         layout: GridLayout
     ) {

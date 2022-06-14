@@ -7,26 +7,27 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.eliseubatista.pocketdex.database.DatabaseFavorites
+import com.eliseubatista.pocketdex.database.DatabasePokemon
+import com.eliseubatista.pocketdex.database.DatabaseTypes
 import com.eliseubatista.pocketdex.database.getDatabase
 import com.eliseubatista.pocketdex.models.pokemons.EvolutionChainModel
-import com.eliseubatista.pocketdex.models.pokemons.PokemonModel
-import com.eliseubatista.pocketdex.models.pokemons.TypeModel
 import com.eliseubatista.pocketdex.repository.PocketdexRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-class PokemonDetailsViewModel(val application: Application, val pokemonName: String) : ViewModel() {
+class PokemonDetailsViewModel(val application: Application, private val pokemonName: String) :
+    ViewModel() {
 
     private val database = getDatabase(application)
     private val pocketdexRepository = PocketdexRepository(database)
 
-    lateinit var pokeFirstType: TypeModel
+    lateinit var pokeFirstType: DatabaseTypes
     var pokeEvolutionChain = mutableListOf<EvolutionChainModel>()
 
-    private var _pokemon = MutableLiveData<PokemonModel>()
-    val pokemon: LiveData<PokemonModel>
+    private var _pokemon = MutableLiveData<DatabasePokemon>()
+    val pokemon: LiveData<DatabasePokemon>
         get() = _pokemon
 
     private var _isInFavorites = MutableLiveData<Boolean>()
@@ -49,7 +50,7 @@ class PokemonDetailsViewModel(val application: Application, val pokemonName: Str
         coroutineJob.cancel()
     }
 
-    fun getPokemonData() {
+    private fun getPokemonData() {
 
         //If we are already loading and waiting for the pokemon data, do nothing
         if (_isLoadingPokemon.value == true) {
@@ -60,10 +61,14 @@ class PokemonDetailsViewModel(val application: Application, val pokemonName: Str
 
         coroutineScope.launch {
 
-            val pokemonModel = pocketdexRepository.getPokemonByName(application, pokemonName)
+            val pokemonModel =
+                pocketdexRepository.getPokemonByName(application.applicationContext, pokemonName)
 
             pokeFirstType =
-                pocketdexRepository.getTypeByName(application, pokemonModel!!.types[0])!!
+                pocketdexRepository.getTypeByName(
+                    application.applicationContext,
+                    pokemonModel!!.types[0]
+                )!!
 
             //for each evolution chain
             for (evolutionChain in pokemonModel.evolutionChain) {
@@ -79,7 +84,10 @@ class PokemonDetailsViewModel(val application: Application, val pokemonName: Str
 
                 for (evolution in splitChain) {
                     val evolutionPokemon =
-                        pocketdexRepository.getPokemonByName(application, evolution)
+                        pocketdexRepository.getPokemonByName(
+                            application.applicationContext,
+                            evolution
+                        )
 
                     evolutionChainModel.evolutions.add(evolutionPokemon!!)
                 }
@@ -104,7 +112,7 @@ class PokemonDetailsViewModel(val application: Application, val pokemonName: Str
             val favoriteInDatabase = pocketdexRepository.getFavoriteByName(pokemonName)
 
             if (favoriteInDatabase == null) {
-                Log.i("FAV", "Adding ${pokemonName} to favorites")
+                Log.i("FAV", "Adding $pokemonName to favorites")
 
                 coroutineScope.launch {
                     val favoriteData = DatabaseFavorites(
@@ -117,7 +125,7 @@ class PokemonDetailsViewModel(val application: Application, val pokemonName: Str
                     _isInFavorites.value = true
                 }
             } else {
-                Log.i("FAV", "Removing ${pokemonName} from favorites")
+                Log.i("FAV", "Removing $pokemonName from favorites")
 
                 pocketdexRepository.removeFromFavorites(favoriteInDatabase)
                 _isInFavorites.value = false
@@ -127,7 +135,8 @@ class PokemonDetailsViewModel(val application: Application, val pokemonName: Str
 
     }
 
-    class Factory(val application: Application, val pokemonName: String) :
+    @Suppress("UNCHECKED_CAST")
+    class Factory(val application: Application, private val pokemonName: String) :
         ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(PokemonDetailsViewModel::class.java)) {

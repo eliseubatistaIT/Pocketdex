@@ -1,14 +1,12 @@
 package com.eliseubatista.pocketdex.repository
 
 import android.app.Application
+import android.content.Context
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
 import com.eliseubatista.pocketdex.database.DatabaseFavorites
 import com.eliseubatista.pocketdex.database.DatabasePokemon
 import com.eliseubatista.pocketdex.database.DatabaseTypes
 import com.eliseubatista.pocketdex.database.PocketdexDatabase
-import com.eliseubatista.pocketdex.models.pokemons.PokemonModel
-import com.eliseubatista.pocketdex.models.pokemons.TypeModel
 import com.eliseubatista.pocketdex.network.PokeApi
 import com.eliseubatista.pocketdex.utils.hasInternetConnection
 import kotlinx.coroutines.Dispatchers
@@ -16,15 +14,9 @@ import kotlinx.coroutines.withContext
 
 class PocketdexRepository(private val database: PocketdexDatabase) {
 
-    val pokemonTypes: LiveData<List<TypeModel>> =
-        Transformations.map(database.typesDao.getTypes()) {
-            it.asDomainModel()
-        }
+    val pokemonTypes: LiveData<List<DatabaseTypes>> = database.typesDao.getTypes()
 
-    val pokemons: LiveData<List<PokemonModel>> =
-        Transformations.map(database.pokemonDao.getPokemons()) {
-            it.asDomainModel()
-        }
+    val pokemons: LiveData<List<DatabasePokemon>> = database.pokemonDao.getPokemons()
 
     val favoritePokemons: LiveData<List<DatabaseFavorites>> =
         database.favoritesDao.getFavoritePokemons()
@@ -50,8 +42,29 @@ class PocketdexRepository(private val database: PocketdexDatabase) {
         }
     }
 
-    suspend fun refreshTypes(application: Application) {
-        if (!hasInternetConnection(application)) {
+    suspend fun getTypes(appContext: Context) {
+        var types: MutableList<DatabaseTypes>
+
+        withContext(Dispatchers.IO) {
+            types = database.typesDao.getTypesInRange(0, 100).toMutableList()
+
+            if (types.isEmpty() && hasInternetConnection(appContext)) {
+
+                val typesGlobalData = PokeApi.retrofitService.getTypes(100, 0)
+
+                for (typeResult in typesGlobalData.results) {
+                    val typeData = PokeApi.retrofitService.getTypeByName(typeResult.name)
+                    val typeDatabase = typeData.asDatabaseModel()
+                    types.add(typeDatabase)
+                }
+            }
+
+            database.typesDao.insertAll(types)
+        }
+    }
+
+    suspend fun refreshTypes(appContext: Context) {
+        if (!hasInternetConnection(appContext)) {
             return
         }
         withContext(Dispatchers.IO) {
@@ -69,8 +82,37 @@ class PocketdexRepository(private val database: PocketdexDatabase) {
         }
     }
 
-    suspend fun refreshPokemons(application: Application, limit: Int, offset: Int) {
-        if (!hasInternetConnection(application)) {
+    suspend fun getPokemons(appContext: Context, limit: Int, offset: Int) {
+        if (!hasInternetConnection(appContext)) {
+            return
+        }
+
+        var pokemons: MutableList<DatabasePokemon>
+
+        withContext(Dispatchers.IO) {
+            val max = offset + limit
+            pokemons = database.pokemonDao.getPokemonsInRange(offset, max).toMutableList()
+
+            if (pokemons.isEmpty() && hasInternetConnection(appContext)) {
+
+                val pokemonsGlobalData = PokeApi.retrofitService.getPokemons(limit, offset)
+
+                for (pokemonResult in pokemonsGlobalData.results) {
+                    val pokemonDetailedData =
+                        PokeApi.retrofitService.getPokemonByName(pokemonResult.name)
+
+                    val databasePokemon = pokemonDetailedData.asDatabaseModel()
+
+                    pokemons.add(databasePokemon)
+                }
+            }
+
+            database.pokemonDao.insertAll(pokemons)
+        }
+    }
+
+    suspend fun refreshPokemons(appContext: Context, limit: Int, offset: Int) {
+        if (!hasInternetConnection(appContext)) {
             return
         }
         withContext(Dispatchers.IO) {
@@ -93,7 +135,7 @@ class PocketdexRepository(private val database: PocketdexDatabase) {
 
     suspend fun getFavoriteByName(name: String): DatabaseFavorites? {
 
-        var favorite: DatabaseFavorites? = null
+        var favorite: DatabaseFavorites?
 
         withContext(Dispatchers.IO) {
 
@@ -103,17 +145,17 @@ class PocketdexRepository(private val database: PocketdexDatabase) {
         return favorite
     }
 
-    suspend fun getTypeByName(application: Application, name: String): TypeModel? {
+    suspend fun getTypeByName(appContext: Context, name: String): DatabaseTypes? {
 
-        if (!hasInternetConnection(application)) {
+        if (!hasInternetConnection(appContext)) {
             return null
         }
 
-        var typeModel: TypeModel? = null
+        var typeDatabase: DatabaseTypes?
 
         withContext(Dispatchers.IO) {
 
-            var typeDatabase = database.typesDao.getTypeByName(name)
+            typeDatabase = database.typesDao.getTypeByName(name)
 
             if (typeDatabase == null) {
                 val typeDetailedData = PokeApi.retrofitService.getTypeByName(name)
@@ -121,34 +163,29 @@ class PocketdexRepository(private val database: PocketdexDatabase) {
                 //pokeDatabase = PokemonApiToPokemonDatabase(pokemonDetailedData)
                 typeDatabase = typeDetailedData.asDatabaseModel()
             }
-
-            typeModel = typeDatabase.asDomainModel()
         }
 
-        return typeModel
+        return typeDatabase
 
     }
 
-    suspend fun getPokemonByName(application: Application, name: String): PokemonModel? {
-        if (!hasInternetConnection(application)) {
+    suspend fun getPokemonByName(appContext: Context, name: String): DatabasePokemon? {
+        if (!hasInternetConnection(appContext)) {
             return null
         }
-        var pokeModel: PokemonModel? = null
+        var pokeDatabase: DatabasePokemon?
 
         withContext(Dispatchers.IO) {
 
-            var pokeDatabase = database.pokemonDao.getPokemonByName(name)
+            pokeDatabase = database.pokemonDao.getPokemonByName(name)
 
             if (pokeDatabase == null) {
                 val pokemonDetailedData = PokeApi.retrofitService.getPokemonByName(name)
 
                 pokeDatabase = pokemonDetailedData.asDatabaseModel()
             }
-
-            pokeModel = pokeDatabase.asDomainModel()
         }
 
-        return pokeModel
-
+        return pokeDatabase
     }
 }

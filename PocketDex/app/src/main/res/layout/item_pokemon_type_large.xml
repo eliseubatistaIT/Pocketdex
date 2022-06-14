@@ -20,7 +20,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@drawable/img_fighting_type_logo" />
+            tools:srcCompat="@drawable/img_fighting_type_logo"
+            tools:ignore="ContentDescription" />
 
         <ImageView
             android:id="@+id/type_textImage"
@@ -30,7 +31,8 @@
             app:layout_constraintEnd_toEndOf="@id/type_logo"
             app:layout_constraintStart_toStartOf="@id/type_logo"
             app:layout_constraintTop_toBottomOf="@id/type_logo"
-            tools:srcCompat="@drawable/img_fighting_type_text" />
+            tools:srcCompat="@drawable/img_fighting_type_text"
+            tools:ignore="ContentDescription" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -21,6 +21,7 @@
             android:scaleType="centerCrop"
             app:layout_constraintEnd_toStartOf="@+id/arrow"
             app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription"
             tools:srcCompat="@drawable/img_pokemon_very_large" />
 
         <TextView
@@ -29,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="1dp"
             android:fontFamily="@font/font_pokemon_solid"
-            android:text="--->"
+            android:text="@string/pokemon_evolution_of_two_arrow"
             android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/baseForm"
@@ -46,6 +47,7 @@
             android:scaleType="centerCrop"
             app:layout_constraintStart_toEndOf="@+id/arrow"
             app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription"
             tools:srcCompat="@drawable/img_pokemon_very_large" />
 
         <TextView
@@ -54,7 +56,7 @@
             android:layout_height="20dp"
             android:layout_marginTop="-15dp"
             android:fontFamily="@font/font_pokemon_hollow"
-            android:text="- - - - - - - - - - - - - - - -"
+            android:text="@string/pokemon_evolution_separator"
             android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"

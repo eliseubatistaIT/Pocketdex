@@ -1,13 +1,7 @@
 package com.eliseubatista.pocketdex.models.pokemons
 
-class EvolutionChainModel {
-    var chainString = ""
-    var evolutions = mutableListOf<PokemonModel>()
+import com.eliseubatista.pocketdex.database.DatabasePokemon
 
-    constructor(chainString : String)
-    {
-        this.chainString = chainString
-    }
-
-
+class EvolutionChainModel(var chainString: String) {
+    var evolutions = mutableListOf<DatabasePokemon>()
 }

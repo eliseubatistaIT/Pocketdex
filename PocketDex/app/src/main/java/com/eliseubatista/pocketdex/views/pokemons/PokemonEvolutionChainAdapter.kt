@@ -1,4 +1,4 @@
-package com.eliseubatista.pocketdex.views
+package com.eliseubatista.pocketdex.views.pokemons
 
 import android.view.LayoutInflater
 import android.view.View
@@ -20,42 +20,45 @@ class PokemonEvolutionChainAdapter :
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): PokemonEvolutionChainAdapter.ViewHolder {
+    ): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = ItemPokemonEvolutionListBinding.inflate(layoutInflater, parent, false)
-        return PokemonEvolutionChainAdapter.ViewHolder(binding)
+        return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: PokemonEvolutionChainAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
         holder.bind(item)
     }
 
-    //Private constructor, i dont want to call it by accident, i want to use the from function
     class ViewHolder(val binding: ItemPokemonEvolutionListBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         //This is used to bind the data to the view holder
         fun bind(item: EvolutionChainModel) {
 
-            if (item.evolutions.size == 1) {
-                binding.evolutionOfTwoContainer.visibility = View.GONE
-                binding.evolutionOfThreeContainer.visibility = View.GONE
-            } else if (item.evolutions.size == 2) {
-                binding.evolutionOfTwoContainer.visibility = View.VISIBLE
-                binding.evolutionOfThreeContainer.visibility = View.GONE
-            } else {
-                binding.evolutionOfTwoContainer.visibility = View.GONE
-                binding.evolutionOfThreeContainer.visibility = View.VISIBLE
+            when (item.evolutions.size) {
+                1 -> {
+                    binding.evolutionOfTwoContainer.visibility = View.GONE
+                    binding.evolutionOfThreeContainer.visibility = View.GONE
+                }
+                2 -> {
+                    binding.evolutionOfTwoContainer.visibility = View.VISIBLE
+                    binding.evolutionOfThreeContainer.visibility = View.GONE
+                }
+                else -> {
+                    binding.evolutionOfTwoContainer.visibility = View.GONE
+                    binding.evolutionOfThreeContainer.visibility = View.VISIBLE
+                }
             }
 
             for ((index, evo) in item.evolutions.withIndex()) {
-                var imageViewOfTwo = when (index) {
+                val imageViewOfTwo = when (index) {
                     0 -> binding.evolutionOfTwo.baseForm
                     else -> binding.evolutionOfTwo.evolution
                 }
 
-                var imageViewOfThree = when (index) {
+                val imageViewOfThree = when (index) {
                     0 -> binding.evolutionOfThree.baseForm
                     1 -> binding.evolutionOfThree.evolution1
                     else -> binding.evolutionOfThree.evolution2
@@ -72,8 +75,8 @@ class PokemonEvolutionChainAdapter :
                 imageViewOfThree.scaleX = imageScale
                 imageViewOfThree.scaleY = imageScale
 
-                loadImageWithGlide(evo.maleSprite, imageViewOfTwo)
-                loadImageWithGlide(evo.maleSprite, imageViewOfThree)
+                loadImageWithGlide(evo.spriteUrl, imageViewOfTwo)
+                loadImageWithGlide(evo.spriteUrl, imageViewOfThree)
             }
 
             binding.executePendingBindings()

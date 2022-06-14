@@ -4,26 +4,26 @@
     <item
         android:id="@+id/nav_locations"
         android:icon="@drawable/ic_map"
-        android:title="Locations" />
+        android:title="@string/bar_item_locations" />
 
     <item
         android:id="@+id/nav_items"
         android:icon="@drawable/ic_items"
-        android:title="Items" />
+        android:title="@string/bar_item_items" />
 
     <item
         android:id="@+id/nav_pokedex"
         android:icon="@drawable/ic_pokedex"
-        android:title="Pokedex" />
+        android:title="@string/bar_item_pokedex" />
 
     <item
         android:id="@+id/nav_profile"
         android:icon="@drawable/ic_person"
-        android:title="Profile" />
+        android:title="@string/bar_item_profile" />
 
     <item
         android:id="@+id/nav_settings"
         android:icon="@drawable/ic_settings"
-        android:title="Settings" />
+        android:title="@string/bar_item_settings" />
 
 </menu>

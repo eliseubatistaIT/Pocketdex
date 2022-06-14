@@ -33,13 +33,3 @@ fun List<BaseNameAndUrl>.getNames(): List<String> {
 
     return names
 }
-
-fun GlobalSearchData.getNames(): List<String> {
-    val globalNames = mutableListOf<String>()
-
-    for (result in results) {
-        globalNames.add(result.name)
-    }
-
-    return globalNames
-}

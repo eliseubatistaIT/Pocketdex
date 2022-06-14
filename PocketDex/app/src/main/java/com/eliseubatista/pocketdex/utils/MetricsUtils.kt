@@ -6,16 +6,14 @@ fun pxToDp(context: Context, pxValue: Int): Int {
     val res = context.resources
 
     val density = res.displayMetrics.density
-    val dpValue = (pxValue / density).toInt()
 
-    return dpValue
+    return (pxValue / density).toInt()
 }
 
 fun dpToPx(context: Context, dpValue: Int): Int {
     val res = context.resources
 
     val density = res.displayMetrics.density
-    val pxValue = (dpValue * density).toInt()
 
-    return pxValue
+    return (dpValue * density).toInt()
 }

@@ -37,6 +37,9 @@ interface TypesDao {
     @Query("select * from databasetypes")
     fun getTypes(): LiveData<List<DatabaseTypes>>
 
+    @Query("select * from databasetypes where id > :minId and id <= :maxId")
+    fun getTypesInRange(minId: Int, maxId: Int): List<DatabaseTypes>
+
     @Query("select * from databasetypes where name = :name")
     fun getTypeByName(name: String): DatabaseTypes?
 
@@ -55,6 +58,9 @@ interface PokemonDao {
 
     @Query("select * from databasepokemon")
     fun getPokemons(): LiveData<List<DatabasePokemon>>
+
+    @Query("select * from databasepokemon where id > :minId and id <= :maxId")
+    fun getPokemonsInRange(minId: Int, maxId: Int): List<DatabasePokemon>
 
     @Query("select * from databasepokemon where name = :name")
     fun getPokemonByName(name: String): DatabasePokemon?

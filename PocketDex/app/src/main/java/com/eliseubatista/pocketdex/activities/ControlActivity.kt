@@ -1,11 +1,9 @@
 package com.eliseubatista.pocketdex.activities
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
 import com.eliseubatista.pocketdex.R
 import com.eliseubatista.pocketdex.databinding.ActivityControlBinding
 import com.eliseubatista.pocketdex.fragments.items.ItemsFragment
@@ -22,7 +20,7 @@ class ControlActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding =
-            DataBindingUtil.setContentView<ActivityControlBinding>(this, R.layout.activity_control)
+            DataBindingUtil.setContentView(this, R.layout.activity_control)
 
         binding.bottomNavigationView.setOnItemSelectedListener { item ->
             onBottomNavViewItemSelected(
@@ -63,7 +61,7 @@ class ControlActivity : AppCompatActivity() {
 
     private fun navigateToPokedex() {
 
-        binding.bottomNavigationView.menu.findItem(R.id.nav_pokedex).setChecked(true)
+        binding.bottomNavigationView.menu.findItem(R.id.nav_pokedex).isChecked = true
 
         val pokedexFragment = PokedexFragment()
 

@@ -1,8 +1,6 @@
 package com.eliseubatista.pocketdex.network.pokemons
 
-import android.util.Log
 import com.eliseubatista.pocketdex.network.BaseNameAndUrl
-import com.eliseubatista.pocketdex.network.PokeApi
 import com.squareup.moshi.Json
 
 /*

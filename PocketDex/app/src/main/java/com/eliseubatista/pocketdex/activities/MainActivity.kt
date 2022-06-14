@@ -1,9 +1,8 @@
 package com.eliseubatista.pocketdex.activities
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.eliseubatista.pocketdex.R
 import com.eliseubatista.pocketdex.databinding.ActivityMainBinding
@@ -20,12 +19,8 @@ class MainActivity : AppCompatActivity() {
         setupClickListeners(binding)
     }
 
-    override fun onStart() {
-        super.onStart()
-    }
-
     private fun setupClickListeners(binding: ActivityMainBinding) {
-        binding.titleScreenTouchImage.setOnClickListener { view: View ->
+        binding.titleScreenTouchImage.setOnClickListener {
             openControlActivity()
         }
     }

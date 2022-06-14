@@ -36,11 +36,11 @@ private fun getListOfChains(
 ): List<String> {
 
     val listOfChains = mutableListOf<String>()
-    var chainString = baseForm
+    var chainString: String
 
     for (evolution1 in evolutionChain) {
         if (evolution1 == null) {
-            continue;
+            continue
         }
         if (isStringBlank(evolution1.baseForm.name)) {
             continue
@@ -48,11 +48,9 @@ private fun getListOfChains(
 
         chainString = baseForm + ":" + evolution1.baseForm.name
 
-        if(evolution1.evolvesTo.isEmpty())
-        {
+        if (evolution1.evolvesTo.isEmpty()) {
             listOfChains.add(chainString)
-        }
-        else{
+        } else {
             for (evolution2 in evolution1.evolvesTo) {
                 if (evolution2 == null) {
                     continue

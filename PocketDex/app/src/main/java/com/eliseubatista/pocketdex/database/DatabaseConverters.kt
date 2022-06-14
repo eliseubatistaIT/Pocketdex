@@ -13,7 +13,7 @@ class DatabaseTypeConverters {
             if (index == 0) {
                 finalString = s
             } else {
-                finalString += ";" + s
+                finalString += ";$s"
             }
         }
 
@@ -22,9 +22,8 @@ class DatabaseTypeConverters {
 
     @TypeConverter
     fun toStringList(storedString: String): List<String> {
-        val stringList = storedString.split(";")
 
-        return stringList
+        return storedString.split(";")
     }
 
     @TypeConverter
@@ -36,7 +35,7 @@ class DatabaseTypeConverters {
             if (index == 0) {
                 finalString = i.toString()
             } else {
-                finalString += ";" + i
+                finalString += ";$i"
             }
         }
 

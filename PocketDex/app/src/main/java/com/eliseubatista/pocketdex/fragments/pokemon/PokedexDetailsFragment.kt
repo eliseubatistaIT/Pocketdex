@@ -1,29 +1,17 @@
 package com.eliseubatista.pocketdex.fragments.pokemon
 
-import PokedexDetailsAboutFragment
-import PokedexDetailsEvolutionsFragment
-import PokedexDetailsStatsFragment
 import android.os.Bundle
-import android.text.Html
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.ViewPager2
 import com.eliseubatista.pocketdex.R
+import com.eliseubatista.pocketdex.database.DatabasePokemon
 import com.eliseubatista.pocketdex.databinding.FragmentPokedexDetailsBinding
-import com.eliseubatista.pocketdex.fragments.locations.LocationsFragment
-import com.eliseubatista.pocketdex.models.pokemons.PokemonModel
-import com.eliseubatista.pocketdex.models.pokemons.TypeModel
 import com.eliseubatista.pocketdex.utils.*
-import com.eliseubatista.pocketdex.views.*
+import com.eliseubatista.pocketdex.views.SectionPagerAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.google.android.material.tabs.TabLayoutMediator
@@ -32,6 +20,9 @@ class PokedexDetailsFragment : Fragment() {
     private var pokemonName = ""
     private lateinit var viewModel: PokemonDetailsViewModel
     private lateinit var viewModelFactory: PokemonDetailsViewModel.Factory
+
+    private lateinit var progressBarDialog: ProgressBarDialog
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,23 +39,32 @@ class PokedexDetailsFragment : Fragment() {
         viewModelFactory =
             PokemonDetailsViewModel.Factory(requireActivity().application, pokemonName)
         viewModel =
-            ViewModelProvider(this, viewModelFactory).get(PokemonDetailsViewModel::class.java)
+            ViewModelProvider(this, viewModelFactory)[PokemonDetailsViewModel::class.java]
+
+        progressBarDialog = ProgressBarDialog(inflater, requireContext())
 
         viewModel.isInFavorites.observe(
-            viewLifecycleOwner,
-            Observer { inFavorites ->
-                refreshFavorites(binding, inFavorites)
-            })
+            viewLifecycleOwner
+        ) { inFavorites ->
+            refreshFavorites(binding, inFavorites)
+        }
 
+        viewModel.isLoadingPokemon.observe(viewLifecycleOwner) {
+            if (it) {
+                progressBarDialog.startLoading("Loading More Pokemons..")
+            } else {
+                progressBarDialog.dismiss()
+            }
+        }
 
         viewModel.pokemon.observe(
-            viewLifecycleOwner,
-            Observer { pokemon -> refreshPokemonHeader(binding, pokemon) })
+            viewLifecycleOwner
+        ) { pokemon -> refreshPokemonHeader(binding, pokemon) }
 
-        binding.toolbarPokedexDetails.favorite.setOnClickListener { view: View ->
+        binding.toolbarPokedexDetails.favorite.setOnClickListener {
             viewModel.addOrRemoveFavorite()
         }
-        binding.toolbarPokedexDetails.arrowBack.setOnClickListener { view: View -> parentFragmentManager.popBackStack() }
+        binding.toolbarPokedexDetails.arrowBack.setOnClickListener { parentFragmentManager.popBackStack() }
 
         return binding.root
     }
@@ -101,7 +101,7 @@ class PokedexDetailsFragment : Fragment() {
 
     private fun refreshPokemonHeader(
         binding: FragmentPokedexDetailsBinding,
-        pokemon: PokemonModel
+        pokemon: DatabasePokemon
     ) {
 
         val imageScale = getImageScaleByEvolutionChain(pokemon.name, pokemon.evolutionChain)
@@ -109,7 +109,7 @@ class PokedexDetailsFragment : Fragment() {
         binding.pokemonDetailsAvatar.scaleX = imageScale
         binding.pokemonDetailsAvatar.scaleY = imageScale
 
-        loadImageWithGlide(pokemon.maleSprite, binding.pokemonDetailsAvatar)
+        loadImageWithGlide(pokemon.spriteUrl, binding.pokemonDetailsAvatar)
 
         val pokemonColor = getPokemonBackgroundColor(requireContext(), pokemon.color)
         val textColor = getTextColorByBackgroundColor(requireContext(), pokemonColor)

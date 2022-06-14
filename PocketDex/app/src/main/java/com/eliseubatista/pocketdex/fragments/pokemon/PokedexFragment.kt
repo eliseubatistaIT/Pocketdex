@@ -1,23 +1,20 @@
 package com.eliseubatista.pocketdex.fragments.pokemon
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.eliseubatista.pocketdex.R
 import com.eliseubatista.pocketdex.databinding.FragmentPokedexBinding
 import com.eliseubatista.pocketdex.utils.ProgressBarDialog
-import com.eliseubatista.pocketdex.views.OnPokemonClickedListener
-import com.eliseubatista.pocketdex.views.PokemonAdapter
+import com.eliseubatista.pocketdex.views.pokemons.OnPokemonClickedListener
+import com.eliseubatista.pocketdex.views.pokemons.PokemonAdapter
 
 class PokedexFragment : Fragment() {
 
@@ -36,7 +33,7 @@ class PokedexFragment : Fragment() {
 
         viewModelFactory = PokedexViewModel.Factory(requireActivity().application)
         viewModel =
-            ViewModelProvider(this, viewModelFactory).get(PokedexViewModel::class.java)
+            ViewModelProvider(this, viewModelFactory)[PokedexViewModel::class.java]
 
         progressBarDialog = ProgressBarDialog(inflater, requireContext())
 
@@ -66,26 +63,26 @@ class PokedexFragment : Fragment() {
             }
 
         //Create and observer to refresh the list automatically
-        viewModel.pokemons.observe(viewLifecycleOwner, Observer {
+        viewModel.pokemons.observe(viewLifecycleOwner) {
             pokemonListAdapter.submitList(it)
-        })
+        }
 
-        viewModel.isLoadingMorePokemons.observe(viewLifecycleOwner, Observer {
+        viewModel.isLoadingMorePokemons.observe(viewLifecycleOwner) {
             if (it) {
                 progressBarDialog.startLoading("Loading More Pokemons..")
             } else {
                 progressBarDialog.dismiss()
             }
-        })
+        }
 
-        //Scroll listenner
+        //Scroll listener
         binding.pokemonsList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
 
                 //If we reach the end of the list, we want to show more pokemons
-                //TODO: Verificar scroll
-                if (recyclerView.canScrollVertically(3) == false) {
+                //TODO: Check scroll
+                if (!recyclerView.canScrollVertically(3)) {
                     viewModel.getMorePokemons()
                 }
             }

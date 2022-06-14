@@ -1,35 +1,25 @@
-package com.eliseubatista.pocketdex.views
+package com.eliseubatista.pocketdex.views.pokemons
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.eliseubatista.pocketdex.R
+import com.eliseubatista.pocketdex.database.DatabasePokemon
 import com.eliseubatista.pocketdex.databinding.ItemPokemonListBinding
-import com.eliseubatista.pocketdex.models.pokemons.PokemonModel
 import com.eliseubatista.pocketdex.utils.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 
 class PokemonAdapter :
-    ListAdapter<PokemonModel, PokemonAdapter.ViewHolder>(PokemonDiffCallback()) {
-
-    private var coroutineJob = Job()
-    private val coroutineScope = CoroutineScope(coroutineJob + Dispatchers.Main)
+    ListAdapter<DatabasePokemon, PokemonAdapter.ViewHolder>(PokemonDiffCallback()) {
 
     lateinit var onPokemonClickedListener: OnPokemonClickedListener
 
     //Creates the view holder
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PokemonAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = ItemPokemonListBinding.inflate(layoutInflater, parent, false)
-        return PokemonAdapter.ViewHolder(binding)
+        return ViewHolder(binding)
     }
 
     //Binds a new item to the view holder
@@ -38,19 +28,18 @@ class PokemonAdapter :
         holder.bind(onPokemonClickedListener, item)
     }
 
-    //Private constructor, i dont want to call it by accident, i want to use the from function
     class ViewHolder(val binding: ItemPokemonListBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         //This is used to bind the data to the view holder
-        fun bind(clickedListener: OnPokemonClickedListener, item: PokemonModel) {
+        fun bind(clickedListener: OnPokemonClickedListener, item: DatabasePokemon) {
 
             val imageScale = getImageScaleByEvolutionChain(item.name, item.evolutionChain)
 
             binding.pokemonListImage.scaleX = imageScale
             binding.pokemonListImage.scaleY = imageScale
 
-            loadImageWithGlide(item.maleSprite, binding.pokemonListImage)
+            loadImageWithGlide(item.spriteUrl, binding.pokemonListImage)
 
             val pokemonColor = getPokemonBackgroundColor(itemView.context, item.color)
 
@@ -72,7 +61,7 @@ class PokemonAdapter :
                 )
             )
 
-            if (item.types.size > 0) {
+            if (item.types.isNotEmpty()) {
 
                 val typeOneLogo = getPokemonTypeLogoImage(itemView.context, item.types[0])
 
@@ -92,7 +81,7 @@ class PokemonAdapter :
                 binding.pokemonListSecondType.typeContainer.visibility = View.GONE
             }
 
-            binding.pokemonListItemBackground.setOnClickListener { v: View ->
+            binding.pokemonListItemBackground.setOnClickListener {
                 clickedListener.onPokemonClicked(
                     item.name
                 )
@@ -104,17 +93,17 @@ class PokemonAdapter :
 }
 
 //This util is used to avoid redrawing an item that was not changed
-class PokemonDiffCallback : DiffUtil.ItemCallback<PokemonModel>() {
+class PokemonDiffCallback : DiffUtil.ItemCallback<DatabasePokemon>() {
     override fun areItemsTheSame(
-        oldItem: PokemonModel,
-        newItem: PokemonModel
+        oldItem: DatabasePokemon,
+        newItem: DatabasePokemon
     ): Boolean {
         return oldItem.id == newItem.id
     }
 
     override fun areContentsTheSame(
-        oldItem: PokemonModel,
-        newItem: PokemonModel
+        oldItem: DatabasePokemon,
+        newItem: DatabasePokemon
     ): Boolean {
         return oldItem.id == newItem.id
     }

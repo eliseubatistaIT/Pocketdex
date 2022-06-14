@@ -23,30 +23,31 @@
             app:layout_constraintBottom_toTopOf="@id/types_grid"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:tint="#404040" />
+            app:tint="#404040"
+            tools:ignore="ContentDescription" />
 
         <TextView
             android:id="@+id/fixed_Text"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:text="50%:"
             android:textColor="#000000"
             android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="50%:" />
 
         <GridLayout
             android:id="@+id/types_grid"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:columnCount="11"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/fixed_Text"
-            app:layout_constraintTop_toTopOf="parent"
-            android:columnCount="11">
+            app:layout_constraintTop_toTopOf="parent">
             <!-- 11 because we want 8 columns, but we have 3 of preview -->
 
             <ImageView
@@ -54,6 +55,7 @@
                 android:layout_height="30dp"
                 android:src="@drawable/img_bug_type_logo"
                 android:visibility="gone"
+                tools:ignore="ContentDescription"
                 tools:visibility="visible" />
 
             <ImageView
@@ -61,6 +63,7 @@
                 android:layout_height="30dp"
                 android:src="@drawable/img_poison_type_logo"
                 android:visibility="gone"
+                tools:ignore="ContentDescription"
                 tools:visibility="visible" />
 
             <ImageView
@@ -68,24 +71,11 @@
                 android:layout_height="30dp"
                 android:src="@drawable/img_fire_type_logo"
                 android:visibility="gone"
+                tools:ignore="ContentDescription"
                 tools:visibility="visible" />
 
 
-
         </GridLayout>
-
-        <!--        <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/grid_view"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/fixed_Text"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:itemCount="7"
-                    tools:listitem="@layout/item_pokemon_type_small"
-                    tools:spanCount="8" />-->
 
         <ImageView
             android:id="@+id/bottom_bar"
@@ -98,7 +88,8 @@
             app:layout_constraintEnd_toEndOf="@id/types_grid"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/types_grid"
-            app:tint="#404040" />
+            app:tint="#404040"
+            tools:ignore="ContentDescription" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

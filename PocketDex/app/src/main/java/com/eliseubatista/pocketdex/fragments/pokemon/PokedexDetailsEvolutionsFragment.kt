@@ -1,22 +1,19 @@
+package com.eliseubatista.pocketdex.fragments.pokemon
+
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.eliseubatista.pocketdex.R
-import com.eliseubatista.pocketdex.databinding.*
-import com.eliseubatista.pocketdex.fragments.pokemon.PokemonDetailsViewModel
-import com.eliseubatista.pocketdex.models.pokemons.PokemonModel
-import com.eliseubatista.pocketdex.models.pokemons.TypeModel
-import com.eliseubatista.pocketdex.utils.*
-import com.eliseubatista.pocketdex.views.PokemonEvolutionChainAdapter
-import com.eliseubatista.pocketdex.views.PokemonTypeSmallAdapter
+import com.eliseubatista.pocketdex.database.DatabasePokemon
+import com.eliseubatista.pocketdex.databinding.FragmentPokedexDetailsEvolutionsBinding
+import com.eliseubatista.pocketdex.utils.dpToPx
+import com.eliseubatista.pocketdex.utils.getPokemonBackgroundColor
+import com.eliseubatista.pocketdex.views.pokemons.PokemonEvolutionChainAdapter
 
 class PokedexDetailsEvolutionsFragment : Fragment() {
 
@@ -45,13 +42,13 @@ class PokedexDetailsEvolutionsFragment : Fragment() {
             ViewModelProvider(
                 requireParentFragment(),
                 viewModelFactory
-            ).get(PokemonDetailsViewModel::class.java)
+            )[PokemonDetailsViewModel::class.java]
 
         setupRecyclerViews(binding)
 
         viewModel.pokemon.observe(
-            viewLifecycleOwner,
-            Observer { pokemon -> refreshPokemonEvolutions(binding, pokemon) })
+            viewLifecycleOwner
+        ) { pokemon -> refreshPokemonEvolutions(binding, pokemon) }
 
         return binding.root
     }
@@ -65,7 +62,7 @@ class PokedexDetailsEvolutionsFragment : Fragment() {
 
     private fun refreshPokemonEvolutions(
         binding: FragmentPokedexDetailsEvolutionsBinding,
-        pokemon: PokemonModel
+        pokemon: DatabasePokemon
     ) {
 
         val pokemonColor = getPokemonBackgroundColor(requireContext(), pokemon.color)

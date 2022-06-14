@@ -7,10 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.eliseubatista.pocketdex.database.getDatabase
-import com.eliseubatista.pocketdex.models.pokemons.PokemonModel
-import com.eliseubatista.pocketdex.network.PokeApi
 import com.eliseubatista.pocketdex.repository.PocketdexRepository
-import com.eliseubatista.pocketdex.utils.ProgressBarDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -41,9 +38,9 @@ class PokedexViewModel(val application: Application) : ViewModel() {
         coroutineJob.cancel()
     }
 
-    fun getMoreTypes() {
+    private fun getMoreTypes() {
         coroutineScope.launch {
-            pocketdexRepository.refreshTypes(application)
+            pocketdexRepository.getTypes(application.applicationContext)
         }
     }
 
@@ -60,7 +57,8 @@ class PokedexViewModel(val application: Application) : ViewModel() {
 
             val pokemonsLoaded = pokemons.value?.size ?: 0
 
-            pocketdexRepository.refreshPokemons(application, 10, pokemonsLoaded)
+            //pocketdexRepository.refreshPokemons(application.applicationContext, 10, pokemonsLoaded)
+            pocketdexRepository.getPokemons(application.applicationContext, 10, pokemonsLoaded)
 
             _isLoadingMorePokemons.value = false
         }
@@ -68,6 +66,7 @@ class PokedexViewModel(val application: Application) : ViewModel() {
 
     }
 
+    @Suppress("UNCHECKED_CAST")
     class Factory(val application: Application) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(PokedexViewModel::class.java)) {

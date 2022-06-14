@@ -1,36 +1,31 @@
 package com.eliseubatista.pocketdex.repository
 
-import com.eliseubatista.pocketdex.database.DatabaseFavorites
 import com.eliseubatista.pocketdex.database.DatabasePokemon
 import com.eliseubatista.pocketdex.database.DatabaseTypes
-import com.eliseubatista.pocketdex.models.pokemons.PokemonModel
-import com.eliseubatista.pocketdex.models.pokemons.TypeModel
 import com.eliseubatista.pocketdex.network.PokeApi
 import com.eliseubatista.pocketdex.network.getNames
 import com.eliseubatista.pocketdex.network.pokemons.*
 
 @JvmName("asDatabaseTypeTypeData")
-suspend fun TypeData.asDatabaseModel(): DatabaseTypes {
+fun TypeData.asDatabaseModel(): DatabaseTypes {
 
-    val _doubleDamageFrom = this.damageRelations.doubleDamageFrom.getNames()
-    val _doubleDamageTo = this.damageRelations.doubleDamageTo.getNames()
-    val _halfDamageFrom = this.damageRelations.halfDamageFrom.getNames()
-    val _halfDamageTo = this.damageRelations.halfDamageTo.getNames()
-    val _noDamageFrom = this.damageRelations.noDamageFrom.getNames()
-    val _noDamageTo = this.damageRelations.noDamageTo.getNames()
+    val doubleDamageFrom = this.damageRelations.doubleDamageFrom.getNames()
+    val doubleDamageTo = this.damageRelations.doubleDamageTo.getNames()
+    val halfDamageFrom = this.damageRelations.halfDamageFrom.getNames()
+    val halfDamageTo = this.damageRelations.halfDamageTo.getNames()
+    val noDamageFrom = this.damageRelations.noDamageFrom.getNames()
+    val noDamageTo = this.damageRelations.noDamageTo.getNames()
 
-    val databaseType = DatabaseTypes(
-        this.id,
-        _doubleDamageFrom,
-        _doubleDamageTo,
-        _halfDamageFrom,
-        _halfDamageTo,
-        _noDamageFrom,
-        _noDamageTo,
-        this.name
+    return DatabaseTypes(
+        id,
+        doubleDamageFrom,
+        doubleDamageTo,
+        halfDamageFrom,
+        halfDamageTo,
+        noDamageFrom,
+        noDamageTo,
+        name
     )
-
-    return databaseType
 }
 
 @JvmName("asDatabaseModelPokemonData")
@@ -53,19 +48,17 @@ suspend fun PokemonData.asDatabaseModel(): DatabasePokemon {
 
     val genus = speciesData.getGenus()
 
-    val pokemonMaleSprite = this.sprites.frontDefault ?: ""
-    val pokemonFemaleSprite = this.sprites.frontFemale ?: ""
+    val sprite = this.sprites.frontDefault ?: ""
 
-    val pokeDatabase = DatabasePokemon(
-        this.id,
-        this.height,
-        this.name,
+    return DatabasePokemon(
+        id,
+        height,
+        name,
         speciesData.color.name,
         evolutionChain,
         flavor,
         genus,
-        pokemonMaleSprite,
-        pokemonFemaleSprite,
+        sprite,
         pokemonStats[0],
         pokemonStats[1],
         pokemonStats[2],
@@ -73,45 +66,6 @@ suspend fun PokemonData.asDatabaseModel(): DatabasePokemon {
         pokemonStats[4],
         pokemonStats[5],
         pokemonTypes,
-        this.weight
+        weight
     )
-
-    return pokeDatabase
 }
-
-@JvmName("asDomainModelDatabaseTypes")
-fun DatabaseTypes.asDomainModel(): TypeModel {
-    val type = TypeModel.fromDatabase(this)
-    return type
-}
-
-@JvmName("asDomainModelDatabaseTypes")
-fun List<DatabaseTypes>.asDomainModel(): List<TypeModel> {
-    val types = mutableListOf<TypeModel>()
-
-    for (element in this) {
-        val type = TypeModel.fromDatabase(element)
-        types.add(type)
-    }
-
-    return types
-}
-
-@JvmName("asDomainModelDatabasePokemon")
-fun DatabasePokemon.asDomainModel(): PokemonModel {
-    val pokemon = PokemonModel.fromDatabase(this)
-    return pokemon
-}
-
-@JvmName("asDomainModelDatabasePokemon")
-fun List<DatabasePokemon>.asDomainModel(): List<PokemonModel> {
-    val pokemons = mutableListOf<PokemonModel>()
-
-    for (element in this) {
-        val pokemon = PokemonModel.fromDatabase(element)
-        pokemons.add(pokemon)
-    }
-
-    return pokemons
-}
-

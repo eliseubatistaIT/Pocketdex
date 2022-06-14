@@ -34,13 +34,12 @@ fun formatPocketdexObjectDescription(description: String): String {
         return description
     }
 
-    val newDescription = description
-    val tokenizer = StringTokenizer(newDescription)
+    val tokenizer = StringTokenizer(description)
     val builder = StringBuilder()
 
     while (tokenizer.hasMoreTokens()) {
-        val string = tokenizer.nextToken();
-        builder.append(string).append(" ");
+        val string = tokenizer.nextToken()
+        builder.append(string).append(" ")
     }
 
     return builder.toString()
@@ -70,15 +69,11 @@ fun formatPokemonGenus(genus: String): String {
 
 fun formatPokemonHeight(height: Int): String {
 
-    val formattedHeight = "${height / 10.0f}m"
-
-    return formattedHeight
+    return "${height / 10.0f}m"
 }
 
 fun formatPokemonWeight(weight: Int): String {
 
-    val formattedWeight = "${weight / 10.0f}Kg"
-
-    return formattedWeight
+    return "${weight / 10.0f}Kg"
 }
 

@@ -1,13 +1,12 @@
 package com.eliseubatista.pocketdex.utils
 
-import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 
-fun hasInternetConnection(application: Application): Boolean {
+fun hasInternetConnection(appContext: Context): Boolean {
     val connectivityManager =
-        application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
+        appContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
 
     if (connectivityManager == null) {
         return false

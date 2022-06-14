@@ -16,7 +16,7 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:text="Base Stats"
+            android:text="@string/pokemon_base_stats"
             android:textAlignment="textStart"
             android:textColor="#FF5722"
             android:textSize="16sp"
@@ -35,7 +35,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/hp_fixedText"
             app:srcCompat="@drawable/img_plain_white"
-            app:tint="#888888" />
+            app:tint="#888888"
+            tools:ignore="ContentDescription" />
 
 
         <TextView
@@ -44,7 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="46dp"
             android:layout_marginTop="16dp"
-            android:text="HP"
+            android:text="@string/pokemon_stat_hp"
             android:textAlignment="textStart"
             android:textColor="#000000"
             android:textSize="14sp"
@@ -57,19 +58,19 @@
             android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="24dp"
-            android:text="999"
             android:textAlignment="textEnd"
             android:textColor="#000000"
             android:textSize="14sp"
             app:layout_constraintEnd_toStartOf="@+id/middleBar"
-            app:layout_constraintTop_toTopOf="@+id/hp_fixedText" />
+            app:layout_constraintTop_toTopOf="@+id/hp_fixedText"
+            tools:text="999" />
 
         <TextView
             android:id="@+id/attack_fixedText"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Attack"
+            android:text="@string/pokemon_stat_attack"
             android:textAlignment="textStart"
             android:textColor="#000000"
             android:textSize="14sp"
@@ -81,19 +82,19 @@
             android:id="@+id/attack_value"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
-            android:text="999"
             android:textAlignment="textEnd"
             android:textColor="#000000"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="@+id/hp_value"
-            app:layout_constraintTop_toTopOf="@+id/attack_fixedText" />
+            app:layout_constraintTop_toTopOf="@+id/attack_fixedText"
+            tools:text="999" />
 
         <TextView
             android:id="@+id/defense_fixedText"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Defense"
+            android:text="@string/pokemon_stat_defense"
             android:textAlignment="textStart"
             android:textColor="#000000"
             android:textSize="14sp"
@@ -105,12 +106,12 @@
             android:id="@+id/defense_value"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
-            android:text="999"
             android:textAlignment="textEnd"
             android:textColor="#000000"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="@+id/hp_value"
-            app:layout_constraintTop_toTopOf="@+id/defense_fixedText" />
+            app:layout_constraintTop_toTopOf="@+id/defense_fixedText"
+            tools:text="999" />
 
 
         <TextView
@@ -118,7 +119,7 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:text="Sp. Attck"
+            android:text="@string/pokemon_stat_special_attack"
             android:textAlignment="textStart"
             android:textColor="#000000"
             android:textSize="14sp"
@@ -130,19 +131,19 @@
             android:id="@+id/spAttack_value"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
-            android:text="999"
             android:textAlignment="textEnd"
             android:textColor="#000000"
             android:textSize="14sp"
             app:layout_constraintStart_toEndOf="@+id/spAttack_fixedText"
-            app:layout_constraintTop_toTopOf="@+id/spAttack_fixedText" />
+            app:layout_constraintTop_toTopOf="@+id/spAttack_fixedText"
+            tools:text="999" />
 
         <TextView
             android:id="@+id/spDefense_fixedText"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Sp. Defense"
+            android:text="@string/pokemon_stat_special_defense"
             android:textAlignment="textStart"
             android:textColor="#000000"
             android:textSize="14sp"
@@ -154,19 +155,19 @@
             android:id="@+id/spDefense_value"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
-            android:text="999"
             android:textAlignment="textEnd"
             android:textColor="#000000"
             android:textSize="14sp"
             app:layout_constraintStart_toEndOf="@+id/spDefense_fixedText"
-            app:layout_constraintTop_toTopOf="@+id/spDefense_fixedText" />
+            app:layout_constraintTop_toTopOf="@+id/spDefense_fixedText"
+            tools:text="999" />
 
         <TextView
             android:id="@+id/speed_fixedText"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Speed"
+            android:text="@string/pokemon_stat_speed"
             android:textAlignment="textStart"
             android:textColor="#000000"
             android:textSize="14sp"
@@ -178,12 +179,12 @@
             android:id="@+id/speed_value"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
-            android:text="999"
             android:textAlignment="textEnd"
             android:textColor="#000000"
             android:textSize="14sp"
             app:layout_constraintStart_toEndOf="@+id/speed_fixedText"
-            app:layout_constraintTop_toTopOf="@+id/speed_fixedText" />
+            app:layout_constraintTop_toTopOf="@+id/speed_fixedText"
+            tools:text="999" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
