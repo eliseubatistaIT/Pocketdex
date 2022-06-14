@@ -21,7 +21,8 @@ data class SpeciesEvolutionChainData(
 )
 
 data class SpeciesFlavorEntriesData(
-    @Json(name = "flavor_text") val flavorText: String
+    @Json(name = "flavor_text") val flavorText: String,
+    @Json(name = "language") val flavorLanguage: BaseNameAndUrl
 )
 
 data class SpeciesGeneraData(
@@ -32,8 +33,10 @@ data class SpeciesGeneraData(
 fun SpeciesData.getFlavor(): String {
     var flavor = ""
 
-    if (this.flavorEntries.isNotEmpty()) {
-        flavor = this.flavorEntries[0].flavorText
+    for (flavorEntrie in this.flavorEntries) {
+        if (flavorEntrie.flavorLanguage.name == "en") {
+            flavor = flavorEntrie.flavorText
+        }
     }
 
     return flavor
