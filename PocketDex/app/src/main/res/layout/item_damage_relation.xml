@@ -20,7 +20,7 @@
             android:alpha="0.125"
             android:scaleType="fitXY"
             android:src="@drawable/img_plain_white"
-            app:layout_constraintBottom_toTopOf="@id/grid_view"
+            app:layout_constraintBottom_toTopOf="@id/types_grid"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:tint="#404040" />
@@ -38,18 +38,54 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/grid_view"
+        <GridLayout
+            android:id="@+id/types_grid"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/fixed_Text"
             app:layout_constraintTop_toTopOf="parent"
-            tools:itemCount="7"
-            tools:listitem="@layout/item_pokemon_type_small"
-            tools:spanCount="8" />
+            android:columnCount="11">
+            <!-- 11 because we want 8 columns, but we have 3 of preview -->
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/img_bug_type_logo"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/img_poison_type_logo"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/img_fire_type_logo"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+
+
+        </GridLayout>
+
+        <!--        <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/grid_view"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/fixed_Text"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:itemCount="7"
+                    tools:listitem="@layout/item_pokemon_type_small"
+                    tools:spanCount="8" />-->
 
         <ImageView
             android:id="@+id/bottom_bar"
@@ -59,9 +95,9 @@
             android:alpha="0.125"
             android:scaleType="fitXY"
             android:src="@drawable/img_plain_white"
-            app:layout_constraintEnd_toEndOf="@id/grid_view"
+            app:layout_constraintEnd_toEndOf="@id/types_grid"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/grid_view"
+            app:layout_constraintTop_toBottomOf="@id/types_grid"
             app:tint="#404040" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

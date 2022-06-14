@@ -23,7 +23,7 @@
 
             <include
                 android:id="@+id/only_type_value"
-                layout="@layout/pokemon_type_large"
+                layout="@layout/item_pokemon_type_large"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -44,7 +44,7 @@
 
             <include
                 android:id="@+id/first_type_value"
-                layout="@layout/pokemon_type_large"
+                layout="@layout/item_pokemon_type_large"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -65,7 +65,7 @@
 
             <include
                 android:id="@+id/second_type_value"
-                layout="@layout/pokemon_type_large"
+                layout="@layout/item_pokemon_type_large"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
