@@ -2,6 +2,9 @@ package com.eliseubatista.pocketdex.network
 
 import com.eliseubatista.pocketdex.network.items.ItemCategoriesApiData
 import com.eliseubatista.pocketdex.network.items.ItemData
+import com.eliseubatista.pocketdex.network.regions.LocationApiData
+import com.eliseubatista.pocketdex.network.regions.LocationAreaApiData
+import com.eliseubatista.pocketdex.network.regions.RegionApiData
 import com.eliseubatista.pocketdex.network.pokemons.EvolutionChainData
 import com.eliseubatista.pocketdex.network.pokemons.PokemonData
 import com.eliseubatista.pocketdex.network.pokemons.SpeciesData
@@ -80,7 +83,7 @@ interface PokeApiService {
         @Query("offset") offset: Int
     ): GlobalSearchData
 
-    @GET("item-category/{itemName}/")
+    @GET("item-category/{itemCategoryName}/")
     suspend fun getItemCategoryByName(@Path("itemCategoryName") name: String): ItemCategoriesApiData
 
     //ITEM ------------------------------------------------------------------------------
@@ -94,6 +97,29 @@ interface PokeApiService {
     @GET("item/{itemName}/")
     suspend fun getItemByName(@Path("itemName") name: String): ItemData
 
+    //REGION ------------------------------------------------------------------------------
+
+    @GET("region")
+    suspend fun getRegions(
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int
+    ): GlobalSearchData
+
+    @GET("region/{regionName}/")
+    suspend fun getRegionByName(@Path("regionName") name: String): RegionApiData
+
+    //LOCATION ------------------------------------------------------------------------------
+    @GET("location")
+    suspend fun getLocations(
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int
+    ): GlobalSearchData
+
+    @GET("location/{locationName}/")
+    suspend fun getLocationByName(@Path("locationName") name: String): LocationApiData
+
+    @GET("location-area/{areaName}/")
+    suspend fun getLocationAreaByName(@Path("areaName") name: String): LocationAreaApiData
 
 }
 

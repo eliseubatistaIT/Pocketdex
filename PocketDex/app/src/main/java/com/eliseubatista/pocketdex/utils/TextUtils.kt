@@ -17,14 +17,23 @@ fun formatPocketdexObjectName(name: String): String {
     val upperCaseName = name.toCharArray()
     upperCaseName[0] = upperCaseName[0].uppercaseChar()
 
+    for ((index, letter) in upperCaseName.withIndex()) {
+        if (letter == '-' && index < upperCaseName.size - 1) {
+            upperCaseName[index] = ' '
+            upperCaseName[index + 1] = upperCaseName[index + 1].uppercaseChar()
+        }
+    }
+
     var newName = String(upperCaseName)
 
-    //For names like "nidoran-f" and "nidoran-m"
+    /*For names like "nidoran-f" and "nidoran-m"
     if (newName.contains("-f")) {
         newName = newName.replace("-f", " Female")
     } else if (newName.contains("-m")) {
         newName = newName.replace("-m", " Male")
-    }
+    } else if (newName.contains("-")) {
+        newName = newName.replace("-", " ")
+    }*/
 
     return newName
 }

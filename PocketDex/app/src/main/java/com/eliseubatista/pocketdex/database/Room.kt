@@ -11,6 +11,10 @@ import com.eliseubatista.pocketdex.database.items.DatabaseItemCategories
 import com.eliseubatista.pocketdex.database.items.DatabaseItems
 import com.eliseubatista.pocketdex.database.items.ItemCategoryDao
 import com.eliseubatista.pocketdex.database.items.ItemDao
+import com.eliseubatista.pocketdex.database.regions.DatabaseLocation
+import com.eliseubatista.pocketdex.database.regions.DatabaseRegions
+import com.eliseubatista.pocketdex.database.regions.LocationDao
+import com.eliseubatista.pocketdex.database.regions.RegionDao
 import com.eliseubatista.pocketdex.database.pokemons.DatabasePokemon
 import com.eliseubatista.pocketdex.database.pokemons.DatabaseTypes
 import com.eliseubatista.pocketdex.database.pokemons.PokemonDao
@@ -18,7 +22,7 @@ import com.eliseubatista.pocketdex.database.pokemons.TypesDao
 
 @Database(
     entities = [DatabaseFavorites::class, DatabasePokemon::class, DatabaseTypes::class, DatabaseItems::class,
-        DatabaseItemCategories::class],
+        DatabaseItemCategories::class, DatabaseRegions::class, DatabaseLocation::class],
     version = 1
 )
 @TypeConverters(DatabaseTypeConverters::class)
@@ -28,6 +32,8 @@ abstract class PocketdexDatabase : RoomDatabase() {
     abstract val typesDao: TypesDao
     abstract val itemsDao: ItemDao
     abstract val itemCategoriesDao: ItemCategoryDao
+    abstract val regionDao: RegionDao
+    abstract val locationDao: LocationDao
 }
 
 private lateinit var INSTANCE: PocketdexDatabase

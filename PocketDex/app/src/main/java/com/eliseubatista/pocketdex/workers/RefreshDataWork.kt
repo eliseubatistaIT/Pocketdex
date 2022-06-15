@@ -18,7 +18,13 @@ class RefreshDataWorker(
 
         return try {
             repository.pokedexRepository.refreshTypes(appContext)
+            repository.itemsRepository.refreshItemCategories(appContext)
+            repository.regionsRepository.refreshRegions(appContext, 50, 0)
+
             repository.pokedexRepository.refreshPokemons(appContext, 5000, 0)
+            repository.itemsRepository.refreshItems(appContext, 5000, 0)
+            repository.regionsRepository.refreshLocations(appContext, 5000, 0)
+
 
             Result.success()
         } catch (exception: Exception) {

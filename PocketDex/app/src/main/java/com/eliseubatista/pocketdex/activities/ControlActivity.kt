@@ -7,10 +7,11 @@ import androidx.databinding.DataBindingUtil
 import com.eliseubatista.pocketdex.R
 import com.eliseubatista.pocketdex.databinding.ActivityControlBinding
 import com.eliseubatista.pocketdex.fragments.items.ItemsFragment
-import com.eliseubatista.pocketdex.fragments.locations.LocationsFragment
+import com.eliseubatista.pocketdex.fragments.regions.RegionsFragment
 import com.eliseubatista.pocketdex.fragments.pokemon.PokedexFragment
 import com.eliseubatista.pocketdex.fragments.profile.ProfileFragment
 import com.eliseubatista.pocketdex.fragments.settings.SettingsFragment
+import com.eliseubatista.pocketdex.utils.replaceFragment
 
 class ControlActivity : AppCompatActivity() {
 
@@ -44,19 +45,20 @@ class ControlActivity : AppCompatActivity() {
     }
 
     private fun navigateToLocations() {
-        val locationFragment = LocationsFragment()
+        val locationFragment = RegionsFragment()
 
         val fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.fragment_container, locationFragment)
-        fragmentTransaction.commit()
+        fragmentTransaction.replaceFragment(locationFragment, R.id.fragment_container)
+
     }
 
     private fun navigateToItems() {
+        binding.bottomNavigationView.menu.findItem(R.id.nav_items).isChecked = true
+
         val itemsFragment = ItemsFragment()
 
         val fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.fragment_container, itemsFragment)
-        fragmentTransaction.commit()
+        fragmentTransaction.replaceFragment(itemsFragment, R.id.fragment_container)
     }
 
     private fun navigateToPokedex() {
@@ -66,23 +68,31 @@ class ControlActivity : AppCompatActivity() {
         val pokedexFragment = PokedexFragment()
 
         val fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.fragment_container, pokedexFragment)
+        fragmentTransaction.replaceFragment(pokedexFragment, R.id.fragment_container)
+
+        /*fragmentTransaction.replace(R.id.fragment_container, pokedexFragment)
         fragmentTransaction.commit()
+
+         */
     }
 
     private fun navigateToProfile() {
+        binding.bottomNavigationView.menu.findItem(R.id.nav_profile).isChecked = true
+
         val profileFragment = ProfileFragment()
 
         val fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.fragment_container, profileFragment)
-        fragmentTransaction.commit()
+
+        fragmentTransaction.replaceFragment(profileFragment, R.id.fragment_container)
     }
 
     private fun navigateToSettings() {
+        binding.bottomNavigationView.menu.findItem(R.id.nav_settings).isChecked = true
+
         val settingsFragment = SettingsFragment()
 
         val fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.fragment_container, settingsFragment)
-        fragmentTransaction.commit()
+        fragmentTransaction.replaceFragment(settingsFragment, R.id.fragment_container)
+
     }
 }

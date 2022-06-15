@@ -51,7 +51,7 @@ class PokedexDetailsFragment : Fragment() {
 
         viewModel.isLoadingPokemon.observe(viewLifecycleOwner) {
             if (it) {
-                progressBarDialog.startLoading("Loading More Pokemons..")
+                progressBarDialog.startLoading("Loading Pokemon..")
             } else {
                 progressBarDialog.dismiss()
             }
@@ -116,19 +116,19 @@ class PokedexDetailsFragment : Fragment() {
 
         binding.pokemonDetailsBackground.setColorFilter(pokemonColor)
 
-        binding.toolbarPokedexDetails.pokemonName.text =
+        binding.toolbarPokedexDetails.detailsName.text =
             formatPocketdexObjectName(pokemon.name)
 
-        binding.toolbarPokedexDetails.pokemonId.text = "#${pokemon.id}"
+        binding.toolbarPokedexDetails.detailsId.text = "#${pokemon.id}"
 
-        binding.toolbarPokedexDetails.pokemonName.setTextColor(
+        binding.toolbarPokedexDetails.detailsName.setTextColor(
             getTextColorByBackgroundColor(
                 requireContext(),
                 pokemonColor
             )
         )
 
-        binding.toolbarPokedexDetails.pokemonId.setTextColor(
+        binding.toolbarPokedexDetails.detailsId.setTextColor(
             getTextColorByBackgroundColor(
                 requireContext(),
                 pokemonColor

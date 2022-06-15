@@ -114,16 +114,14 @@ class PokemonDetailsViewModel(val application: Application, private val pokemonN
             if (favoriteInDatabase == null) {
                 Log.i("FAV", "Adding $pokemonName to favorites")
 
-                coroutineScope.launch {
-                    val favoriteData = DatabaseFavorites(
-                        0,
-                        pokemonName,
-                        "pokemon"
-                    )
+                val favoriteData = DatabaseFavorites(
+                    0,
+                    pokemonName,
+                    "pokemon"
+                )
 
-                    pocketdexRepository.favoritesRepository.addToFavorites(favoriteData)
-                    _isInFavorites.value = true
-                }
+                pocketdexRepository.favoritesRepository.addToFavorites(favoriteData)
+                _isInFavorites.value = true
             } else {
                 Log.i("FAV", "Removing $pokemonName from favorites")
 

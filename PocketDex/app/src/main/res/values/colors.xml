@@ -42,4 +42,15 @@
     <color name="type_dark">#272727</color>
     <color name="type_fairy">#DBA1E4</color>
 
+    <color name="item_black">#292929</color>
+    <color name="item_blue">#4485B8</color>
+    <color name="item_brown">#73644E</color>
+    <color name="item_gray">#938686</color>
+    <color name="item_green">#71A873</color>
+    <color name="item_pink">#BD6C88</color>
+    <color name="item_purple">#A169AA</color>
+    <color name="item_red">#BA5151</color>
+    <color name="item_white">#F1F1F1</color>
+    <color name="item_yellow">#D5C754</color>
+
 </resources>

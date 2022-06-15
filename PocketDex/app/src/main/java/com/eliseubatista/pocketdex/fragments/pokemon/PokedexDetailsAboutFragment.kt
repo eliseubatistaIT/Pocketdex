@@ -32,6 +32,7 @@ class PokedexDetailsAboutFragment : Fragment() {
 
         viewModelFactory =
             PokemonDetailsViewModel.Factory(requireActivity().application, pokemonName)
+
         viewModel =
             ViewModelProvider(
                 requireParentFragment(),

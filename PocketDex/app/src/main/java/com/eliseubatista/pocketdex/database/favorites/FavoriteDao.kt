@@ -12,8 +12,8 @@ interface FavoritesDao {
     @Query("select * from databasefavorites where category = 'item'")
     fun getFavoriteItems(): LiveData<List<DatabaseFavorites>>
 
-    @Query("select * from databasefavorites where category = 'location'")
-    fun getFavoriteLocations(): LiveData<List<DatabaseFavorites>>
+    @Query("select * from databasefavorites where category = 'region'")
+    fun getFavoriteRegions(): LiveData<List<DatabaseFavorites>>
 
     @Query("select * from databasefavorites where name = :name")
     fun getFavoriteByName(name: String): DatabaseFavorites?

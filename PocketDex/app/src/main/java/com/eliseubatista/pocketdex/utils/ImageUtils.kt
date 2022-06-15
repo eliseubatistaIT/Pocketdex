@@ -91,3 +91,20 @@ fun getPokemonTypeTextImage(context: Context, pokemonType: String): Drawable? {
 
     return newTextImage
 }
+
+//Function to get a pokemon type logo
+fun getLocationRegionImage(context: Context, region: String): Drawable? {
+    val newImage = when (region) {
+        "kanto" -> ContextCompat.getDrawable(context, R.drawable.region_kanto)
+        "johto" -> ContextCompat.getDrawable(context, R.drawable.region_johto)
+        "hoenn" -> ContextCompat.getDrawable(context, R.drawable.region_hoenn)
+        "sinnoh" -> ContextCompat.getDrawable(context, R.drawable.region_sinnoh)
+        "unova" -> ContextCompat.getDrawable(context, R.drawable.region_unova)
+        "kalos" -> ContextCompat.getDrawable(context, R.drawable.region_kalos)
+        "alola" -> ContextCompat.getDrawable(context, R.drawable.region_alola)
+        "galar" -> ContextCompat.getDrawable(context, R.drawable.region_galar)
+        else -> ContextCompat.getDrawable(context, R.drawable.region_kanto)
+    }
+
+    return newImage
+}

@@ -32,20 +32,20 @@ class PokemonAdapter :
         RecyclerView.ViewHolder(binding.root) {
 
         //This is used to bind the data to the view holder
-        fun bind(clickedListener: OnPokemonClickedListener, item: DatabasePokemon) {
+        fun bind(clickedListener: OnPokemonClickedListener, pokemon: DatabasePokemon) {
 
-            val imageScale = getImageScaleByEvolutionChain(item.name, item.evolutionChain)
+            val imageScale = getImageScaleByEvolutionChain(pokemon.name, pokemon.evolutionChain)
 
             binding.pokemonListImage.scaleX = imageScale
             binding.pokemonListImage.scaleY = imageScale
 
-            loadImageWithGlide(item.spriteUrl, binding.pokemonListImage)
+            loadImageWithGlide(pokemon.spriteUrl, binding.pokemonListImage)
 
-            val pokemonColor = getPokemonBackgroundColor(itemView.context, item.color)
+            val pokemonColor = getPokemonBackgroundColor(itemView.context, pokemon.color)
 
             binding.pokemonListItemBackground.background.setTint(pokemonColor)
 
-            binding.pokemonListId.text = "#${item.id}"
+            binding.pokemonListId.text = "#${pokemon.id}"
             binding.pokemonListId.setTextColor(
                 getTextColorByBackgroundColor(
                     itemView.context,
@@ -53,7 +53,7 @@ class PokemonAdapter :
                 )
             )
 
-            binding.pokemonListName.text = item.name
+            binding.pokemonListName.text = formatPocketdexObjectName(pokemon.name)
             binding.pokemonListName.setTextColor(
                 getTextColorByBackgroundColor(
                     itemView.context,
@@ -61,15 +61,15 @@ class PokemonAdapter :
                 )
             )
 
-            if (item.types.isNotEmpty()) {
+            if (pokemon.types.isNotEmpty()) {
 
-                val typeOneLogo = getPokemonTypeLogoImage(itemView.context, item.types[0])
+                val typeOneLogo = getPokemonTypeLogoImage(itemView.context, pokemon.types[0])
 
                 binding.pokemonListFirstType.typeLogo.setImageDrawable(typeOneLogo)
 
-                if (item.types.size > 1) {
+                if (pokemon.types.size > 1) {
 
-                    val typeTwoLogo = getPokemonTypeLogoImage(itemView.context, item.types[1])
+                    val typeTwoLogo = getPokemonTypeLogoImage(itemView.context, pokemon.types[1])
 
                     binding.pokemonListSecondType.typeLogo.setImageDrawable(typeTwoLogo)
 
@@ -83,7 +83,7 @@ class PokemonAdapter :
 
             binding.pokemonListItemBackground.setOnClickListener {
                 clickedListener.onPokemonClicked(
-                    item.name
+                    pokemon.name
                 )
             }
 

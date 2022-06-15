@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.eliseubatista.pocketdex.database.getDatabase
+import com.eliseubatista.pocketdex.database.pokemons.DatabasePokemon
 import com.eliseubatista.pocketdex.repository.PocketdexRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -19,6 +20,10 @@ class PokedexViewModel(val application: Application) : ViewModel() {
 
     val types = pocketdexRepository.pokedexRepository.pokemonTypes
     val pokemons = pocketdexRepository.pokedexRepository.pokemons
+
+    private var _searchedPokemons = MutableLiveData<List<DatabasePokemon>>()
+    val searchedPokemons: LiveData<List<DatabasePokemon>>
+        get() = _searchedPokemons
 
     private var _isLoadingMorePokemons = MutableLiveData<Boolean>()
     val isLoadingMorePokemons: LiveData<Boolean>
@@ -57,12 +62,41 @@ class PokedexViewModel(val application: Application) : ViewModel() {
             val pokemonsLoaded = pokemons.value?.size ?: 0
 
             //pocketdexRepository.refreshPokemons(application.applicationContext, 10, pokemonsLoaded)
-            pocketdexRepository.pokedexRepository.getPokemons(application.applicationContext, 10, pokemonsLoaded)
+            pocketdexRepository.pokedexRepository.getPokemons(
+                application.applicationContext,
+                10,
+                pokemonsLoaded
+            )
 
             _isLoadingMorePokemons.value = false
         }
+    }
 
+    fun getPokemonLikeName(name: String, locallyOnly: Boolean) {
+        //If we are already loading and waiting for more pokemons, do nothing
+        if (_isLoadingMorePokemons.value == true) {
+            return
+        }
 
+        if (!locallyOnly) {
+            _isLoadingMorePokemons.value = true
+        }
+
+        _searchedPokemons.value = listOf()
+
+        coroutineScope.launch {
+
+            val pokemonsLoaded = pokemons.value?.size ?: 0
+
+            //pocketdexRepository.refreshPokemons(application.applicationContext, 10, pokemonsLoaded)
+            _searchedPokemons.value = pocketdexRepository.pokedexRepository.getPokemonsLikeName(
+                application.applicationContext,
+                name,
+                locallyOnly
+            )
+
+            _isLoadingMorePokemons.value = false
+        }
     }
 
     @Suppress("UNCHECKED_CAST")

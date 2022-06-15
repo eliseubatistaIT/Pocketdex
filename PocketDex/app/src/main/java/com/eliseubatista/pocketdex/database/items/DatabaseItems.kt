@@ -12,7 +12,7 @@ data class DatabaseItems constructor(
     val attributes: List<String>,
     val category: String,
     val effects: List<String>,
-    val flavor: List<String>,
+    val flavor: String,
     val spriteUrl: String,
 ) {
     override fun toString(): String {

@@ -27,6 +27,38 @@ fun getPokemonBackgroundColor(context: Context, pokemonColorName: String): Int {
     return newColor
 }
 
+//Function to get a pokemon color
+fun getItemBackgroundColor(context: Context, itemId: Int): Int {
+
+    var divider = 0
+
+    //From 9 to 1, get the first divider of this id
+    for (i in 10 downTo 1) {
+        //If the division remainder is zero, get this divider
+        if (itemId % i == 0) {
+            divider = i
+            break
+        }
+    }
+
+
+    val newColor = when (divider) {
+        1 -> ContextCompat.getColor(context, R.color.item_black)
+        2 -> ContextCompat.getColor(context, R.color.item_blue)
+        3 -> ContextCompat.getColor(context, R.color.item_brown)
+        4 -> ContextCompat.getColor(context, R.color.item_gray)
+        5 -> ContextCompat.getColor(context, R.color.item_green)
+        6 -> ContextCompat.getColor(context, R.color.item_pink)
+        7 -> ContextCompat.getColor(context, R.color.item_purple)
+        8 -> ContextCompat.getColor(context, R.color.item_red)
+        9 -> ContextCompat.getColor(context, R.color.item_white)
+        10 -> ContextCompat.getColor(context, R.color.item_yellow)
+        else -> ContextCompat.getColor(context, R.color.item_white)
+    }
+
+    return newColor
+}
+
 //Function to calculate if the text on top of backgroundColor should be black or white
 fun getTextColorByBackgroundColor(context: Context, backgroundColor: Int): Int {
     //By default, the text color is white

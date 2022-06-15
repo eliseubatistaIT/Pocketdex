@@ -14,7 +14,7 @@ interface PokemonDao {
     @Query("select * from databasepokemon where id > :minId and id <= :maxId")
     fun getPokemonsInRange(minId: Int, maxId: Int): List<DatabasePokemon>
 
-    @Query("select * from databasepokemon where name like :name")
+    @Query("select * from databasepokemon where name like '%' || :name || '%'")
     fun getPokemonsByName(name: String): List<DatabasePokemon>
 
     @Query("select * from databasepokemon where name = :name")
