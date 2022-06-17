@@ -2,6 +2,7 @@ package com.eliseubatista.pocketdex
 
 import android.app.Application
 import android.os.Build
+import android.util.Log
 import androidx.work.*
 import com.eliseubatista.pocketdex.workers.RefreshDataWorker
 import kotlinx.coroutines.CoroutineScope
@@ -31,7 +32,8 @@ class PocketDexApplication : Application() {
             .setRequiresBatteryNotLow(true) // Only with a decent battery level
             .setRequiresCharging(false) //Can be done on battery
             .apply {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { //If possible, only when the device is idle
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    //If possible, only when the device is idle. Or maybe not, we'll see
                     setRequiresDeviceIdle(true)
                 }
             }.build()
@@ -44,8 +46,10 @@ class PocketDexApplication : Application() {
 
         WorkManager.getInstance(applicationContext).enqueueUniquePeriodicWork(
             "REFRESH_DATA",
-            ExistingPeriodicWorkPolicy.KEEP,
+            ExistingPeriodicWorkPolicy.REPLACE,
             refreshDataRequest
         )
+
+        Log.w("APP", "Background Worker Set!")
     }
 }

@@ -120,11 +120,11 @@ class RegionDetailsViewModel(val application: Application, private val regionNam
     }
 
     @Suppress("UNCHECKED_CAST")
-    class Factory(val application: Application, private val pokemonName: String) :
+    class Factory(val application: Application, private val regionName: String) :
         ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(RegionDetailsViewModel::class.java)) {
-                return RegionDetailsViewModel(application, pokemonName) as T
+                return RegionDetailsViewModel(application, regionName) as T
             }
             throw IllegalArgumentException("Unknown ViewModel class")
         }

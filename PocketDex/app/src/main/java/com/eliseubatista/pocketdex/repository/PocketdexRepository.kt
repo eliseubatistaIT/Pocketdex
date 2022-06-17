@@ -6,14 +6,14 @@ import com.eliseubatista.pocketdex.database.PocketdexDatabase
 import com.eliseubatista.pocketdex.database.favorites.DatabaseFavorites
 import com.eliseubatista.pocketdex.database.items.DatabaseItemCategories
 import com.eliseubatista.pocketdex.database.items.DatabaseItems
-import com.eliseubatista.pocketdex.database.regions.DatabaseLocation
-import com.eliseubatista.pocketdex.database.regions.DatabaseRegions
 import com.eliseubatista.pocketdex.database.pokemons.DatabasePokemon
 import com.eliseubatista.pocketdex.database.pokemons.DatabaseTypes
+import com.eliseubatista.pocketdex.database.regions.DatabaseLocation
+import com.eliseubatista.pocketdex.database.regions.DatabaseRegions
 import com.eliseubatista.pocketdex.network.PokeApi
 import com.eliseubatista.pocketdex.network.items.asDatabaseModel
-import com.eliseubatista.pocketdex.network.regions.asDatabaseModel
 import com.eliseubatista.pocketdex.network.pokemons.asDatabaseModel
+import com.eliseubatista.pocketdex.network.regions.asDatabaseModel
 import com.eliseubatista.pocketdex.utils.hasInternetConnection
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -74,6 +74,7 @@ class PocketdexRepository(database: PocketdexDatabase) {
         val pokemons: LiveData<List<DatabasePokemon>> = database.pokemonDao.getPokemons()
 
         suspend fun getTypes(appContext: Context) {
+
             var types: MutableList<DatabaseTypes>
 
             withContext(Dispatchers.IO) {
@@ -99,17 +100,20 @@ class PocketdexRepository(database: PocketdexDatabase) {
                 return
             }
             withContext(Dispatchers.IO) {
-                val typesGlobalData = PokeApi.retrofitService.getTypes(100, 0)
-
-                val typesDataList = mutableListOf<DatabaseTypes>()
+                val typesGlobalData = PokeApi.retrofitService.getTypes(1000, 0)
 
                 for (typeResult in typesGlobalData.results) {
-                    val typeData = PokeApi.retrofitService.getTypeByName(typeResult.name)
-                    val typeDatabase = typeData.asDatabaseModel()
-                    typesDataList.add(typeDatabase)
-                }
+                    var typeDatabase =
+                        database.typesDao.getTypeByName(typeResult.name)
 
-                database.typesDao.insertAll(typesDataList)
+                    if (typeDatabase != null) {
+                        continue
+                    }
+
+                    val typeData = PokeApi.retrofitService.getTypeByName(typeResult.name)
+                    typeDatabase = typeData.asDatabaseModel()
+                    database.typesDao.insert(typeDatabase)
+                }
             }
         }
 
@@ -178,70 +182,72 @@ class PocketdexRepository(database: PocketdexDatabase) {
             return pokemons
         }
 
-        suspend fun refreshPokemons(appContext: Context, limit: Int, offset: Int) {
+        suspend fun refreshPokemons(appContext: Context) {
             if (!hasInternetConnection(appContext)) {
                 return
             }
             withContext(Dispatchers.IO) {
-                val pokemonsGlobalData = PokeApi.retrofitService.getPokemons(limit, offset)
-
-                val pokemonsDataList = mutableListOf<DatabasePokemon>()
+                val pokemonsGlobalData = PokeApi.retrofitService.getPokemons(5000, 0)
 
                 for (pokemonResult in pokemonsGlobalData.results) {
+                    var databasePokemon =
+                        database.pokemonDao.getPokemonByName(pokemonResult.name)
+
+                    if (databasePokemon != null) {
+                        continue
+                    }
+
                     val pokemonDetailedData =
                         PokeApi.retrofitService.getPokemonByName(pokemonResult.name)
 
-                    val databasePokemon = pokemonDetailedData.asDatabaseModel()
+                    databasePokemon = pokemonDetailedData.asDatabaseModel()
 
-                    pokemonsDataList.add(databasePokemon)
+                    database.pokemonDao.insert(databasePokemon)
                 }
-
-                database.pokemonDao.insertAll(pokemonsDataList)
             }
         }
 
         suspend fun getTypeByName(appContext: Context, name: String): DatabaseTypes? {
 
-            if (!hasInternetConnection(appContext)) {
-                return null
-            }
-
             var typeDatabase: DatabaseTypes?
 
             withContext(Dispatchers.IO) {
-
                 typeDatabase = database.typesDao.getTypeByName(name)
 
-                if (typeDatabase == null) {
-                    val typeDetailedData = PokeApi.retrofitService.getTypeByName(name)
 
-                    //pokeDatabase = PokemonApiToPokemonDatabase(pokemonDetailedData)
+                if (typeDatabase == null && hasInternetConnection(appContext)) {
+                    val typeDetailedData =
+                        PokeApi.retrofitService.getTypeByName(name)
+
                     typeDatabase = typeDetailedData.asDatabaseModel()
                 }
+
+
+                typeDatabase?.let { database.typesDao.insert(it) }
             }
 
             return typeDatabase
-
         }
 
         suspend fun getPokemonByName(appContext: Context, name: String): DatabasePokemon? {
-            if (!hasInternetConnection(appContext)) {
-                return null
-            }
-            var pokeDatabase: DatabasePokemon?
+            var pokemonDatabase: DatabasePokemon?
 
             withContext(Dispatchers.IO) {
+                pokemonDatabase = database.pokemonDao.getPokemonByName(name)
 
-                pokeDatabase = database.pokemonDao.getPokemonByName(name)
 
-                if (pokeDatabase == null) {
-                    val pokemonDetailedData = PokeApi.retrofitService.getPokemonByName(name)
+                if (pokemonDatabase == null && hasInternetConnection(appContext)) {
+                    val pokemonDetailedData =
+                        PokeApi.retrofitService.getPokemonByName(name)
 
-                    pokeDatabase = pokemonDetailedData.asDatabaseModel()
+                    pokemonDatabase = pokemonDetailedData.asDatabaseModel()
                 }
+
+
+                pokemonDatabase?.let { database.pokemonDao.insert(it) }
             }
 
-            return pokeDatabase
+            return pokemonDatabase
         }
     }
 
@@ -285,16 +291,18 @@ class PocketdexRepository(database: PocketdexDatabase) {
             withContext(Dispatchers.IO) {
                 val categoriesGlobalData = PokeApi.retrofitService.getItemCategories(100, 0)
 
-                val categoriesDataList = mutableListOf<DatabaseItemCategories>()
-
                 for (categoryResult in categoriesGlobalData.results) {
+                    var categoryDatabase =
+                        database.itemCategoriesDao.getItemCategoryByName(categoryResult.name)
+
+                    if (categoryDatabase != null) {
+                        continue
+                    }
                     val categoryData =
                         PokeApi.retrofitService.getItemCategoryByName(categoryResult.name)
-                    val categoryDatabase = categoryData.asDatabaseModel()
-                    categoriesDataList.add(categoryDatabase)
+                    categoryDatabase = categoryData.asDatabaseModel()
+                    database.itemCategoriesDao.insert(categoryDatabase)
                 }
-
-                database.itemCategoriesDao.insertAll(categoriesDataList)
             }
         }
 
@@ -363,25 +371,28 @@ class PocketdexRepository(database: PocketdexDatabase) {
             return items
         }
 
-        suspend fun refreshItems(appContext: Context, limit: Int, offset: Int) {
+        suspend fun refreshItems(appContext: Context) {
             if (!hasInternetConnection(appContext)) {
                 return
             }
             withContext(Dispatchers.IO) {
-                val itemsGlobalData = PokeApi.retrofitService.getItems(limit, offset)
-
-                val itemsDataList = mutableListOf<DatabaseItems>()
+                val itemsGlobalData = PokeApi.retrofitService.getItems(5000, 0)
 
                 for (itemResult in itemsGlobalData.results) {
+                    var databaseItem =
+                        database.itemsDao.getItemByName(itemResult.name)
+
+                    if (databaseItem != null) {
+                        continue
+                    }
+
                     val itemDetailedData =
                         PokeApi.retrofitService.getItemByName(itemResult.name)
 
-                    val databaseItem = itemDetailedData.asDatabaseModel()
+                    databaseItem = itemDetailedData.asDatabaseModel()
 
-                    itemsDataList.add(databaseItem)
+                    database.itemsDao.insert(databaseItem)
                 }
-
-                database.itemsDao.insertAll(itemsDataList)
             }
         }
 
@@ -390,42 +401,42 @@ class PocketdexRepository(database: PocketdexDatabase) {
             name: String
         ): DatabaseItemCategories? {
 
-            if (!hasInternetConnection(appContext)) {
-                return null
-            }
-
-            var categoryDatabase: DatabaseItemCategories?
+            var itemCategoryDatabase: DatabaseItemCategories?
 
             withContext(Dispatchers.IO) {
+                itemCategoryDatabase = database.itemCategoriesDao.getItemCategoryByName(name)
 
-                categoryDatabase = database.itemCategoriesDao.getItemCategoryByName(name)
 
-                if (categoryDatabase == null) {
-                    val categoryDetailedData = PokeApi.retrofitService.getItemCategoryByName(name)
+                if (itemCategoryDatabase == null && hasInternetConnection(appContext)) {
+                    val itemCategoryDetailedData =
+                        PokeApi.retrofitService.getItemCategoryByName(name)
 
-                    categoryDatabase = categoryDetailedData.asDatabaseModel()
+                    itemCategoryDatabase = itemCategoryDetailedData.asDatabaseModel()
                 }
+
+
+                itemCategoryDatabase?.let { database.itemCategoriesDao.insert(it) }
             }
 
-            return categoryDatabase
+            return itemCategoryDatabase
 
         }
 
         suspend fun getItemByName(appContext: Context, name: String): DatabaseItems? {
-            if (!hasInternetConnection(appContext)) {
-                return null
-            }
             var itemDatabase: DatabaseItems?
 
             withContext(Dispatchers.IO) {
-
                 itemDatabase = database.itemsDao.getItemByName(name)
 
-                if (itemDatabase == null) {
+
+                if (itemDatabase == null && hasInternetConnection(appContext)) {
                     val itemDetailedData = PokeApi.retrofitService.getItemByName(name)
 
                     itemDatabase = itemDetailedData.asDatabaseModel()
                 }
+
+
+                itemDatabase?.let { database.itemsDao.insert(it) }
             }
 
             return itemDatabase
@@ -506,25 +517,29 @@ class PocketdexRepository(database: PocketdexDatabase) {
             return regions
         }
 
-        suspend fun refreshRegions(appContext: Context, limit: Int, offset: Int) {
+        suspend fun refreshRegions(appContext: Context) {
             if (!hasInternetConnection(appContext)) {
                 return
             }
             withContext(Dispatchers.IO) {
-                val regionsGlobalData = PokeApi.retrofitService.getRegions(limit, offset)
-
-                val regionsDataList = mutableListOf<DatabaseRegions>()
+                val regionsGlobalData = PokeApi.retrofitService.getRegions(5000, 0)
 
                 for (regionResult in regionsGlobalData.results) {
+                    var databaseRegion =
+                        database.regionDao.getRegionByName(regionResult.name)
+
+                    if (databaseRegion != null) {
+                        continue
+                    }
+
                     val regionDetailedData =
                         PokeApi.retrofitService.getRegionByName(regionResult.name)
 
-                    val databaseRegion = regionDetailedData.asDatabaseModel()
+                    databaseRegion = regionDetailedData.asDatabaseModel()
 
-                    regionsDataList.add(databaseRegion)
+                    database.regionDao.insert(databaseRegion)
                 }
 
-                database.regionDao.insertAll(regionsDataList)
             }
         }
 
@@ -550,41 +565,46 @@ class PocketdexRepository(database: PocketdexDatabase) {
             }
         }
 
-        suspend fun refreshLocations(appContext: Context, limit: Int, offset: Int) {
+        suspend fun refreshLocations(appContext: Context) {
             if (!hasInternetConnection(appContext)) {
                 return
             }
             withContext(Dispatchers.IO) {
-                val locationsGlobalData = PokeApi.retrofitService.getLocations(limit, offset)
-
-                val locationsDataList = mutableListOf<DatabaseLocation>()
+                val locationsGlobalData = PokeApi.retrofitService.getLocations(5000, 0)
 
                 for (locationResult in locationsGlobalData.results) {
+                    var locationDatabase =
+                        database.locationDao.getLocationByName(locationResult.name)
+
+                    if (locationDatabase != null) {
+                        continue
+                    }
+
                     val locationData =
                         PokeApi.retrofitService.getLocationByName(locationResult.name)
-                    val locationDatabase = locationData.asDatabaseModel()
-                    locationsDataList.add(locationDatabase)
-                }
 
-                database.locationDao.insertAll(locationsDataList)
+                    locationDatabase = locationData.asDatabaseModel()
+                    database.locationDao.insert(locationDatabase)
+                }
             }
         }
 
         suspend fun getLocationByName(appContext: Context, name: String): DatabaseLocation? {
-            if (!hasInternetConnection(appContext)) {
-                return null
-            }
+
             var locationDatabase: DatabaseLocation?
 
             withContext(Dispatchers.IO) {
-
                 locationDatabase = database.locationDao.getLocationByName(name)
 
-                if (locationDatabase == null) {
+
+                if (locationDatabase == null && hasInternetConnection(appContext)) {
                     val locationDetailedData = PokeApi.retrofitService.getLocationByName(name)
 
                     locationDatabase = locationDetailedData.asDatabaseModel()
                 }
+
+
+                locationDatabase?.let { database.locationDao.insert(it) }
             }
 
             return locationDatabase
@@ -592,25 +612,23 @@ class PocketdexRepository(database: PocketdexDatabase) {
 
         suspend fun getRegionByName(appContext: Context, name: String): DatabaseRegions? {
 
-            if (!hasInternetConnection(appContext)) {
-                return null
-            }
-
             var regionDatabase: DatabaseRegions?
 
             withContext(Dispatchers.IO) {
-
                 regionDatabase = database.regionDao.getRegionByName(name)
 
-                if (regionDatabase == null) {
+
+                if (regionDatabase == null && hasInternetConnection(appContext)) {
                     val regionDetailedData = PokeApi.retrofitService.getRegionByName(name)
 
                     regionDatabase = regionDetailedData.asDatabaseModel()
                 }
+
+
+                regionDatabase?.let { database.regionDao.insert(it) }
             }
 
             return regionDatabase
-
         }
     }
 

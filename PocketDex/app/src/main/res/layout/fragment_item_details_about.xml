@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
     </data>
+
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="?attr/colorSecondary">
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,8 +23,8 @@
                 android:layout_width="200dp"
                 android:layout_height="40dp"
                 android:layout_marginTop="30dp"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
@@ -32,13 +34,11 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="40dp"
                 android:layout_marginEnd="16dp"
-                android:textColor="#191919"
-                android:textSize="16sp"
+                android:textColor="?attr/colorOnSecondary"                android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/item_details_category"
                 tools:text="A strange seed was planted on its back at birth. The plant sprouts and grows with this POKéMON." />
-
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

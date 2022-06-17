@@ -23,7 +23,7 @@
             app:layout_constraintBottom_toTopOf="@id/types_grid"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:tint="#404040"
+            app:tint="?attr/colorOnSecondary"
             tools:ignore="ContentDescription" />
 
         <TextView
@@ -31,7 +31,7 @@
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:textColor="#000000"
+            android:textColor="?attr/colorOnSecondary"
             android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -88,7 +88,7 @@
             app:layout_constraintEnd_toEndOf="@id/types_grid"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/types_grid"
-            app:tint="#404040"
+            app:tint="?attr/colorOnSecondary"
             tools:ignore="ContentDescription" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

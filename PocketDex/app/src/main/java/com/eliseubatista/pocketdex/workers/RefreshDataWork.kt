@@ -19,11 +19,11 @@ class RefreshDataWorker(
         return try {
             repository.pokedexRepository.refreshTypes(appContext)
             repository.itemsRepository.refreshItemCategories(appContext)
-            repository.regionsRepository.refreshRegions(appContext, 50, 0)
+            repository.regionsRepository.refreshRegions(appContext)
 
-            repository.pokedexRepository.refreshPokemons(appContext, 5000, 0)
-            repository.itemsRepository.refreshItems(appContext, 5000, 0)
-            repository.regionsRepository.refreshLocations(appContext, 5000, 0)
+            repository.pokedexRepository.refreshPokemons(appContext)
+            repository.itemsRepository.refreshItems(appContext)
+            repository.regionsRepository.refreshLocations(appContext)
 
 
             Result.success()

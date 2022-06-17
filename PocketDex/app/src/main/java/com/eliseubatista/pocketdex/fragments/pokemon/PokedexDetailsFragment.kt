@@ -80,11 +80,11 @@ class PokedexDetailsFragment : Fragment() {
 
         viewPager.adapter = adapter
 
-        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+        TabLayoutMediator(tabLayout.tabLayout, viewPager) { tab, position ->
             tab.text = adapter.getPageTitle(position)
         }.attach()
 
-        tabLayout.addOnTabSelectedListener(object : OnTabSelectedListener {
+        tabLayout.tabLayout.addOnTabSelectedListener(object : OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
             }
 

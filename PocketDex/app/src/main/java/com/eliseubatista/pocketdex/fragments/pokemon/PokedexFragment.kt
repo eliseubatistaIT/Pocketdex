@@ -1,7 +1,6 @@
 package com.eliseubatista.pocketdex.fragments.pokemon
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -72,9 +71,9 @@ class PokedexFragment : Fragment() {
     }
 
     private fun setupSearchView() {
-        binding.pokedexSearch.queryHint = "Type Pokémon Name Here"
+        binding.pokedexSearch.searchBar.queryHint = "Type Pokémon Name Here"
 
-        binding.pokedexSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        binding.pokedexSearch.searchBar.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query.isNullOrEmpty() || query.isNullOrBlank()) {
                     isFiltered = false
@@ -166,8 +165,8 @@ class PokedexFragment : Fragment() {
         val pokedexDetailsFragment = PokedexDetailsFragment()
         pokedexDetailsFragment.arguments = bundle
 
-        val fragmentTransaction = parentFragmentManager.beginTransaction()
+        val fragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
 
-        fragmentTransaction.replaceFragment(pokedexDetailsFragment, R.id.fragment_container)
+        fragmentTransaction.replaceFragment(pokedexDetailsFragment, R.id.control_fragment_container)
     }
 }

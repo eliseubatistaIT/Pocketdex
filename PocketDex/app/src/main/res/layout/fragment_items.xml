@@ -10,17 +10,17 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="?attr/colorSecondary"
         tools:context=".fragments.items.ItemsFragment">
 
-        <androidx.appcompat.widget.SearchView
+
+        <include
             android:id="@+id/items_search"
+            layout="@layout/search_bar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:layout_marginHorizontal="10dp"
             android:layout_marginTop="7dp"
-            android:background="@drawable/shape_rounded_rectangle"
-            android:backgroundTint="#EAEAEA"
-            app:iconifiedByDefault="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

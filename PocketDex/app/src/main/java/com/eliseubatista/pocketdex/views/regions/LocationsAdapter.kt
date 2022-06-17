@@ -6,9 +6,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.eliseubatista.pocketdex.database.regions.DatabaseLocation
-import com.eliseubatista.pocketdex.databinding.ItemRegionListBinding
+import com.eliseubatista.pocketdex.databinding.ItemLocationBinding
 import com.eliseubatista.pocketdex.utils.formatPocketdexObjectName
-import com.eliseubatista.pocketdex.utils.getLocationRegionImage
 
 class LocationsAdapter :
     ListAdapter<DatabaseLocation, LocationsAdapter.ViewHolder>(LocationDiffCallback()) {
@@ -18,7 +17,7 @@ class LocationsAdapter :
     //Creates the view holder
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val binding = ItemRegionListBinding.inflate(layoutInflater, parent, false)
+        val binding = ItemLocationBinding.inflate(layoutInflater, parent, false)
         return ViewHolder(binding)
     }
 
@@ -28,21 +27,17 @@ class LocationsAdapter :
         holder.bind(onLocationClickedListener, item)
     }
 
-    class ViewHolder(val binding: ItemRegionListBinding) :
+    class ViewHolder(val binding: ItemLocationBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         //This is used to bind the data to the view holder
         fun bind(clickedListener: OnLocationClickedListener, location: DatabaseLocation) {
 
-            val regionImage = getLocationRegionImage(itemView.context, location.name)
+            binding.locationListId.text = "#${location.id}"
 
-            binding.locationRegionImage.setImageDrawable(regionImage)
+            binding.locationListName.text = formatPocketdexObjectName(location.name)
 
-            binding.locationListId.text.text = "#${location.id}"
-
-            binding.locationListName.text.text = formatPocketdexObjectName(location.name)
-
-            binding.locationRegionImage.setOnClickListener {
+            binding.locationListBackground.setOnClickListener {
                 clickedListener.onLocationClicked(
                     location.name
                 )

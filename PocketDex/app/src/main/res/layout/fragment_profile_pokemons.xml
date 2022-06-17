@@ -11,21 +11,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="?attr/colorSecondary"
-        tools:context=".fragments.pokedex.PokedexFragment">
-
-        <include
-            android:id="@+id/locations_search"
-            layout="@layout/search_bar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_marginHorizontal="10dp"
-            android:layout_marginTop="7dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        tools:context=".fragments.profile.ProfilePokemonsFragment">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/locations_list"
+            android:id="@+id/favorite_pokemons_list"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="15dp"
@@ -34,8 +23,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/locations_search"
-            tools:listitem="@layout/item_region_list" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:listitem="@layout/item_pokemon_list" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

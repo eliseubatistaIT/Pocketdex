@@ -12,6 +12,12 @@ class ProgressBarDialog(val inflater: LayoutInflater, val context: Context) {
     private var alertDialog: AlertDialog? = null
 
     fun startLoading(loadingMessage: String) {
+
+        if(alertDialog?.isShowing == true)
+        {
+            return
+        }
+
         val binding: ProgressBarBinding =
             DataBindingUtil.inflate(inflater, R.layout.progress_bar, null, false)
 

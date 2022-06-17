@@ -64,9 +64,9 @@ class ItemsFragment : Fragment() {
     }
 
     private fun setupSearchView() {
-        binding.itemsSearch.queryHint = "Type Item Name Here"
+        binding.itemsSearch.searchBar.queryHint = "Type Item Name Here"
 
-        binding.itemsSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        binding.itemsSearch.searchBar.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query.isNullOrEmpty() || query.isNullOrBlank()) {
                     isFiltered = false
@@ -158,8 +158,8 @@ class ItemsFragment : Fragment() {
         val itemDetailsFragment = ItemDetailsFragment()
         itemDetailsFragment.arguments = bundle
 
-        val fragmentTransaction = parentFragmentManager.beginTransaction()
+        val fragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
 
-        fragmentTransaction.replaceFragment(itemDetailsFragment, R.id.fragment_container)
+        fragmentTransaction.replaceFragment(itemDetailsFragment, R.id.control_fragment_container)
     }
 }

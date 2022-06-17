@@ -6,6 +6,10 @@ import com.eliseubatista.pocketdex.database.favorites.DatabaseFavorites
 
 @Dao
 interface FavoritesDao {
+
+    @Query("select * from databasefavorites")
+    fun getFavorites(): LiveData<List<DatabaseFavorites>>
+
     @Query("select * from databasefavorites where category = 'pokemon'")
     fun getFavoritePokemons(): LiveData<List<DatabaseFavorites>>
 

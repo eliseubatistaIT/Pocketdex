@@ -61,9 +61,9 @@ class RegionsFragment : Fragment() {
     }
 
     private fun setupSearchView() {
-        binding.locationsSearch.queryHint = "Type Location Name Here"
+        binding.locationsSearch.searchBar.queryHint = "Type Location Name Here"
 
-        binding.locationsSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        binding.locationsSearch.searchBar.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query.isNullOrEmpty() || query.isNullOrBlank()) {
                     isFiltered = false
@@ -155,8 +155,8 @@ class RegionsFragment : Fragment() {
         val regionDetailsFragment = RegionDetailsFragment()
         regionDetailsFragment.arguments = bundle
 
-        val fragmentTransaction = parentFragmentManager.beginTransaction()
+        val fragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
 
-        fragmentTransaction.replaceFragment(regionDetailsFragment, R.id.fragment_container)
+        fragmentTransaction.replaceFragment(regionDetailsFragment, R.id.control_fragment_container)
     }
 }

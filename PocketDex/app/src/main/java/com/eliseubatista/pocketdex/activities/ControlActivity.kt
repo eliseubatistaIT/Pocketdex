@@ -48,7 +48,7 @@ class ControlActivity : AppCompatActivity() {
         val locationFragment = RegionsFragment()
 
         val fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.replaceFragment(locationFragment, R.id.fragment_container)
+        fragmentTransaction.replaceFragment(locationFragment, R.id.control_fragment_container)
 
     }
 
@@ -58,7 +58,7 @@ class ControlActivity : AppCompatActivity() {
         val itemsFragment = ItemsFragment()
 
         val fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.replaceFragment(itemsFragment, R.id.fragment_container)
+        fragmentTransaction.replaceFragment(itemsFragment, R.id.control_fragment_container)
     }
 
     private fun navigateToPokedex() {
@@ -68,7 +68,7 @@ class ControlActivity : AppCompatActivity() {
         val pokedexFragment = PokedexFragment()
 
         val fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.replaceFragment(pokedexFragment, R.id.fragment_container)
+        fragmentTransaction.replaceFragment(pokedexFragment, R.id.control_fragment_container)
 
         /*fragmentTransaction.replace(R.id.fragment_container, pokedexFragment)
         fragmentTransaction.commit()
@@ -83,7 +83,7 @@ class ControlActivity : AppCompatActivity() {
 
         val fragmentTransaction = supportFragmentManager.beginTransaction()
 
-        fragmentTransaction.replaceFragment(profileFragment, R.id.fragment_container)
+        fragmentTransaction.replaceFragment(profileFragment, R.id.control_fragment_container)
     }
 
     private fun navigateToSettings() {
@@ -92,7 +92,7 @@ class ControlActivity : AppCompatActivity() {
         val settingsFragment = SettingsFragment()
 
         val fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.replaceFragment(settingsFragment, R.id.fragment_container)
+        fragmentTransaction.replaceFragment(settingsFragment, R.id.control_fragment_container)
 
     }
 }

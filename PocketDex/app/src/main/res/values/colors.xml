@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary_light">#FFFFFF</color>
-    <color name="primary_dark">#151515</color>
+    <color name="background_light">#EDEDED</color>
+    <color name="background_dark">#2C2C2C</color>
+    <color name="text_light">#151515</color>
+    <color name="text_dark">#EDEDED</color>
 
+    <color name="background2_light">#EDEDED</color>
+    <color name="background2_dark">#2C2C2C</color>
+    <color name="text2_light">#151515</color>
+    <color name="text2_dark">#DADADA</color>
 
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
