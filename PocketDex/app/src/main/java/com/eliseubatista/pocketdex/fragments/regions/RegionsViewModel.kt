@@ -46,7 +46,7 @@ class RegionsViewModel(val application: Application) : ViewModel() {
     fun getMoreRegions() {
 
         //If we are already loading and waiting for more pokemons, do nothing
-        if (_isLoadingMoreRegions.value == true || loadedEverything) {
+        if (_isLoadingMoreRegions.value == true) {
             return
         }
 

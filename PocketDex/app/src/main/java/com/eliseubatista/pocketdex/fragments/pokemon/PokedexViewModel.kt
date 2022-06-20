@@ -54,7 +54,7 @@ class PokedexViewModel(val application: Application) : ViewModel() {
     fun getMorePokemons() {
 
         //If we are already loading and waiting for more pokemons, do nothing
-        if (_isLoadingMorePokemons.value == true  || loadedEverything) {
+        if (_isLoadingMorePokemons.value == true) {
             return
         }
 

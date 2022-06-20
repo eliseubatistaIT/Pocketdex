@@ -54,7 +54,7 @@ class ItemsViewModel(val application: Application) : ViewModel() {
     fun getMoreItems() {
 
         //If we are already loading and waiting for more pokemons, do nothing
-        if (_isLoadingMoreItems.value == true  || loadedEverything) {
+        if (_isLoadingMoreItems.value == true) {
             return
         }
 
