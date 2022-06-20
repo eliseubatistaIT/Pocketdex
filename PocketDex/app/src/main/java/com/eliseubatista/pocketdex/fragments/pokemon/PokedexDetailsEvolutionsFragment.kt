@@ -12,7 +12,6 @@ import com.eliseubatista.pocketdex.R
 import com.eliseubatista.pocketdex.database.pokemons.DatabasePokemon
 import com.eliseubatista.pocketdex.databinding.FragmentPokedexDetailsEvolutionsBinding
 import com.eliseubatista.pocketdex.databinding.ItemPokemonEvolutionListBinding
-import com.eliseubatista.pocketdex.models.pokemons.EvolutionChainModel
 import com.eliseubatista.pocketdex.utils.getImageScaleByEvolutionChain
 import com.eliseubatista.pocketdex.utils.getPokemonBackgroundColor
 import com.eliseubatista.pocketdex.utils.loadImageWithGlide
@@ -78,7 +77,7 @@ class PokedexDetailsEvolutionsFragment : Fragment() {
 
 
     private fun addEvolutions(
-        pokeEvolutionChain: List<EvolutionChainModel>,
+        pokeEvolutionChain: List<List<DatabasePokemon>>,
         layout: LinearLayout
     ) {
         for (chain in pokeEvolutionChain) {
@@ -97,9 +96,9 @@ class PokedexDetailsEvolutionsFragment : Fragment() {
 
     private fun setupEvolutionChain(
         binding: ItemPokemonEvolutionListBinding,
-        chain: EvolutionChainModel
+        chain: List<DatabasePokemon>
     ) {
-        when (chain.evolutions.size) {
+        when (chain.size) {
             1 -> {
                 binding.evolutionOfTwoContainer.visibility = View.GONE
                 binding.evolutionOfThreeContainer.visibility = View.GONE
@@ -114,7 +113,7 @@ class PokedexDetailsEvolutionsFragment : Fragment() {
             }
         }
 
-        for ((index, evo) in chain.evolutions.withIndex()) {
+        for ((index, evo) in chain.withIndex()) {
             val imageViewOfTwo = when (index) {
                 0 -> binding.evolutionOfTwo.baseForm
                 else -> binding.evolutionOfTwo.evolution

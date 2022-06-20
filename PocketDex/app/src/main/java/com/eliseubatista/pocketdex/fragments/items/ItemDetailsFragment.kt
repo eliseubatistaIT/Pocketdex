@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.eliseubatista.pocketdex.R
 import com.eliseubatista.pocketdex.database.items.DatabaseItems
+import com.eliseubatista.pocketdex.databinding.FragmentItemDetailsAboutBinding
 import com.eliseubatista.pocketdex.databinding.FragmentItemDetailsBinding
 import com.eliseubatista.pocketdex.fragments.pokemon.PokedexDetailsAboutFragment
 import com.eliseubatista.pocketdex.fragments.pokemon.PokedexDetailsEvolutionsFragment
@@ -25,16 +26,19 @@ class ItemDetailsFragment : Fragment() {
 
     private lateinit var progressBarDialog: ProgressBarDialog
 
+    private lateinit var binding: FragmentItemDetailsBinding
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding: FragmentItemDetailsBinding =
+        binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_item_details, container, false)
 
-        setUpViewPagerAndTabLayout(binding)
+        setUpViewPagerAndTabLayout()
 
+        //Get the item name from the bundle
         val bundle = requireArguments()
         itemName = bundle.getString("ITEM_NAME", "")
 
@@ -48,7 +52,7 @@ class ItemDetailsFragment : Fragment() {
         viewModel.isInFavorites.observe(
             viewLifecycleOwner
         ) { inFavorites ->
-            refreshFavorites(binding, inFavorites)
+            refreshFavorites(inFavorites)
         }
 
         viewModel.isLoadingItem.observe(viewLifecycleOwner) {
@@ -61,7 +65,7 @@ class ItemDetailsFragment : Fragment() {
 
         viewModel.item.observe(
             viewLifecycleOwner
-        ) { item -> refreshItemHeader(binding, item) }
+        ) { item -> refreshItemHeader(item) }
 
         binding.toolbarItemDetails.favorite.setOnClickListener {
             viewModel.addOrRemoveFavorite()
@@ -71,7 +75,7 @@ class ItemDetailsFragment : Fragment() {
         return binding.root
     }
 
-    private fun setUpViewPagerAndTabLayout(binding: FragmentItemDetailsBinding) {
+    private fun setUpViewPagerAndTabLayout() {
         val viewPager = binding.itemDetailsViewPager
         val tabLayout = binding.itemDetailsTabLayout
 
@@ -100,7 +104,6 @@ class ItemDetailsFragment : Fragment() {
     }
 
     private fun refreshItemHeader(
-        binding: FragmentItemDetailsBinding,
         item: DatabaseItems
     ) {
 
@@ -140,7 +143,7 @@ class ItemDetailsFragment : Fragment() {
         binding.toolbarItemDetails.favorite.setColorFilter(textColor)
     }
 
-    private fun refreshFavorites(binding: FragmentItemDetailsBinding, isInFavorites: Boolean) {
+    private fun refreshFavorites(isInFavorites: Boolean) {
         if (isInFavorites) {
             binding.toolbarItemDetails.favorite.setImageResource(R.drawable.ic_star_fill)
         } else {

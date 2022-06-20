@@ -1,9 +1,13 @@
 package com.eliseubatista.pocketdex.utils
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
+import android.util.Base64
 import androidx.core.content.ContextCompat
 import com.eliseubatista.pocketdex.R
+import java.io.ByteArrayOutputStream
 
 fun getImageScaleByEvolutionChain(
     pokemonName: String,
@@ -107,4 +111,18 @@ fun getLocationRegionImage(context: Context, region: String): Drawable? {
     }
 
     return newImage
+}
+
+fun bitmapToString(bitmap: Bitmap): String {
+    val stream = ByteArrayOutputStream()
+    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+
+    val byteArray = stream.toByteArray()
+    return Base64.encodeToString(byteArray, Base64.DEFAULT)
+}
+
+fun stringToBitmap(string: String): Bitmap {
+    val byteArray = Base64.decode(string, Base64.DEFAULT)
+
+    return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
 }

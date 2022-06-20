@@ -1,5 +1,6 @@
 package com.eliseubatista.pocketdex.activities
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -16,6 +17,7 @@ import com.eliseubatista.pocketdex.utils.replaceFragment
 class ControlActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityControlBinding
+    lateinit var sharedPrefs: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,15 +25,22 @@ class ControlActivity : AppCompatActivity() {
         binding =
             DataBindingUtil.setContentView(this, R.layout.activity_control)
 
+        //Create the bottom navigation click listener
         binding.bottomNavigationView.setOnItemSelectedListener { item ->
             onBottomNavViewItemSelected(
                 item
             )
         }
 
+        sharedPrefs = getSharedPreferences("POCKETDEX_PREFS", MODE_PRIVATE)
+
+        //By default, we want to make sure we open the pokedex
         navigateToPokedex()
     }
 
+    /**
+     * Handle the bottom bar clicks
+     */
     private fun onBottomNavViewItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_locations -> navigateToLocations()
@@ -44,6 +53,9 @@ class ControlActivity : AppCompatActivity() {
         return true
     }
 
+    /**
+     * Open the locations fragment
+     */
     private fun navigateToLocations() {
         val locationFragment = RegionsFragment()
 
@@ -52,6 +64,9 @@ class ControlActivity : AppCompatActivity() {
 
     }
 
+    /**
+     * Open the items fragment
+     */
     private fun navigateToItems() {
         binding.bottomNavigationView.menu.findItem(R.id.nav_items).isChecked = true
 
@@ -61,6 +76,9 @@ class ControlActivity : AppCompatActivity() {
         fragmentTransaction.replaceFragment(itemsFragment, R.id.control_fragment_container)
     }
 
+    /**
+     * Open the pokedex fragment
+     */
     private fun navigateToPokedex() {
 
         binding.bottomNavigationView.menu.findItem(R.id.nav_pokedex).isChecked = true
@@ -69,13 +87,11 @@ class ControlActivity : AppCompatActivity() {
 
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         fragmentTransaction.replaceFragment(pokedexFragment, R.id.control_fragment_container)
-
-        /*fragmentTransaction.replace(R.id.fragment_container, pokedexFragment)
-        fragmentTransaction.commit()
-
-         */
     }
 
+    /**
+     * Open the profile fragment
+     */
     private fun navigateToProfile() {
         binding.bottomNavigationView.menu.findItem(R.id.nav_profile).isChecked = true
 
@@ -86,6 +102,9 @@ class ControlActivity : AppCompatActivity() {
         fragmentTransaction.replaceFragment(profileFragment, R.id.control_fragment_container)
     }
 
+    /**
+     * Open the settings fragment
+     */
     private fun navigateToSettings() {
         binding.bottomNavigationView.menu.findItem(R.id.nav_settings).isChecked = true
 

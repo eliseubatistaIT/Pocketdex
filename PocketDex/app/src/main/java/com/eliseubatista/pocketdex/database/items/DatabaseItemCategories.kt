@@ -8,8 +8,4 @@ data class DatabaseItemCategories constructor(
     @PrimaryKey
     val id: Int,
     val name: String
-) {
-    override fun toString(): String {
-        return "\nType: ${id}, $name \n"
-    }
-}
+)

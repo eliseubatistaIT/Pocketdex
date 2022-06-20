@@ -5,8 +5,8 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.eliseubatista.pocketdex.database.favorites.DatabaseFavorites
-import com.eliseubatista.pocketdex.database.favorites.FavoritesDao
+import com.eliseubatista.pocketdex.database.profile.DatabaseFavorite
+import com.eliseubatista.pocketdex.database.profile.FavoritesDao
 import com.eliseubatista.pocketdex.database.items.DatabaseItemCategories
 import com.eliseubatista.pocketdex.database.items.DatabaseItems
 import com.eliseubatista.pocketdex.database.items.ItemCategoryDao
@@ -21,7 +21,7 @@ import com.eliseubatista.pocketdex.database.pokemons.PokemonDao
 import com.eliseubatista.pocketdex.database.pokemons.TypesDao
 
 @Database(
-    entities = [DatabaseFavorites::class, DatabasePokemon::class, DatabaseTypes::class, DatabaseItems::class,
+    entities = [DatabaseFavorite::class, DatabasePokemon::class, DatabaseTypes::class, DatabaseItems::class,
         DatabaseItemCategories::class, DatabaseRegions::class, DatabaseLocation::class],
     version = 1
 )
@@ -37,6 +37,7 @@ abstract class PocketdexDatabase : RoomDatabase() {
 }
 
 private lateinit var INSTANCE: PocketdexDatabase
+
 
 fun getDatabase(context: Context): PocketdexDatabase {
     synchronized(PocketdexDatabase::class.java) {

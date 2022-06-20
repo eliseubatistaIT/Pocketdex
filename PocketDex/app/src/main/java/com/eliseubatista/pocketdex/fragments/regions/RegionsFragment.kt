@@ -127,7 +127,7 @@ class RegionsFragment : Fragment() {
 
                 //If we reach the end of the list, we want to show more pokemons
                 //TODO: Check scroll
-                if (!recyclerView.canScrollVertically(3) && !isFiltered) {
+                if (!recyclerView.canScrollVertically(3) && !isFiltered && !viewModel.loadedEverything) {
                     viewModel.getMoreRegions()
                 }
             }

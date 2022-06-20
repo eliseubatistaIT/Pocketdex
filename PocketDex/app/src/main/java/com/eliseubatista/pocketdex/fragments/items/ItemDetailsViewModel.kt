@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.eliseubatista.pocketdex.database.favorites.DatabaseFavorites
+import com.eliseubatista.pocketdex.database.profile.DatabaseFavorite
 import com.eliseubatista.pocketdex.database.getDatabase
 import com.eliseubatista.pocketdex.database.items.DatabaseItemCategories
 import com.eliseubatista.pocketdex.database.items.DatabaseItems
@@ -90,7 +90,7 @@ class ItemDetailsViewModel(val application: Application, private val itemName: S
             if (favoriteInDatabase == null) {
                 Log.i("FAV", "Adding $itemName to favorites")
 
-                val favoriteData = DatabaseFavorites(
+                val favoriteData = DatabaseFavorite(
                     0,
                     itemName,
                     "item"

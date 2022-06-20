@@ -9,8 +9,4 @@ data class DatabaseRegions constructor(
     val id: Int,
     val name: String,
     val locations: List<String>
-) {
-    override fun toString(): String {
-        return "\nRegions: ${id}, $name\n"
-    }
-}
+)

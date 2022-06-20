@@ -10,8 +10,4 @@ data class DatabaseLocation constructor(
     val name: String,
     //val areas: List<String>,
     //val pokemonEncounters: List<String>
-) {
-    override fun toString(): String {
-        return "\nLocation: ${id}, $name\n"
-    }
-}
+)

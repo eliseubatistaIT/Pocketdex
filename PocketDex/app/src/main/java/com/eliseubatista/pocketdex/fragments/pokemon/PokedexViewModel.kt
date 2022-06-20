@@ -32,6 +32,9 @@ class PokedexViewModel(val application: Application) : ViewModel() {
     private var coroutineJob = Job()
     private val coroutineScope = CoroutineScope(coroutineJob + Dispatchers.Main)
 
+    var loadedEverything = false
+
+
     init {
         getMoreTypes()
         getMorePokemons()
@@ -51,7 +54,7 @@ class PokedexViewModel(val application: Application) : ViewModel() {
     fun getMorePokemons() {
 
         //If we are already loading and waiting for more pokemons, do nothing
-        if (_isLoadingMorePokemons.value == true) {
+        if (_isLoadingMorePokemons.value == true  || loadedEverything) {
             return
         }
 
@@ -62,11 +65,13 @@ class PokedexViewModel(val application: Application) : ViewModel() {
             val pokemonsLoaded = pokemons.value?.size ?: 0
 
             //pocketdexRepository.refreshPokemons(application.applicationContext, 10, pokemonsLoaded)
-            pocketdexRepository.pokedexRepository.getPokemons(
+            val resultsFound = pocketdexRepository.pokedexRepository.getPokemons(
                 application.applicationContext,
                 10,
                 pokemonsLoaded
             )
+
+            loadedEverything = !resultsFound
 
             _isLoadingMorePokemons.value = false
         }

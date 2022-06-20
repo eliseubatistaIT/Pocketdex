@@ -1,12 +1,10 @@
 package com.eliseubatista.pocketdex.fragments.profile
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.eliseubatista.pocketdex.database.favorites.DatabaseFavorites
 import com.eliseubatista.pocketdex.database.getDatabase
 import com.eliseubatista.pocketdex.database.items.DatabaseItems
 import com.eliseubatista.pocketdex.database.pokemons.DatabasePokemon

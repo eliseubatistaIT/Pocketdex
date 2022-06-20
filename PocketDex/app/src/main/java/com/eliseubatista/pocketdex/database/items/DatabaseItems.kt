@@ -14,10 +14,4 @@ data class DatabaseItems constructor(
     val effects: List<String>,
     val flavor: String,
     val spriteUrl: String,
-) {
-    override fun toString(): String {
-        return "\nPokemon: ${id}, $name" +
-                "\nCategory: $category" +
-                "\nCost: $cost\n"
-    }
-}
+)

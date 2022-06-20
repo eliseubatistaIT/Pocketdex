@@ -3,7 +3,7 @@ package com.eliseubatista.pocketdex.repository
 import android.content.Context
 import androidx.lifecycle.LiveData
 import com.eliseubatista.pocketdex.database.PocketdexDatabase
-import com.eliseubatista.pocketdex.database.favorites.DatabaseFavorites
+import com.eliseubatista.pocketdex.database.profile.DatabaseFavorite
 import com.eliseubatista.pocketdex.database.items.DatabaseItemCategories
 import com.eliseubatista.pocketdex.database.items.DatabaseItems
 import com.eliseubatista.pocketdex.database.pokemons.DatabasePokemon
@@ -28,22 +28,22 @@ class PocketdexRepository(database: PocketdexDatabase) {
     //FAVORITES  -------------------------------------------------------------------------------------------
 
     class FavoriteRepository(private val database: PocketdexDatabase) {
-        val favoritePokemons: LiveData<List<DatabaseFavorites>> =
+        val favoritePokemons: LiveData<List<DatabaseFavorite>> =
             database.favoritesDao.getFavoritePokemons()
 
-        val favoriteItems: LiveData<List<DatabaseFavorites>> =
+        val favoriteItems: LiveData<List<DatabaseFavorite>> =
             database.favoritesDao.getFavoriteItems()
 
-        val favoriteLocations: LiveData<List<DatabaseFavorites>> =
+        val favoriteLocations: LiveData<List<DatabaseFavorite>> =
             database.favoritesDao.getFavoriteRegions()
 
-        suspend fun addToFavorites(favorite: DatabaseFavorites) {
+        suspend fun addToFavorites(favorite: DatabaseFavorite) {
             withContext(Dispatchers.IO) {
                 database.favoritesDao.insert(favorite)
             }
         }
 
-        suspend fun removeFromFavorites(favorite: DatabaseFavorites?) {
+        suspend fun removeFromFavorites(favorite: DatabaseFavorite?) {
             if (favorite == null) {
                 return
             }
@@ -53,9 +53,9 @@ class PocketdexRepository(database: PocketdexDatabase) {
             }
         }
 
-        suspend fun getFavoriteByName(name: String): DatabaseFavorites? {
+        suspend fun getFavoriteByName(name: String): DatabaseFavorite? {
 
-            var favorite: DatabaseFavorites?
+            var favorite: DatabaseFavorite?
 
             withContext(Dispatchers.IO) {
 

@@ -22,11 +22,4 @@ data class DatabasePokemon constructor(
     val speed: Int,
     val types: List<String>,
     val weight: Int
-){
-    override fun toString(): String {
-        return "\nPokemon: ${id}, $name" +
-                "\nEvolution Chain: $evolutionChain" +
-                "\nTypes: $types" +
-                "\nGenus: ${genus}\n"
-    }
-}
+)

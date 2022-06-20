@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.eliseubatista.pocketdex.database.favorites.DatabaseFavorites
+import com.eliseubatista.pocketdex.database.profile.DatabaseFavorite
 import com.eliseubatista.pocketdex.database.getDatabase
 import com.eliseubatista.pocketdex.database.regions.DatabaseLocation
 import com.eliseubatista.pocketdex.database.regions.DatabaseRegions
@@ -100,7 +100,7 @@ class RegionDetailsViewModel(val application: Application, private val regionNam
             if (favoriteInDatabase == null) {
                 Log.i("FAV", "Adding $regionName to favorites")
 
-                val favoriteData = DatabaseFavorites(
+                val favoriteData = DatabaseFavorite(
                     0,
                     regionName,
                     "region"
