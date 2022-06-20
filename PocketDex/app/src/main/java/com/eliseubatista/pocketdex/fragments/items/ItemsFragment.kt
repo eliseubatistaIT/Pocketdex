@@ -130,7 +130,7 @@ class ItemsFragment : Fragment() {
 
                 //If we reach the end of the list, we want to show more pokemons
                 //TODO: Check scroll
-                if (!recyclerView.canScrollVertically(3) && !isFiltered  && !viewModel.loadedEverything) {
+                if (!recyclerView.canScrollVertically(3) && !isFiltered) {
                     viewModel.getMoreItems()
                 }
             }
